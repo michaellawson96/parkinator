@@ -29,7 +29,7 @@ public class LoginResourse {
     @Context
     private UriInfo context;
 
-    private User convertJsonStringToUserForPost(String jsonString) {
+    private User convertJsonStringToUser(String jsonString) {
         User u = null;
         try {
             // create a parser to convert a string to a json object
@@ -52,10 +52,10 @@ public class LoginResourse {
 
     @POST
     @Consumes(MediaType.TEXT_PLAIN)
-    @Produces(MediaType.TEXT_PLAIN)
+    @Produces(MediaType.APPLICATION_JSON)
     public String Login(String content) {
         UserDAOInterface uDAO = new UserDao();
-        User u = convertJsonStringToUserForPost(content);
+        User u = convertJsonStringToUser(content);
         boolean existenceCheck = uDAO.Login(u.getEmail(), u.getUserPassword());
         if (existenceCheck == true) {//this means the customer has been successfully obtained
             return "true";
