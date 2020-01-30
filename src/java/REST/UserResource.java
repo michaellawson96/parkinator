@@ -97,8 +97,8 @@ public class UserResource {
      */
     @PUT
     @Consumes(MediaType.TEXT_PLAIN)
-    public void putText(String content) {
-
+    public boolean putText(String content) {
+        return false;
     }
 
     /**
@@ -108,9 +108,8 @@ public class UserResource {
      */
     @POST
     @Consumes(MediaType.TEXT_PLAIN)
-    @Produces(MediaType.)
+    @Produces(MediaType.TEXT_PLAIN)
     public String Register(String content) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-
+        return null;
     }
 }
