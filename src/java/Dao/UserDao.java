@@ -84,23 +84,20 @@ public class UserDao implements UserDAOInterface {
     }
 
     @Override
-    public boolean Registor(String fullname, String email, String password, String user_Type,
+    public boolean Register(String fullname, String email, String password, String user_Type,
             String pass_question, String pass_Answer) {
         
         try {
-            sql.setPs(sql.getConn().prepareStatement("insert into users values (null, ?, ?, ?, ?, ?, ?"));
+            sql.setPs(sql.getConn().prepareStatement("insert into users (user_fullname, email, password, user_type, pass_question, pass_answer) values (?, ?, ?, ?, ?, ?"));
             sql.getPs().setString(1, fullname);
             sql.getPs().setString(2, email);
-            sql.getPs().setString(1, password);
-            sql.getPs().setString(2, user_Type);
-            sql.getPs().setString(1, pass_question);
-            sql.getPs().setString(2, pass_Answer);
+            sql.getPs().setString(3, password);
+            sql.getPs().setString(4, user_Type);
+            sql.getPs().setString(5, pass_question);
+            sql.getPs().setString(6, pass_Answer);
 
             sql.getPs().executeUpdate();
 
-            if (!rst.next()) {
-                return false;
-            }
             return true;
 
         } catch (SQLException se) {

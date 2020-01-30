@@ -17,4 +17,7 @@ public interface UserDAOInterface {
         boolean updateUser(User user);
         ArrayList<User> selectAllUsers();
         boolean Login(String email, String password);
+        boolean Register(String fullname, String email, String password, String user_Type, 
+                String pass_question, String pass_Answer);       
+        
 }

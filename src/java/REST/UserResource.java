@@ -53,8 +53,13 @@ public class UserResource {
             // create a new Customer and use get method to retrieve values for a key
             u = new User();
             // note that JSONObject has all numbers as longs, and needs to be converted to an int if required.
+            
+            u.setUserFullname((String) obj.get("fullname"));
             u.setEmail((String) obj.get("email"));
             u.setUserPassword((String) obj.get("password"));
+            u.setUserType((String) obj.get("user_type"));
+            u.setPass_Quesstion((String) obj.get("pass_question"));
+            u.setPass_answer((String) obj.get("pass_answer"));
         } // more detailed reporting can be done by catching specific exceptions, such as ParseException
         catch (ParseException exp) {
             System.out.println(exp);
@@ -89,7 +94,7 @@ public class UserResource {
             return array.toString();
         }
     }
-//fsirgksvonjnv mlnvpsd
+
     /**
      * PUT method for updating or creating an instance of UserResource
      *
@@ -110,6 +115,17 @@ public class UserResource {
     @Consumes(MediaType.TEXT_PLAIN)
     @Produces(MediaType.TEXT_PLAIN)
     public String Register(String content) {
-        return null;
+        UserDAOInterface uDAO = new UserDao();
+        User u = convertJsonStringToUserForPost(content);
+        boolean dontExistCheck = uDAO.Register(u.getUserFullname(), u.getEmail(), u.getUserPassword(), u.getUserType(), u.getPass_Quesstion(), u.getPass_answer());
+        if (dontExistCheck == true) {
+            return "true";
+        } else {
+            return "false";
+
+        }
+        
+        //{"fullname":"Jonas", "email":"Jonas@gmail.com", "password":"jonny", "user_Type":"Manager", "pass_question":"are you really real?", "pass_answer":"no not really"}
+
     }
 }
