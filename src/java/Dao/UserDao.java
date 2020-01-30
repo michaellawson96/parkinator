@@ -17,6 +17,8 @@ import java.util.ArrayList;
  */
 public class UserDao implements UserDAOInterface {
 
+    private SqlConnection sql = new SqlConnection();
+
     @Override
     public int insertUser(User user) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
@@ -29,9 +31,6 @@ public class UserDao implements UserDAOInterface {
 
     @Override
     public ArrayList<User> selectAllUsers() {
-        // Create variables to hold database details
-        SqlConnection sql = new SqlConnection();
-
         try {
             sql.setPs(sql.getConn().prepareStatement("select * from users"));
             ResultSet rst;
@@ -58,18 +57,61 @@ public class UserDao implements UserDAOInterface {
     }
 
     @Override
-    public boolean Login(String UserEmail, String UserPassword) {
-        ArrayList<User> users = selectAllUsers();
+    public boolean Login(String email, String password) {
 
-        boolean existenceCheck = false;
+        try {
+            sql.setPs(sql.getConn().prepareStatement("select * from users where email=? and password=?"));
+            sql.getPs().setString(1, email);
+            sql.getPs().setString(2, password);
 
-        for (User i : users) {
-            if (UserEmail.equals(i.getEmail()) && UserPassword.equals(i.getUserPassword())) {
-                existenceCheck = true;
+            ResultSet rst;
+            rst = sql.getPs().executeQuery();
+
+            if (!rst.next()) {
+                return false;
             }
-        }
+            return true;
 
-        return existenceCheck;
+        } catch (SQLException se) {
+            System.out.println("SQL Exception occurred: " + se.getMessage());
+            se.printStackTrace();
+            return false;
+        } catch (Exception e) {
+            System.out.println("Exception occurred: " + e.getMessage());
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    @Override
+    public boolean Registor(String fullname, String email, String password, String user_Type,
+            String pass_question, String pass_Answer) {
+        
+        try {
+            sql.setPs(sql.getConn().prepareStatement("insert into users values (null, ?, ?, ?, ?, ?, ?"));
+            sql.getPs().setString(1, fullname);
+            sql.getPs().setString(2, email);
+            sql.getPs().setString(1, password);
+            sql.getPs().setString(2, user_Type);
+            sql.getPs().setString(1, pass_question);
+            sql.getPs().setString(2, pass_Answer);
+
+            sql.getPs().executeUpdate();
+
+            if (!rst.next()) {
+                return false;
+            }
+            return true;
+
+        } catch (SQLException se) {
+            System.out.println("SQL Exception occurred: " + se.getMessage());
+            se.printStackTrace();
+            return false;
+        } catch (Exception e) {
+            System.out.println("Exception occurred: " + e.getMessage());
+            e.printStackTrace();
+            return false;
+        }
     }
 
 }
