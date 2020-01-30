@@ -36,7 +36,7 @@ public class UserResource {
         jObj.put("email", user.getEmail());
         jObj.put("password", user.getUserPassword());
         jObj.put("user_type", user.getUserType());
-        jObj.put("pass_question", user.getPass_Quesstion());
+        jObj.put("pass_question", user.getPass_Question());
         jObj.put("pass_answer", user.getPass_answer());
 
         return jObj;
@@ -58,7 +58,7 @@ public class UserResource {
             u.setEmail((String) obj.get("email"));
             u.setUserPassword((String) obj.get("password"));
             u.setUserType((String) obj.get("user_type"));
-            u.setPass_Quesstion((String) obj.get("pass_question"));
+            u.setPass_Question((String) obj.get("pass_question"));
             u.setPass_answer((String) obj.get("pass_answer"));
         } // more detailed reporting can be done by catching specific exceptions, such as ParseException
         catch (ParseException exp) {
@@ -117,15 +117,13 @@ public class UserResource {
     public String Register(String content) {
         UserDAOInterface uDAO = new UserDao();
         User u = convertJsonStringToUserForPost(content);
-        boolean dontExistCheck = uDAO.Register(u.getUserFullname(), u.getEmail(), u.getUserPassword(), u.getUserType(), u.getPass_Quesstion(), u.getPass_answer());
+        boolean dontExistCheck = uDAO.Register(u.getUserFullname(), u.getEmail(), u.getUserPassword(), u.getUserType(), u.getPass_Question(), u.getPass_answer());
         if (dontExistCheck == true) {
-            return "true";
+            return "{\"valid\":true}";
         } else {
-            return "false";
-
+            return "{\"valid\":false}";
         }
         
-        //{"fullname":"Jonas", "email":"Jonas@gmail.com", "password":"jonny", "user_Type":"Manager", "pass_question":"are you really real?", "pass_answer":"no not really"}
-
+        //{"fullname":"Jonas", "email":"Jonas@gmail.com", "password":"jonny", "user_type":"Manager", "pass_question":"are you really real?", "pass_answer":"no not really"}
     }
 }
