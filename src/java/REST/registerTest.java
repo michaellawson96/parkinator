@@ -15,7 +15,8 @@ public class registerTest {
     public static void main(String[] args) {
         UserResource ur = new UserResource();
         
-        ur.Register("{\"fullname\":\"Jonas\", \"email\":\"Jonas@gmail.com\", \"password\":\"jonny\", \"user_Type\":\"Manager\", \"pass_question\":\"are you really real?\", \"pass_answer\":\"no not really\"}");
+        ur.Register("{\"fullname\":\"Jonas\", \"email\":\"Jonas@gmail.com\", \"password\":\"jonny\", \"user_type\":\"Manager\", \"pass_question\":\"are you really real?\", \"pass_answer\":\"no not really\"}");
+        //{"user_fullname":"asdasd","email":"asdsad@gmail.com","password":"Lukiukas","user_type":"regular","pass_question":"asdasd","pass_answer":"asdasd"}
     }
     
     

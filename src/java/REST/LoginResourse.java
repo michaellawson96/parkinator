@@ -9,12 +9,14 @@ import Dao.UserDAOInterface;
 import Dao.UserDao;
 import Dto.User;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.UriInfo;
+import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
@@ -49,6 +51,8 @@ public class LoginResourse {
         }
         return u;
     }
+
+
 
     @POST
     @Consumes(MediaType.TEXT_PLAIN)

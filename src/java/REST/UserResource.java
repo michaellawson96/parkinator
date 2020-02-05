@@ -42,7 +42,7 @@ public class UserResource {
         return jObj;
     }
 
-    private User convertJsonStringToUserForPost(String jsonString) {
+    private User convertJsonStringToUser(String jsonString) {
         User u = null;
         try {
             // create a parser to convert a string to a json object
@@ -75,7 +75,7 @@ public class UserResource {
      */
     @GET
     @Produces(MediaType.TEXT_PLAIN)
-    @Consumes(MediaType.TEXT_PLAIN)
+    @Consumes(MediaType.APPLICATION_JSON)
     public String getText() {
         UserDAOInterface uDAO = new UserDao();
         ArrayList<User> users = uDAO.selectAllUsers();
@@ -102,8 +102,11 @@ public class UserResource {
      */
     @PUT
     @Consumes(MediaType.TEXT_PLAIN)
-    public boolean putText(String content) {
-        return false;
+    @Produces(MediaType.APPLICATION_JSON)
+    public boolean Update(String content) {
+        UserDAOInterface uDAO = new UserDao();
+        User u = convertJsonStringToUser(content);
+        return uDAO.updateUser(u);
     }
 
     /**
@@ -113,15 +116,15 @@ public class UserResource {
      */
     @POST
     @Consumes(MediaType.TEXT_PLAIN)
-    @Produces(MediaType.TEXT_PLAIN)
+    @Produces(MediaType.APPLICATION_JSON)
     public String Register(String content) {
         UserDAOInterface uDAO = new UserDao();
-        User u = convertJsonStringToUserForPost(content);
+        User u = convertJsonStringToUser(content);
         boolean dontExistCheck = uDAO.Register(u.getUserFullname(), u.getEmail(), u.getUserPassword(), u.getUserType(), u.getPass_Question(), u.getPass_answer());
         if (dontExistCheck == true) {
-            return "{\"valid\":true}";
+            return "true";
         } else {
-            return "{\"valid\":false}";
+            return "false";
         }
         
         //{"fullname":"Jonas", "email":"Jonas@gmail.com", "password":"jonny", "user_type":"Manager", "pass_question":"are you really real?", "pass_answer":"no not really"}

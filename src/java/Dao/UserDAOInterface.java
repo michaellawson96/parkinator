@@ -13,11 +13,12 @@ import java.util.ArrayList;
  * @author Jonas
  */
 public interface UserDAOInterface {
-    int insertUser(User user);
         boolean updateUser(User user);
         ArrayList<User> selectAllUsers();
-        boolean Login(String email, String password);
+        boolean CheckUserExistsByEmail(String email);
+        boolean Login(String email, String password); 
         boolean Register(String fullname, String email, String password, String user_Type, 
-                String pass_question, String pass_Answer);       
-        
+                String pass_question, String pass_Answer); 
+        ArrayList<User> getUsers(User us);
+        User getUserByEmail(String email);
 }

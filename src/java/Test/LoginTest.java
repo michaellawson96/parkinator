@@ -5,7 +5,9 @@
  */
 package Test;
 
+import REST.UserDetailsResource;
 import REST.UserResource;
+import java.util.Scanner;
 
 /**
  *
@@ -14,5 +16,12 @@ import REST.UserResource;
 public class LoginTest {
     public static void main(String[] args) {
         UserResource ur = new UserResource();
+        UserDetailsResource r = new UserDetailsResource();
+        Scanner sc = new Scanner(System.in);
+        
+        String c = sc.next();
+        System.out.println(r.postText(c));
+        
+        //{"email":"asd"}
     }
 }

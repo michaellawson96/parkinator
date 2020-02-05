@@ -14,24 +14,24 @@ import java.util.Objects;
 public class User {
     
     private int userNo;
-    private String userFullname;
+    private String userFullname;//
     private String Email;
     private String userPassword;
     private String userType;
-    private String pass_Quesstion;
-    private String pass_answer;
+    private String pass_Question;//
+    private String pass_answer;//
 
     
     public User() {
     }
 
-    public User(int userNo, String userFullname, String Email, String userPassword, String userType, String pass_Quesstion, String pass_answer) {
+    public User(int userNo, String userFullname, String Email, String userPassword, String userType, String pass_Question, String pass_answer) {
         this.userNo = userNo;
         this.userFullname = userFullname;
         this.Email = Email;
         this.userPassword = userPassword;
         this.userType = userType;
-        this.pass_Quesstion = pass_Quesstion;
+        this.pass_Question = pass_Question;
         this.pass_answer = pass_answer;
     }
 
@@ -75,12 +75,12 @@ public class User {
         this.userType = userType;
     }
 
-    public String getPass_Quesstion() {
-        return pass_Quesstion;
+    public String getPass_Question() {
+        return pass_Question;
     }
 
-    public void setPass_Quesstion(String pass_Quesstion) {
-        this.pass_Quesstion = pass_Quesstion;
+    public void setPass_Question(String pass_Quesstion) {
+        this.pass_Question = pass_Quesstion;
     }
 
     public String getPass_answer() {
@@ -128,7 +128,7 @@ public class User {
     public String toString() {
         return "User{" + "userNo=" + userNo + ", userFullname=" + userFullname + ", Email=" + Email + 
                 ", userPassword=" + userPassword + ", userType=" + userType + ", pass_Quesstion=" + 
-                pass_Quesstion + ", pass_answer=" + pass_answer + '}';
+                pass_Question + ", pass_answer=" + pass_answer + '}';
     }
     
     
