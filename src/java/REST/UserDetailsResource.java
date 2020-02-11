@@ -55,7 +55,9 @@ public class UserDetailsResource {
 
     private JSONObject convertUserToJson(User user) {
         JSONObject jObj = new JSONObject();
-        jObj.put("user_fullname", user.getEmail());
+        jObj.put("user_id", user.getUserNo());
+        jObj.put("pass_question", user.getPass_Question());
+        jObj.put("user_fullname", user.getUserFullname());
         jObj.put("user_type", user.getUserType());
         jObj.put("email", user.getEmail());
         return jObj;

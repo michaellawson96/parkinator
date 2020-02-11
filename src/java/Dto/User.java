@@ -20,12 +20,13 @@ public class User {
     private String userType;
     private String pass_Question;//
     private String pass_answer;//
+    private boolean hasDisabledBadge;
 
     
     public User() {
     }
 
-    public User(int userNo, String userFullname, String Email, String userPassword, String userType, String pass_Question, String pass_answer) {
+    public User(int userNo, String userFullname, String Email, String userPassword, String userType, String pass_Question, String pass_answer, boolean hasDisabledBadge) {
         this.userNo = userNo;
         this.userFullname = userFullname;
         this.Email = Email;
@@ -33,6 +34,7 @@ public class User {
         this.userType = userType;
         this.pass_Question = pass_Question;
         this.pass_answer = pass_answer;
+        this.hasDisabledBadge = hasDisabledBadge;
     }
 
     public int getUserNo() {
@@ -91,12 +93,25 @@ public class User {
         this.pass_answer = pass_answer;
     }
 
+    public boolean getHasDisabledBadge() {
+        return hasDisabledBadge;
+    }
+
+    public void setHasDisabledBadge(Boolean hasDisabledBadge) {
+        this.hasDisabledBadge = hasDisabledBadge;
+    }
+
     @Override
     public int hashCode() {
-        int hash = 3;
+        int hash = 7;
         hash = 29 * hash + this.userNo;
+        hash = 29 * hash + Objects.hashCode(this.userFullname);
         hash = 29 * hash + Objects.hashCode(this.Email);
         hash = 29 * hash + Objects.hashCode(this.userPassword);
+        hash = 29 * hash + Objects.hashCode(this.userType);
+        hash = 29 * hash + Objects.hashCode(this.pass_Question);
+        hash = 29 * hash + Objects.hashCode(this.pass_answer);
+        hash = 29 * hash + Objects.hashCode(this.hasDisabledBadge);
         return hash;
     }
 
@@ -115,10 +130,25 @@ public class User {
         if (this.userNo != other.userNo) {
             return false;
         }
+        if (!Objects.equals(this.userFullname, other.userFullname)) {
+            return false;
+        }
         if (!Objects.equals(this.Email, other.Email)) {
             return false;
         }
         if (!Objects.equals(this.userPassword, other.userPassword)) {
+            return false;
+        }
+        if (!Objects.equals(this.userType, other.userType)) {
+            return false;
+        }
+        if (!Objects.equals(this.pass_Question, other.pass_Question)) {
+            return false;
+        }
+        if (!Objects.equals(this.pass_answer, other.pass_answer)) {
+            return false;
+        }
+        if (!Objects.equals(this.hasDisabledBadge, other.hasDisabledBadge)) {
             return false;
         }
         return true;
@@ -126,10 +156,10 @@ public class User {
 
     @Override
     public String toString() {
-        return "User{" + "userNo=" + userNo + ", userFullname=" + userFullname + ", Email=" + Email + 
-                ", userPassword=" + userPassword + ", userType=" + userType + ", pass_Quesstion=" + 
-                pass_Question + ", pass_answer=" + pass_answer + '}';
+        return "User{" + "userNo=" + userNo + ", userFullname=" + userFullname + ", Email=" + Email + ", userPassword=" + userPassword + ", userType=" + userType + ", pass_Question=" + pass_Question + ", pass_answer=" + pass_answer + ", hasDisabledBadge=" + hasDisabledBadge + '}';
     }
+
+    
     
     
 }

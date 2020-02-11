@@ -38,6 +38,7 @@ public class UserResource {
         jObj.put("user_type", user.getUserType());
         jObj.put("pass_question", user.getPass_Question());
         jObj.put("pass_answer", user.getPass_answer());
+        jObj.put("has_disabled_badge", user.getHasDisabledBadge());
 
         return jObj;
     }
@@ -54,12 +55,13 @@ public class UserResource {
             u = new User();
             // note that JSONObject has all numbers as longs, and needs to be converted to an int if required.
             
-            u.setUserFullname((String) obj.get("fullname"));
+            u.setUserFullname((String) obj.get("user_fullname"));
             u.setEmail((String) obj.get("email"));
             u.setUserPassword((String) obj.get("password"));
             u.setUserType((String) obj.get("user_type"));
             u.setPass_Question((String) obj.get("pass_question"));
             u.setPass_answer((String) obj.get("pass_answer"));
+            u.setHasDisabledBadge((boolean) obj.get("has_disabled_badge"));
         } // more detailed reporting can be done by catching specific exceptions, such as ParseException
         catch (ParseException exp) {
             System.out.println(exp);
@@ -75,7 +77,7 @@ public class UserResource {
      */
     @GET
     @Produces(MediaType.TEXT_PLAIN)
-    @Consumes(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.TEXT_PLAIN)
     public String getText() {
         UserDAOInterface uDAO = new UserDao();
         ArrayList<User> users = uDAO.selectAllUsers();
@@ -102,8 +104,8 @@ public class UserResource {
      */
     @PUT
     @Consumes(MediaType.TEXT_PLAIN)
-    @Produces(MediaType.APPLICATION_JSON)
-    public boolean Update(String content) {
+    @Produces(MediaType.TEXT_PLAIN)
+    public boolean update(String content) {
         UserDAOInterface uDAO = new UserDao();
         User u = convertJsonStringToUser(content);
         return uDAO.updateUser(u);
@@ -116,11 +118,11 @@ public class UserResource {
      */
     @POST
     @Consumes(MediaType.TEXT_PLAIN)
-    @Produces(MediaType.APPLICATION_JSON)
-    public String Register(String content) {
+    @Produces(MediaType.TEXT_PLAIN)
+    public String register(String content) {
         UserDAOInterface uDAO = new UserDao();
         User u = convertJsonStringToUser(content);
-        boolean dontExistCheck = uDAO.Register(u.getUserFullname(), u.getEmail(), u.getUserPassword(), u.getUserType(), u.getPass_Question(), u.getPass_answer());
+        boolean dontExistCheck = uDAO.register(u.getUserFullname(), u.getEmail(), u.getUserPassword(), u.getUserType(), u.getPass_Question(), u.getPass_answer(), u.getHasDisabledBadge());
         if (dontExistCheck == true) {
             return "true";
         } else {
@@ -128,5 +130,6 @@ public class UserResource {
         }
         
         //{"fullname":"Jonas", "email":"Jonas@gmail.com", "password":"jonny", "user_type":"Manager", "pass_question":"are you really real?", "pass_answer":"no not really"}
+        //{"pass_question":"what is your mother's maiden name", "password":"michael1", "user_type":"user", "user_fullname":"Michael Lawson","pass_answer":"mc mahon", "email":"michael@gmail.com", "has_disabled_badge":false}
     }
 }

@@ -21,6 +21,8 @@ import java.util.ArrayList;
 public class UserDao implements UserDAOInterface {
 
     private SqlConnection sql = new SqlConnection();
+    
+    
     @Override
     public ArrayList<User> getUsers(User us) {
         ArrayList<User> user = new ArrayList();
@@ -48,6 +50,8 @@ public class UserDao implements UserDAOInterface {
                 u.setUserFullname(rs.getString("user_fullname"));
                 u.setUserType(rs.getString("user_type"));
                 u.setEmail(rs.getString("email"));
+                u.setPass_Question(rs.getString("pass_question"));
+                u.setHasDisabledBadge(rs.getBoolean("has_disabled_badge"));
                 user.add(u);
             }
 
@@ -95,7 +99,7 @@ public class UserDao implements UserDAOInterface {
             while (rst.next()) {
                 users.add(new User(rst.getInt("user_id"), rst.getString("user_fullname"), rst.getString("email"),
                         rst.getString("password"), rst.getString("user_type"), rst.getString("pass_question"),
-                        rst.getString("pass_answer")));
+                        rst.getString("pass_answer"), rst.getBoolean("has_disabled_badge")));
             }
             System.out.println("User has been added.");
 
@@ -138,13 +142,13 @@ public class UserDao implements UserDAOInterface {
     }
 
     @Override
-    public boolean Register(String fullname, String email, String password, String user_Type,
-            String pass_question, String pass_Answer) {
+    public boolean register(String fullname, String email, String password, String user_Type,
+            String pass_question, String pass_Answer, boolean has_disabled_badge) {
 
         try {
 
             if (CheckUserExistsByEmail(email)) {
-                sql.setPs(sql.getConn().prepareStatement("INSERT INTO users(user_fullname, email, password, user_type, pass_question, pass_answer) VALUES (?,?,?,?,?,?)"));
+                sql.setPs(sql.getConn().prepareStatement("INSERT INTO users(user_fullname, email, password, user_type, pass_question, pass_answer, has_disabled_badge) VALUES (?,?,?,?,?,?,?)"));
 
                 sql.getPs().setString(1, fullname);
                 sql.getPs().setString(2, email);
@@ -152,6 +156,7 @@ public class UserDao implements UserDAOInterface {
                 sql.getPs().setString(4, user_Type);
                 sql.getPs().setString(5, pass_question);
                 sql.getPs().setString(6, pass_Answer);
+                sql.getPs().setBoolean(7, has_disabled_badge);
 
                 sql.getPs().executeUpdate();
                 return true;
@@ -197,13 +202,13 @@ public class UserDao implements UserDAOInterface {
     @Override
     public boolean updateUser(User user) {
         try {
-            sql.setPs(sql.getConn().prepareStatement("UPDATE users SET user_fullname=?,pass_question=?,pass_answer=? WHERE email = ?"));
-            sql.getPs().setString(1, user.getEmail());
+            sql.setPs(sql.getConn().prepareStatement("UPDATE users SET user_fullname=?,pass_question=?,pass_answer=?, has_disabled_badge=? WHERE email = ?"));
 
             sql.getPs().setString(1, user.getUserFullname());
             sql.getPs().setString(2, user.getPass_Question());
             sql.getPs().setString(3, user.getPass_answer());
-            sql.getPs().setString(4, user.getEmail());
+            sql.getPs().setBoolean(4, user.getHasDisabledBadge());
+            sql.getPs().setString(5, user.getEmail());
 
             sql.getPs().executeUpdate();
 
@@ -232,7 +237,7 @@ public class UserDao implements UserDAOInterface {
             while (rst.next()) {
                 user = new User(rst.getInt("user_id"), rst.getString("user_fullname"), rst.getString("email"),
                         rst.getString("password"), rst.getString("user_type"), rst.getString("pass_question"),
-                        rst.getString("pass_answer"));
+                        rst.getString("pass_answer"), rst.getBoolean("has_disabled_badge"));
             }
             System.out.println("User has been added.");
 

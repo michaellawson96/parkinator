@@ -56,7 +56,7 @@ public class LoginResourse {
 
     @POST
     @Consumes(MediaType.TEXT_PLAIN)
-    @Produces(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.TEXT_PLAIN)
     public String Login(String content) {
         UserDAOInterface uDAO = new UserDao();
         User u = convertJsonStringToUser(content);
