@@ -43,7 +43,7 @@ public class LoginResourse {
             u = new User();
             // note that JSONObject has all numbers as longs, and needs to be converted to an int if required.
             u.setEmail((String) obj.get("email"));
-            u.setUserPassword((String) obj.get("password"));
+            u.setUserHash((String) obj.get("hash"));
         } // more detailed reporting can be done by catching specific exceptions, such as ParseException
         catch (ParseException exp) {
             System.out.println(exp);
@@ -60,7 +60,7 @@ public class LoginResourse {
     public String Login(String content) {
         UserDAOInterface uDAO = new UserDao();
         User u = convertJsonStringToUser(content);
-        boolean existenceCheck = uDAO.Login(u.getEmail(), u.getUserPassword());
+        boolean existenceCheck = uDAO.Login(u.getEmail(), u.getUserHash());
         if (existenceCheck == true) {//this means the customer has been successfully obtained
             return "true";
         } else {

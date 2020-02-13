@@ -34,10 +34,10 @@ public class UserResource {
         jObj.put("user_id", user.getUserNo());
         jObj.put("user_fullname", user.getUserFullname());
         jObj.put("email", user.getEmail());
-        jObj.put("password", user.getUserPassword());
+        jObj.put("hash", user.getUserHash());
         jObj.put("user_type", user.getUserType());
-        jObj.put("pass_question", user.getPass_Question());
-        jObj.put("pass_answer", user.getPass_answer());
+        jObj.put("question", user.getQuestion());
+        jObj.put("answer_hash", user.getAnswer_hash());
         jObj.put("has_disabled_badge", user.getHasDisabledBadge());
 
         return jObj;
@@ -57,10 +57,10 @@ public class UserResource {
             
             u.setUserFullname((String) obj.get("user_fullname"));
             u.setEmail((String) obj.get("email"));
-            u.setUserPassword((String) obj.get("password"));
+            u.setUserHash((String) obj.get("hash"));
             u.setUserType((String) obj.get("user_type"));
-            u.setPass_Question((String) obj.get("pass_question"));
-            u.setPass_answer((String) obj.get("pass_answer"));
+            u.setQuestion((String) obj.get("question"));
+            u.setAnswer_hash((String) obj.get("answer_hash"));
             u.setHasDisabledBadge((boolean) obj.get("has_disabled_badge"));
         } // more detailed reporting can be done by catching specific exceptions, such as ParseException
         catch (ParseException exp) {
@@ -98,7 +98,7 @@ public class UserResource {
     }
 
     /**
-     * PUT method for updating or creating an instance of UserResource
+     * PUT method for updating or creatinsg an instance of UserResource
      *
      * @param content representation for the resource
      */
@@ -122,14 +122,14 @@ public class UserResource {
     public String register(String content) {
         UserDAOInterface uDAO = new UserDao();
         User u = convertJsonStringToUser(content);
-        boolean dontExistCheck = uDAO.register(u.getUserFullname(), u.getEmail(), u.getUserPassword(), u.getUserType(), u.getPass_Question(), u.getPass_answer(), u.getHasDisabledBadge());
+        boolean dontExistCheck = uDAO.register(u.getUserFullname(), u.getEmail(), u.getUserHash(), u.getUserType(), u.getQuestion(), u.getAnswer_hash(), u.getHasDisabledBadge());
         if (dontExistCheck == true) {
             return "true";
         } else {
             return "false";
         }
         
-        //{"fullname":"Jonas", "email":"Jonas@gmail.com", "password":"jonny", "user_type":"Manager", "pass_question":"are you really real?", "pass_answer":"no not really"}
-        //{"pass_question":"what is your mother's maiden name", "password":"michael1", "user_type":"user", "user_fullname":"Michael Lawson","pass_answer":"mc mahon", "email":"michael@gmail.com", "has_disabled_badge":false}
+        //{"fullname":"Jonas", "email":"Jonas@gmail.com", "hash":"jonny", "user_type":"Manager", "question":"are you really real?", "answer_hash":"no not really"}
+        //{"question":"what is your mother's maiden name", "hash":"michael1", "user_type":"user", "user_fullname":"Michael Lawson","answer_hash":"mc mahon", "email":"michael@gmail.com", "has_disabled_badge":false}
     }
 }

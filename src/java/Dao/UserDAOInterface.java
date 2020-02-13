@@ -16,9 +16,9 @@ public interface UserDAOInterface {
         boolean updateUser(User user);
         ArrayList<User> selectAllUsers();
         boolean CheckUserExistsByEmail(String email);
-        boolean Login(String email, String password); 
-        boolean register(String fullname, String email, String password, String user_Type, 
-                String pass_question, String pass_Answer, boolean has_disabled_badge); 
+        boolean Login(String email, String hash); 
+        boolean register(String fullname, String email, String hash, String user_Type, 
+                String question, String answer_Hash, boolean has_disabled_badge); 
         ArrayList<User> getUsers(User us);
         User getUserByEmail(String email);
 }

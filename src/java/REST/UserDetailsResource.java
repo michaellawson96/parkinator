@@ -56,12 +56,16 @@ public class UserDetailsResource {
     private JSONObject convertUserToJson(User user) {
         JSONObject jObj = new JSONObject();
         jObj.put("user_id", user.getUserNo());
-        jObj.put("pass_question", user.getPass_Question());
         jObj.put("user_fullname", user.getUserFullname());
-        jObj.put("user_type", user.getUserType());
         jObj.put("email", user.getEmail());
+        jObj.put("hash", user.getUserHash());
+        jObj.put("user_type", user.getUserType());
+        jObj.put("question", user.getQuestion());
+        jObj.put("answer_hash", user.getAnswer_hash());
+        jObj.put("has_disabled_badge", user.getHasDisabledBadge());
+
         return jObj;
-    }    
+    }
     /**
      * Retrieves representation of an instance of REST.UserDetailsResource
      * @return an instance of java.lang.String

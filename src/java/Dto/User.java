@@ -16,24 +16,24 @@ public class User {
     private int userNo;
     private String userFullname;//
     private String Email;
-    private String userPassword;
+    private String userHash;
     private String userType;
-    private String pass_Question;//
-    private String pass_answer;//
+    private String question;//
+    private String answer_hash;//
     private boolean hasDisabledBadge;
 
     
     public User() {
     }
 
-    public User(int userNo, String userFullname, String Email, String userPassword, String userType, String pass_Question, String pass_answer, boolean hasDisabledBadge) {
+    public User(int userNo, String userFullname, String Email, String userHash, String userType, String question, String answer_hash, boolean hasDisabledBadge) {
         this.userNo = userNo;
         this.userFullname = userFullname;
         this.Email = Email;
-        this.userPassword = userPassword;
+        this.userHash = userHash;
         this.userType = userType;
-        this.pass_Question = pass_Question;
-        this.pass_answer = pass_answer;
+        this.question = question;
+        this.answer_hash = answer_hash;
         this.hasDisabledBadge = hasDisabledBadge;
     }
 
@@ -61,12 +61,12 @@ public class User {
         this.Email = Email;
     }
 
-    public String getUserPassword() {
-        return userPassword;
+    public String getUserHash() {
+        return userHash;
     }
 
-    public void setUserPassword(String userPassword) {
-        this.userPassword = userPassword;
+    public void setUserHash(String userHash) {
+        this.userHash = userHash;
     }
 
     public String getUserType() {
@@ -77,20 +77,20 @@ public class User {
         this.userType = userType;
     }
 
-    public String getPass_Question() {
-        return pass_Question;
+    public String getQuestion() {
+        return question;
     }
 
-    public void setPass_Question(String pass_Quesstion) {
-        this.pass_Question = pass_Quesstion;
+    public void setQuestion(String pass_Quesstion) {
+        this.question = pass_Quesstion;
     }
 
-    public String getPass_answer() {
-        return pass_answer;
+    public String getAnswer_hash() {
+        return answer_hash;
     }
 
-    public void setPass_answer(String pass_answer) {
-        this.pass_answer = pass_answer;
+    public void setAnswer_hash(String answer_hash) {
+        this.answer_hash = answer_hash;
     }
 
     public boolean getHasDisabledBadge() {
@@ -107,10 +107,10 @@ public class User {
         hash = 29 * hash + this.userNo;
         hash = 29 * hash + Objects.hashCode(this.userFullname);
         hash = 29 * hash + Objects.hashCode(this.Email);
-        hash = 29 * hash + Objects.hashCode(this.userPassword);
+        hash = 29 * hash + Objects.hashCode(this.userHash);
         hash = 29 * hash + Objects.hashCode(this.userType);
-        hash = 29 * hash + Objects.hashCode(this.pass_Question);
-        hash = 29 * hash + Objects.hashCode(this.pass_answer);
+        hash = 29 * hash + Objects.hashCode(this.question);
+        hash = 29 * hash + Objects.hashCode(this.answer_hash);
         hash = 29 * hash + Objects.hashCode(this.hasDisabledBadge);
         return hash;
     }
@@ -136,16 +136,16 @@ public class User {
         if (!Objects.equals(this.Email, other.Email)) {
             return false;
         }
-        if (!Objects.equals(this.userPassword, other.userPassword)) {
+        if (!Objects.equals(this.userHash, other.userHash)) {
             return false;
         }
         if (!Objects.equals(this.userType, other.userType)) {
             return false;
         }
-        if (!Objects.equals(this.pass_Question, other.pass_Question)) {
+        if (!Objects.equals(this.question, other.question)) {
             return false;
         }
-        if (!Objects.equals(this.pass_answer, other.pass_answer)) {
+        if (!Objects.equals(this.answer_hash, other.answer_hash)) {
             return false;
         }
         if (!Objects.equals(this.hasDisabledBadge, other.hasDisabledBadge)) {
@@ -156,7 +156,7 @@ public class User {
 
     @Override
     public String toString() {
-        return "User{" + "userNo=" + userNo + ", userFullname=" + userFullname + ", Email=" + Email + ", userPassword=" + userPassword + ", userType=" + userType + ", pass_Question=" + pass_Question + ", pass_answer=" + pass_answer + ", hasDisabledBadge=" + hasDisabledBadge + '}';
+        return "User{" + "userNo=" + userNo + ", userFullname=" + userFullname + ", Email=" + Email + ", userHash=" + userHash + ", userType=" + userType + ", question=" + question + ", answer_hash=" + answer_hash + ", hasDisabledBadge=" + hasDisabledBadge + '}';
     }
 
     
