@@ -79,8 +79,10 @@ public class UserDao implements UserDAOInterface {
             if (email.contains("@") && email.contains(".") && hash.matches(".*[a-z].*") && hash.length() <= 15 && hash.matches(".*\\d.*")) {
                 String[] HashedSaltedPw = SaltANDHash(hash);
                 String[] HashedSaltedAnswer = SaltANDHash(answer_hash);
-
-                if (CheckUserExistsByEmail(email)) {
+                
+                System.out.println("valid email supplied");
+                
+                if (!CheckUserExistsByEmail(email)) {
                     sql.setPs(sql.getConn().prepareStatement("INSERT INTO users(user_fullname, email, hash, user_type, question, answer_hash, has_disabled_badge) VALUES (?,?,?,?,?,?,?)"));
                     sql.getPs().setString(1, fullname);
                     sql.getPs().setString(2, email);
@@ -89,18 +91,24 @@ public class UserDao implements UserDAOInterface {
                     sql.getPs().setString(5, question);
                     sql.getPs().setString(6, HashedSaltedAnswer[1]);
                     sql.getPs().setBoolean(7, has_disabled_badge);
-
+                    
+                    
+                    
                     sql.getPs().executeUpdate();
 
+                    System.out.println("user recorded");
+                    
                     User u = getUserByEmail(email);
 
                     sql.setPs(sql.getConn().prepareStatement("INSERT INTO salt(user_id, salt, answer_salt) VALUES (?,?,?)"));
                     sql.getPs().setInt(1, u.getUserNo());
                     sql.getPs().setString(2, HashedSaltedPw[0]);
                     sql.getPs().setString(3, HashedSaltedAnswer[0]);
-
+                    
                     sql.getPs().executeUpdate();
-
+                    
+                    System.out.println("salt recorded");
+                    
                     return true;
                     }
             } 
@@ -129,8 +137,7 @@ public class UserDao implements UserDAOInterface {
     }
 
     @Override
-    public boolean CheckUserExistsByEmail(String email
-    ) {
+    public boolean CheckUserExistsByEmail(String email) {
         try {
             sql.setPs(sql.getConn().prepareStatement("select * from users where email=?"));
             sql.getPs().setString(1, email);
@@ -139,10 +146,10 @@ public class UserDao implements UserDAOInterface {
             rst = sql.getPs().executeQuery();
 
             if (rst.next()) {
-                System.out.println("true");
+                System.out.println("user already exists");
                 return true;
             }
-            System.out.println("false");
+            System.out.println("user doesn't exist yet");
             return false;
 
         } catch (SQLException se) {

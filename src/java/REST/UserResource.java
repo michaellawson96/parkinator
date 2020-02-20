@@ -122,8 +122,8 @@ public class UserResource {
     public String register(String content) {
         UserDAOInterface uDAO = new UserDao();
         User u = convertJsonStringToUser(content);
-        boolean dontExistCheck = uDAO.register(u.getUserFullname(), u.getEmail(), u.getUserHash(), u.getUserType(), u.getQuestion(), u.getAnswer_hash(), u.getHasDisabledBadge());
-        if (dontExistCheck == true) {
+        boolean success = uDAO.register(u.getUserFullname(), u.getEmail(), u.getUserHash(), u.getUserType(), u.getQuestion(), u.getAnswer_hash(), u.getHasDisabledBadge());
+        if (success == true) {
             return "true";
         } else {
             return "false";
