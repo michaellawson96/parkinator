@@ -56,7 +56,7 @@ public class CarDAO implements CarDAOInterface {
     @Override
     public ArrayList<Car> getAllUserCars(int userNo) {
         try {
-            sql.setPs(sql.getConn().prepareStatement("select * from cars wher user_id = ?"));
+            sql.setPs(sql.getConn().prepareStatement("select * from cars where user_id = ?"));
             sql.getPs().setInt(1, userNo);
             ResultSet rst;
             // Execute the query

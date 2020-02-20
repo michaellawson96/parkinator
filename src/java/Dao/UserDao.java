@@ -6,6 +6,7 @@
 package Dao;
 
 import Dto.User;
+import SaltingString.BCrypt;
 import SqlConnection.SqlConnection;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -21,73 +22,7 @@ import java.util.ArrayList;
 public class UserDao implements UserDAOInterface {
 
     private SqlConnection sql = new SqlConnection();
-    
-    
-    @Override
-    public ArrayList<User> getUsers(User us) {
-        ArrayList<User> user = new ArrayList();
 
-        String driver = "com.mysql.jdbc.Driver";
-        String url = "jdbc:mysql://127.0.0.1:3306/parkinator";
-        String username = "root";
-        String hash = "";
-
-        Connection conn = null;
-        PreparedStatement ps = null;
-        ResultSet rs = null;
-
-        try {
-            Class.forName(driver);
-
-            conn = DriverManager.getConnection(url, username, hash);
-
-            ps = conn.prepareStatement("SELECT * FROM users WHERE email='" + us.getEmail() + "'");
-            rs = ps.executeQuery();
-
-            while (rs.next()) {
-                User u = new User();
-                u.setUserNo(rs.getInt("user_id"));
-                u.setUserFullname(rs.getString("user_fullname"));
-                u.setUserType(rs.getString("user_type"));
-                u.setEmail(rs.getString("email"));
-                u.setQuestion(rs.getString("question"));
-                u.setHasDisabledBadge(rs.getBoolean("has_disabled_badge"));
-                user.add(u);
-            }
-
-        } catch (SQLException se) {
-            System.out.println("SQL Exception occurred: " + se.getMessage());
-            se.printStackTrace();
-        } catch (Exception e) {
-            System.out.println("Exception occurred: " + e.getMessage());
-            e.printStackTrace();
-        } finally {
-            if (rs != null) {
-                try {
-                    rs.close();
-                } catch (SQLException ex) {
-                    System.out.println("Exception occurred when attempting to close ResultSet: " + ex.getMessage());
-                }
-            }
-            if (ps != null) {
-                try {
-                    ps.close();
-                } catch (SQLException ex) {
-                    System.out.println("Exception occurred when attempting to close the PreparedStatement: " + ex.getMessage());
-                }
-            }
-            if (conn != null) {
-                try {
-                    conn.close();
-                } catch (SQLException ex) {
-                    System.out.println("Exception occurred when attempting to close the Connection: " + ex.getMessage());
-                }
-            }
-        }
-
-        return user;
-
-    }
     @Override
     public ArrayList<User> selectAllUsers() {
         try {
@@ -118,22 +53,14 @@ public class UserDao implements UserDAOInterface {
     @Override
     public boolean Login(String email, String hash) {
         try {
-            sql.setPs(sql.getConn().prepareStatement("select * from users where email=? and hash=?"));
-            sql.getPs().setString(1, email);
-            sql.getPs().setString(2, hash);
-
-            ResultSet rst;
-            rst = sql.getPs().executeQuery();
-
-            if (!rst.next()) {
+            if (CheckUserExistsByEmail(email)) {
+                User u = getUserByEmail(email);
+                System.out.println(u.toString());
+                return BCrypt.checkpw(hash, u.getUserHash());
+            } else {
                 return false;
             }
-            return true;
 
-        } catch (SQLException se) {
-            System.out.println("SQL Exception occurred: " + se.getMessage());
-            se.printStackTrace();
-            return false;
         } catch (Exception e) {
             System.out.println("Exception occurred: " + e.getMessage());
             e.printStackTrace();
@@ -147,19 +74,54 @@ public class UserDao implements UserDAOInterface {
 
         try {
 
-            if (CheckUserExistsByEmail(email)) {
-                sql.setPs(sql.getConn().prepareStatement("INSERT INTO users(user_fullname, email, hash, user_type, question, answer_hash, has_disabled_badge) VALUES (?,?,?,?,?,?,?)"));
+            if (email.contains("@") && email.contains(".")) {
 
-                sql.getPs().setString(1, fullname);
-                sql.getPs().setString(2, email);
-                sql.getPs().setString(3, hash);
-                sql.getPs().setString(4, user_Type);
-                sql.getPs().setString(5, question);
-                sql.getPs().setString(6, answer_hash);
-                sql.getPs().setBoolean(7, has_disabled_badge);
+                if (hash.length() <= 15) {
+                    if (hash.matches(".*\\d.*")) {
+                        if (hash.matches(".*[A-Z].*")) {
+                            if (hash.matches(".*[a-z].*")) {
 
-                sql.getPs().executeUpdate();
-                return true;
+                                String[] HashedSaltedPw = SaltANDHash(hash);
+                                String[] HashedSaltedAnswer = SaltANDHash(answer_hash);
+
+                                if (CheckUserExistsByEmail(email)) {
+                                    sql.setPs(sql.getConn().prepareStatement("INSERT INTO users(user_fullname, email, hash, user_type, question, answer_hash, has_disabled_badge) VALUES (?,?,?,?,?,?,?)"));
+                                    sql.getPs().setString(1, fullname);
+                                    sql.getPs().setString(2, email);
+                                    sql.getPs().setString(3, HashedSaltedPw[1]);
+                                    sql.getPs().setString(4, user_Type);
+                                    sql.getPs().setString(5, question);
+                                    sql.getPs().setString(6, HashedSaltedAnswer[1]);
+                                    sql.getPs().setBoolean(7, has_disabled_badge);
+
+                                    sql.getPs().executeUpdate();
+
+                                    User u = getUserByEmail(email);
+
+                                    sql.setPs(sql.getConn().prepareStatement("INSERT INTO salt(user_id, salt, answer_salt) VALUES (?,?,?)"));
+                                    sql.getPs().setInt(1, u.getUserNo());
+                                    sql.getPs().setString(2, HashedSaltedPw[0]);
+                                    sql.getPs().setString(3, HashedSaltedAnswer[0]);
+
+                                    sql.getPs().executeUpdate();
+
+                                    return true;
+                                } else {
+                                    return false;
+                                }
+                            } else {
+                                return false;
+                            }
+
+                        } else {
+                            return false;
+                        }
+                    } else {
+                        return false;
+                    }
+                } else {
+                    return false;
+                }
             } else {
                 return false;
             }
@@ -174,8 +136,19 @@ public class UserDao implements UserDAOInterface {
         }
     }
 
+    public static String[] SaltANDHash(String needHashSalt) {
+        String[] SaltUsedAndHash = new String[2];
+
+        SaltUsedAndHash[0] = BCrypt.gensalt(12);
+
+        SaltUsedAndHash[1] = BCrypt.hashpw(needHashSalt, SaltUsedAndHash[0]);
+
+        return SaltUsedAndHash;
+    }
+
     @Override
-    public boolean CheckUserExistsByEmail(String email) {
+    public boolean CheckUserExistsByEmail(String email
+    ) {
         try {
             sql.setPs(sql.getConn().prepareStatement("select * from users where email=?"));
             sql.getPs().setString(1, email);
@@ -200,7 +173,8 @@ public class UserDao implements UserDAOInterface {
     }
 
     @Override
-    public boolean updateUser(User user) {
+    public boolean updateUser(User user
+    ) {
         try {
             sql.setPs(sql.getConn().prepareStatement("UPDATE users SET user_fullname=?,question=?,answer_hash=?, has_disabled_badge=? WHERE email = ?"));
 
@@ -250,6 +224,7 @@ public class UserDao implements UserDAOInterface {
             System.out.println("Exception occurred: " + e.getMessage());
             e.printStackTrace();
             return null;
-        }    }
+        }
+    }
 
 }

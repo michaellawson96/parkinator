@@ -14,12 +14,12 @@ import java.util.Objects;
 public class User {
     
     private int userNo;
-    private String userFullname;//
+    private String userFullname;
     private String Email;
     private String userHash;
     private String userType;
-    private String question;//
-    private String answer_hash;//
+    private String question;
+    private String answer_hash;
     private boolean hasDisabledBadge;
 
     

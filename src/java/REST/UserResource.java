@@ -129,7 +129,7 @@ public class UserResource {
             return "false";
         }
         
-        //{"fullname":"Jonas", "email":"Jonas@gmail.com", "hash":"jonny", "user_type":"Manager", "question":"are you really real?", "answer_hash":"no not really"}
+        //{"fullname":"Jonas", "email":"Jonas@gmail.com", "hash":"jonny", "user_type":"Manager", "question":"are you really real?", "answer_hash":"no not really, "has_disabled_badge":false"}
         //{"question":"what is your mother's maiden name", "hash":"michael1", "user_type":"user", "user_fullname":"Michael Lawson","answer_hash":"mc mahon", "email":"michael@gmail.com", "has_disabled_badge":false}
     }
 }

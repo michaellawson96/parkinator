@@ -19,6 +19,6 @@ public interface UserDAOInterface {
         boolean Login(String email, String hash); 
         boolean register(String fullname, String email, String hash, String user_Type, 
                 String question, String answer_Hash, boolean has_disabled_badge); 
-        ArrayList<User> getUsers(User us);
+        
         User getUserByEmail(String email);
 }
