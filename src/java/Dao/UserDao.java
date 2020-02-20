@@ -53,11 +53,13 @@ public class UserDao implements UserDAOInterface {
     @Override
     public boolean Login(String email, String hash) {
         try {
+            System.out.println(email);
             if (CheckUserExistsByEmail(email)) {
                 User u = getUserByEmail(email);
                 System.out.println(u.toString());
                 return BCrypt.checkpw(hash, u.getUserHash());
             } else {
+                System.out.println("didn't exist");
                 return false;
             }
 
@@ -74,57 +76,36 @@ public class UserDao implements UserDAOInterface {
 
         try {
 
-            if (email.contains("@") && email.contains(".")) {
+            if (email.contains("@") && email.contains(".") && hash.matches(".*[a-z].*") && hash.length() <= 15 && hash.matches(".*\\d.*")) {
+                String[] HashedSaltedPw = SaltANDHash(hash);
+                String[] HashedSaltedAnswer = SaltANDHash(answer_hash);
 
-                if (hash.length() <= 15) {
-                    if (hash.matches(".*\\d.*")) {
-                        if (hash.matches(".*[A-Z].*")) {
-                            if (hash.matches(".*[a-z].*")) {
+                if (CheckUserExistsByEmail(email)) {
+                    sql.setPs(sql.getConn().prepareStatement("INSERT INTO users(user_fullname, email, hash, user_type, question, answer_hash, has_disabled_badge) VALUES (?,?,?,?,?,?,?)"));
+                    sql.getPs().setString(1, fullname);
+                    sql.getPs().setString(2, email);
+                    sql.getPs().setString(3, HashedSaltedPw[1]);
+                    sql.getPs().setString(4, user_Type);
+                    sql.getPs().setString(5, question);
+                    sql.getPs().setString(6, HashedSaltedAnswer[1]);
+                    sql.getPs().setBoolean(7, has_disabled_badge);
 
-                                String[] HashedSaltedPw = SaltANDHash(hash);
-                                String[] HashedSaltedAnswer = SaltANDHash(answer_hash);
+                    sql.getPs().executeUpdate();
 
-                                if (CheckUserExistsByEmail(email)) {
-                                    sql.setPs(sql.getConn().prepareStatement("INSERT INTO users(user_fullname, email, hash, user_type, question, answer_hash, has_disabled_badge) VALUES (?,?,?,?,?,?,?)"));
-                                    sql.getPs().setString(1, fullname);
-                                    sql.getPs().setString(2, email);
-                                    sql.getPs().setString(3, HashedSaltedPw[1]);
-                                    sql.getPs().setString(4, user_Type);
-                                    sql.getPs().setString(5, question);
-                                    sql.getPs().setString(6, HashedSaltedAnswer[1]);
-                                    sql.getPs().setBoolean(7, has_disabled_badge);
+                    User u = getUserByEmail(email);
 
-                                    sql.getPs().executeUpdate();
+                    sql.setPs(sql.getConn().prepareStatement("INSERT INTO salt(user_id, salt, answer_salt) VALUES (?,?,?)"));
+                    sql.getPs().setInt(1, u.getUserNo());
+                    sql.getPs().setString(2, HashedSaltedPw[0]);
+                    sql.getPs().setString(3, HashedSaltedAnswer[0]);
 
-                                    User u = getUserByEmail(email);
+                    sql.getPs().executeUpdate();
 
-                                    sql.setPs(sql.getConn().prepareStatement("INSERT INTO salt(user_id, salt, answer_salt) VALUES (?,?,?)"));
-                                    sql.getPs().setInt(1, u.getUserNo());
-                                    sql.getPs().setString(2, HashedSaltedPw[0]);
-                                    sql.getPs().setString(3, HashedSaltedAnswer[0]);
-
-                                    sql.getPs().executeUpdate();
-
-                                    return true;
-                                } else {
-                                    return false;
-                                }
-                            } else {
-                                return false;
-                            }
-
-                        } else {
-                            return false;
-                        }
-                    } else {
-                        return false;
+                    return true;
                     }
-                } else {
-                    return false;
-                }
-            } else {
-                return false;
-            }
+            } 
+            else return false;
+            
         } catch (SQLException se) {
             System.out.println("SQL Exception occurred: " + se.getMessage());
             se.printStackTrace();
@@ -134,6 +115,7 @@ public class UserDao implements UserDAOInterface {
             e.printStackTrace();
             return false;
         }
+        return false;
     }
 
     public static String[] SaltANDHash(String needHashSalt) {
@@ -157,9 +139,11 @@ public class UserDao implements UserDAOInterface {
             rst = sql.getPs().executeQuery();
 
             if (rst.next()) {
-                return false;
+                System.out.println("true");
+                return true;
             }
-            return true;
+            System.out.println("false");
+            return false;
 
         } catch (SQLException se) {
             System.out.println("SQL Exception occurred: " + se.getMessage());

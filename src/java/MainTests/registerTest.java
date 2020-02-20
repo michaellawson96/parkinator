@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package REST;
+package MainTests;
 
 
 /**
@@ -11,11 +11,13 @@ package REST;
  * @author snake
  */
 import REST.UserResource;
+import REST.UserResource;
 public class registerTest {
     public static void main(String[] args) {
         UserResource ur = new UserResource();
         
-        ur.update("{\"pass_question\":\"what is your mother's maiden name\", \"password\":\"michael1\", \"user_type\":\"user\", \"user_fullname\":\"Michael Lawson\",\"pass_answer\":\"mc mahon\", \"email\":\"michael@gmail.com\", \"has_disabled_badge\":false, \"user_id\":2}");
+        
+        ur.register("{\"user_type\":\"user\",\"question\":\"what is your mother's maiden name\",\"user_id\":4,\"answer_hash\":\"Mc Mahon\",\"user_fullname\":\"Michael Lawson\",\"email\":\"michael2@gmail.com\",\"hash\":\"Michael1\",\"has_disabled_badge\":false}");
         //{"user_fullname":"asdasd","email":"asdsad@gmail.com","password":"Lukiukas","user_type":"regular","pass_question":"asdasd","pass_answer":"asdasd"}
     }
     
