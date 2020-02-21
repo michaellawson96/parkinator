@@ -76,7 +76,7 @@ public class UserDao implements UserDAOInterface {
 
         try {
 
-            if (email.contains("@") && email.contains(".") && hash.matches(".*[a-z].*") && hash.length() <= 15 && hash.matches(".*\\d.*")) {
+            if (email.contains("@") && email.contains(".") && hash.matches(".*[a-z].*") && hash.length() <= 30 && hash.length() >= 7 && hash.matches(".*\\d.*")) {
                 String[] HashedSaltedPw = SaltANDHash(hash);
                 String[] HashedSaltedAnswer = SaltANDHash(answer_hash);
                 
@@ -217,5 +217,33 @@ public class UserDao implements UserDAOInterface {
             return null;
         }
     }
+    
+ 
+    @Override
+    public boolean CheckUserExistsByEmailRecovery(User user) {
+        try {
+            sql.setPs(sql.getConn().prepareStatement("select * from users where email=?"));
+            sql.getPs().setString(1, user.getEmail());
+
+            ResultSet rst;
+            rst = sql.getPs().executeQuery();
+
+            if (rst.next()) {
+                System.out.println("user already exists");
+                return true;
+            }
+            System.out.println("user doesn't exist yet");
+            return false;
+
+        } catch (SQLException se) {
+            System.out.println("SQL Exception occurred: " + se.getMessage());
+            se.printStackTrace();
+            return false;
+        } catch (Exception e) {
+            System.out.println("Exception occurred: " + e.getMessage());
+            e.printStackTrace();
+            return false;
+        }
+    }   
 
 }

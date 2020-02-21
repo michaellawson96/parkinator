@@ -5,6 +5,7 @@
  */
 package Test;
 
+import REST.RecoveryResource;
 import REST.UserDetailsResource;
 import REST.UserResource;
 import java.util.Scanner;
@@ -18,9 +19,9 @@ public class LoginTest {
         UserResource ur = new UserResource();
         UserDetailsResource r = new UserDetailsResource();
         Scanner sc = new Scanner(System.in);
-        
+        RecoveryResource rr = new RecoveryResource();
         String c = sc.next();
-        System.out.println(r.postText(c));
+        System.out.println(rr.CheckEmail(c));
         
         //{"email":"asd"}
     }

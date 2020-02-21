@@ -32,6 +32,7 @@ public class ApplicationConfig extends Application {
         resources.add(REST.CarResource.class);
         resources.add(REST.LoginResourse.class);
         resources.add(REST.NewCrossOriginResourceSharingFilter.class);
+        resources.add(REST.RecoveryResource.class);
         resources.add(REST.UserCarResource.class);
         resources.add(REST.UserDetailsResource.class);
         resources.add(REST.UserResource.class);
