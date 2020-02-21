@@ -13,6 +13,7 @@ import javax.ws.rs.core.UriInfo;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -65,10 +66,13 @@ public class CarResource {
      */
     @POST
     @Consumes(MediaType.TEXT_PLAIN)
-    public void putText(String content) {
+    @Produces(MediaType.APPLICATION_JSON)
+    public boolean putText(String content) {
         CarDAOInterface cDAO = new CarDAO();
         Car c = convertJsonStringToCar(content);
-        cDAO.insertCar(c);
+        return cDAO.insertCar(c);
+        
         //{"car_reg":"09-MN-6919","car_details":"Red Renault Megane","user_no":2}
+        
     }
 }
