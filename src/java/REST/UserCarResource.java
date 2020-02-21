@@ -14,6 +14,7 @@ import javax.ws.rs.core.UriInfo;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.Produces;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PUT;
 import javax.ws.rs.core.MediaType;
@@ -49,7 +50,7 @@ public class UserCarResource {
 
             // create a new Customer and use get method to retrieve values for a key
             
-            userNo = ((Long) obj.get("user_no")).intValue();
+            userNo = ((Long) obj.get("user_id")).intValue();
         } // more detailed reporting can be done by catching specific exceptions, such as ParseException
         catch (ParseException exp) {
             System.out.println(exp);
@@ -73,13 +74,14 @@ public class UserCarResource {
      * Put method for updating or creating an instance of UserCarResource
      * @param content representation for the resource
      */
-    @PUT
+    @POST
     @Consumes(MediaType.TEXT_PLAIN)
     @Produces(MediaType.TEXT_PLAIN)
     public String getUserCars(String content) {
         CarDAOInterface cDAO = new CarDAO();
         int userNo = convertJsonStringToUserNo(content);
         ArrayList<Car> cars = cDAO.getAllUserCars(userNo);
+        
         JSONArray array = new JSONArray();
             for (Car car : cars) {
                 array.add(convertCarToJson(car));

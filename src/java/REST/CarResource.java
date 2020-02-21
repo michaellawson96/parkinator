@@ -66,7 +66,7 @@ public class CarResource {
      */
     @POST
     @Consumes(MediaType.TEXT_PLAIN)
-    @Produces(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.TEXT_PLAIN)
     public boolean putText(String content) {
         CarDAOInterface cDAO = new CarDAO();
         Car c = convertJsonStringToCar(content);
