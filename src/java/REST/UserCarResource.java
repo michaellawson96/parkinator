@@ -76,7 +76,7 @@ public class UserCarResource {
      */
     @POST
     @Consumes(MediaType.TEXT_PLAIN)
-    @Produces(MediaType.TEXT_PLAIN)
+    @Produces(MediaType.APPLICATION_JSON)
     public String getUserCars(String content) {
         CarDAOInterface cDAO = new CarDAO();
         int userNo = convertJsonStringToUserNo(content);
