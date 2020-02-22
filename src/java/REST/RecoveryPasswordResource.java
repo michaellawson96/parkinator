@@ -25,17 +25,18 @@ import org.json.simple.parser.ParseException;
  *
  * @author SeppQ
  */
-@Path("Recovery")
-public class RecoveryResource {
+@Path("RecoveryPassword")
+public class RecoveryPasswordResource {
 
     @Context
     private UriInfo context;
 
     /**
-     * Creates a new instance of RecoveryResource
+     * Creates a new instance of RecoveryPasswordResource
      */
-    public RecoveryResource() {
+    public RecoveryPasswordResource() {
     }
+
     private User convertJsonStringToUser(String jsonString) {
         User u = null;
         try {
@@ -47,9 +48,9 @@ public class RecoveryResource {
             // create a new Customer and use get method to retrieve values for a key
             u = new User();
             // note that JSONObject has all numbers as longs, and needs to be converted to an int if required.
-            
             u.setEmail((String) obj.get("email"));
-
+            u.setAnswer_hash((String) obj.get("answer_hash"));
+            u.setUserHash((String) obj.get("hash"));
         } // more detailed reporting can be done by catching specific exceptions, such as ParseException
         catch (ParseException exp) {
             System.out.println(exp);
@@ -57,16 +58,24 @@ public class RecoveryResource {
         }
         return u;
     }
-
     @POST
     @Consumes(MediaType.TEXT_PLAIN)
     @Produces(MediaType.TEXT_PLAIN)
-    public String CheckEmail(String content) {
+    public boolean CheckQeustionAnswer(String content) {
         UserDao udao = new UserDao();
-        User email = convertJsonStringToUser(content);
-        String check = udao.CheckUserExistsByEmailRecovery(email);
-        return check;
+        User validation = convertJsonStringToUser(content);
+        
+        return udao.CheckUserRecoveryAnswer(validation);
         
     }
- 
+    @PUT
+    @Consumes(MediaType.TEXT_PLAIN)
+    @Produces(MediaType.TEXT_PLAIN)
+    public boolean UpdatePassword(String content) {
+        UserDao udao = new UserDao();
+        User validation = convertJsonStringToUser(content);    
+        return udao.updateUserPassword(validation);
+        
+    }    
+    
 }

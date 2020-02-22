@@ -21,5 +21,7 @@ public interface UserDAOInterface {
                 String question, String answer_Hash, boolean has_disabled_badge); 
         
         User getUserByEmail(String email);
-        boolean CheckUserExistsByEmailRecovery(User user);
+        String CheckUserExistsByEmailRecovery(User user);
+        boolean CheckUserRecoveryAnswer(User user);
+        boolean updateUserPassword(User user);
 }
