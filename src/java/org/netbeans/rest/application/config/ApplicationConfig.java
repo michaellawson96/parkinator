@@ -29,6 +29,7 @@ public class ApplicationConfig extends Application {
      * If required, comment out calling this method in getClasses().
      */
     private void addRestResourceClasses(Set<Class<?>> resources) {
+        resources.add(REST.AdminResource.class);
         resources.add(REST.CarResource.class);
         resources.add(REST.LoginResourse.class);
         resources.add(REST.NewCrossOriginResourceSharingFilter.class);

@@ -275,25 +275,25 @@ public class UserDao implements UserDAOInterface {
 
             if (user.getUserHash().matches(".*[a-z].*") && user.getUserHash().length() <= 30 && user.getUserHash().length() >= 7 && user.getUserHash().matches(".*\\d.*")) {
 
-                    String[] HashedSaltedPw = SaltANDHash(user.getUserHash());
+                String[] HashedSaltedPw = SaltANDHash(user.getUserHash());
 
-                    sql.setPs(sql.getConn().prepareStatement("UPDATE users SET hash = ? WHERE email = ?"));
+                sql.setPs(sql.getConn().prepareStatement("UPDATE users SET hash = ? WHERE email = ?"));
 
-                    sql.getPs().setString(1, HashedSaltedPw[1]);
-                    sql.getPs().setString(2, user.getEmail());
+                sql.getPs().setString(1, HashedSaltedPw[1]);
+                sql.getPs().setString(2, user.getEmail());
 
-                    sql.getPs().executeUpdate();
+                sql.getPs().executeUpdate();
 
-                    User u = getUserByEmail(user.getEmail());
+                User u = getUserByEmail(user.getEmail());
 
-                    sql.setPs(sql.getConn().prepareStatement("UPDATE salt SET salt = ? WHERE user_id = ?"));
+                sql.setPs(sql.getConn().prepareStatement("UPDATE salt SET salt = ? WHERE user_id = ?"));
 
-                    sql.getPs().setString(1, HashedSaltedPw[0]);
-                    sql.getPs().setInt(2, u.getUserNo());
-                    sql.getPs().executeUpdate();
+                sql.getPs().setString(1, HashedSaltedPw[0]);
+                sql.getPs().setInt(2, u.getUserNo());
+                sql.getPs().executeUpdate();
 
-                    return true;
-                
+                return true;
+
             } else {
                 return false;
             }
@@ -308,5 +308,56 @@ public class UserDao implements UserDAOInterface {
             return false;
         }
     }
-}//$2a$12$JjNGBPPwSWsq9CG7MA5Jf.urvzibGnf90acSNP5rMgrQCEcnG/QrW
-//$2a$12$R0NJcW.cD75JXGarhidzx.JvWALE56onRhu4pMmW0fnvJc52en97a
+
+    @Override
+    public boolean AdminDeletesYser(User user) {
+        try {
+            sql.setPs(sql.getConn().prepareStatement("DELETE FROM salt WHERE user_id = ?"));
+
+            sql.getPs().setInt(1, user.getUserNo());
+
+            sql.getPs().executeUpdate();            
+            
+
+            sql.setPs(sql.getConn().prepareStatement("DELETE FROM users WHERE user_id = ?"));
+
+            sql.getPs().setInt(1, user.getUserNo());
+
+            sql.getPs().executeUpdate();
+
+            return true;
+
+        } catch (SQLException se) {
+            System.out.println("SQL Exception occurred: " + se.getMessage());
+            se.printStackTrace();
+            return false;
+        } catch (Exception e) {
+            System.out.println("Exception occurred: " + e.getMessage());
+            e.printStackTrace();
+            return false;
+        }
+    }
+    @Override
+    public boolean AdminUpdatesUserTypes(User user) {
+        try {
+
+                sql.setPs(sql.getConn().prepareStatement("UPDATE users SET user_type = ? WHERE email = ?"));
+
+                sql.getPs().setString(1, user.getUserType());
+                sql.getPs().setString(2, user.getEmail());
+
+                sql.getPs().executeUpdate();
+
+            return true;
+
+        } catch (SQLException se) {
+            System.out.println("SQL Exception occurred: " + se.getMessage());
+            se.printStackTrace();
+            return false;
+        } catch (Exception e) {
+            System.out.println("Exception occurred: " + e.getMessage());
+            e.printStackTrace();
+            return false;
+        }
+    }    
+}
