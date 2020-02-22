@@ -20,10 +20,11 @@ public class Car {
     public Car() {
     }
 
-    public Car(String carReg, String carDetails, int userNo) {
+    public Car(int carNo, String carReg, String carDetails, int userNo) {
         this.carReg = carReg;
         this.carDetails = carDetails;
         this.userNo = userNo;
+        this.carNo = carNo;
     }
 
     public int getCarNo() {

@@ -63,7 +63,7 @@ public class CarDAO implements CarDAOInterface {
             rst = sql.getPs().executeQuery();
             ArrayList<Car> cars = new ArrayList<>();
             while (rst.next()) {
-                cars.add(new Car(rst.getString("car_reg"),rst.getString("car_details"),rst.getInt("user_id")));
+                cars.add(new Car(rst.getInt("car_id"),rst.getString("car_reg"),rst.getString("car_details"),rst.getInt("user_id")));
             }
             System.out.println("Car has been added.");
 
