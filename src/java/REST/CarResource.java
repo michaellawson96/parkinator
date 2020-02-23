@@ -50,7 +50,7 @@ public class CarResource {
             
             c.setCarReg((String) obj.get("car_reg"));
             c.setCarDetails((String) obj.get("car_details"));
-            int userNumber =  ((Long)obj.get("user_no")).intValue();
+            int userNumber =  ((Long)obj.get("user_id")).intValue();
             c.setUserNo(userNumber);
         } // more detailed reporting can be done by catching specific exceptions, such as ParseException
         catch (ParseException exp) {
@@ -67,7 +67,7 @@ public class CarResource {
     @POST
     @Consumes(MediaType.TEXT_PLAIN)
     @Produces(MediaType.TEXT_PLAIN)
-    public boolean putText(String content) {
+    public boolean postText(String content) {
         CarDAOInterface cDAO = new CarDAO();
         Car c = convertJsonStringToCar(content);
         return cDAO.insertCar(c);
