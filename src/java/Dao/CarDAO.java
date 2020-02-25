@@ -45,12 +45,47 @@ public class CarDAO implements CarDAOInterface {
 
     @Override
     public boolean updateCar(Car car) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        try {
+                sql.setPs(sql.getConn().prepareStatement("UPDATE cars SET car_reg =?, car_details=?, user_id=? WHERE car_id=?"));
+
+                sql.getPs().setString(1, car.getCarReg());
+                sql.getPs().setString(2, car.getCarDetails());
+                sql.getPs().setInt(3, car.getUserNo());
+                sql.getPs().setInt(4, car.getCarNo());
+
+                sql.getPs().executeUpdate();
+                return true;
+        } catch (SQLException se) {
+            System.out.println("SQL Exception occurred: " + se.getMessage());
+            se.printStackTrace();
+            return false;
+        } catch (Exception e) {
+            System.out.println("Exception occurred: " + e.getMessage());
+            e.printStackTrace();
+            return false;
+        }
     }
 
     @Override
     public boolean deleteCar(Car car) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        try {
+                sql.setPs(sql.getConn().prepareStatement("DELETE FROM cars WHERE car_id=?"));
+
+                sql.getPs().setInt(1, car.getCarNo());
+
+                sql.getPs().executeUpdate();
+                return true;
+        } 
+        catch (SQLException se) {
+            System.out.println("SQL Exception occurred: " + se.getMessage());
+            se.printStackTrace();
+            return false;
+        } 
+        catch (Exception e) {
+            System.out.println("Exception occurred: " + e.getMessage());
+            e.printStackTrace();
+            return false;
+        }    
     }
 
     @Override
