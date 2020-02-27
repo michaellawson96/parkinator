@@ -30,7 +30,7 @@ public class SqlConnection {
         driver = "com.mysql.jdbc.Driver";
         url = "jdbc:mysql://127.0.0.1:3306/parkinator";
         username = "root";
-        password = "This_Is_The_Password";
+        password = "";
         
         try
         {
