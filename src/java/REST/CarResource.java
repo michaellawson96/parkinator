@@ -85,45 +85,35 @@ public class CarResource {
      * @param content representation for the resource
      */
     @PUT
+    @Path("update/")
     @Consumes(MediaType.TEXT_PLAIN)
     @Produces(MediaType.TEXT_PLAIN)
-    public boolean putText(String content) {
+    public boolean updateCar(String content) {
         CarDAOInterface cDAO = new CarDAO();
         
         //this will take the action from the json string and determine which action should be taken
-        String action = determineAction(content);
         Car c = convertJsonStringToCar(content);
         
-        //either case will return a boolean that shows whether or not the method succeeded
-        switch(action){
-            
-            case "delete": return cDAO.deleteCar(c);
-                
-            case "update": return cDAO.updateCar(c);
-                
-        }
-        
-        //if the json string contained neither of those actions (or no action key at all)...
-        return false;
+        return cDAO.updateCar(c);
     }
     
-    
-    private String determineAction(String jsonString){
-        String action = null;
-        try {
-            // create a parser to convert a string to a json object
-            JSONParser parser = new JSONParser();
-            // parser returns an object. You should know or check what to convert to (an JSONObject or JSONArray)
-            JSONObject obj = (JSONObject) parser.parse(jsonString);
-            
-            action = ((String) obj.get("action"));
-            
-        } // more detailed reporting can be done by catching specific exceptions, such as ParseException
-        catch (ParseException exp) {
-            System.out.println(exp);
-            action = null;
-        }
-        return action;
+    /**
+     * PUT method for updating or deleting an instance of CarResource
+     * Sample input for UPDATE: {"car_details":"Red Renault Megane","user_id":14,"car_reg":"09-MN-6919","car_id":5,"action":"update"}
+     * Sample input for DELETE: {"car_details":"Red Renault Megane","user_id":14,"car_reg":"09-MN-6919","car_id":5,"action":"delete"}
+     * @param content representation for the resource
+     */
+    @PUT
+    @Path("delete/")
+    @Consumes(MediaType.TEXT_PLAIN)
+    @Produces(MediaType.TEXT_PLAIN)
+    public boolean deleteCar(String content) {
+        CarDAOInterface cDAO = new CarDAO();
+        
+        //this will take the action from the json string and determine which action should be taken
+        Car c = convertJsonStringToCar(content);
+        
+        return cDAO.deleteCar(c);
     }
     
     
