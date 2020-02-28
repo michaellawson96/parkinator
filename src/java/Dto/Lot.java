@@ -21,7 +21,9 @@ public class Lot {
         this.Parking_name = Parking_name;
         this.cc_id = cc_id;
     }
+    public Lot() {
 
+    }
     public int getLot_id() {
         return lot_id;
     }

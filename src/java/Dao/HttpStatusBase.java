@@ -32,4 +32,8 @@ public class HttpStatusBase {
         HttpStatus hs = new HttpStatus(408,"Problem On the Server Side");
         return convertStatusToJson(hs).toJSONString();
     }    
+    public String ParseError(){
+        HttpStatus hs = new HttpStatus(523,"error has been reached unexpectedly while parsing.");
+        return convertStatusToJson(hs).toJSONString();
+    }      
 }
