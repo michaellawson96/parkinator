@@ -35,8 +35,9 @@ public class SqlConnection {
         url = "jdbc:mysql://127.0.0.1:3306/" + dbName;
         username = "root";
         password = "";
-
-        try {
+        
+        try
+        {
             // Load the database driver
             Class.forName(driver);
 
