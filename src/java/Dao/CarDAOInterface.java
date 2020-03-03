@@ -14,6 +14,7 @@ import java.util.ArrayList;
  * @author USER
  */
 public interface CarDAOInterface {
+    
     boolean insertCar(Car car);
     boolean updateCar(Car car);
     boolean deleteCar(Car car);
