@@ -21,7 +21,15 @@ import java.util.ArrayList;
  */
 public class UserDao implements UserDAOInterface {
 
-    private SqlConnection sql = new SqlConnection();
+    private SqlConnection sql = null;
+    
+    public UserDao(SqlConnection sql){
+        this.sql = sql;
+    }
+    
+    public UserDao(){
+        this.sql = new SqlConnection();
+    }
 
     @Override
     public ArrayList<User> selectAllUsers() {
@@ -310,7 +318,7 @@ public class UserDao implements UserDAOInterface {
     }
 
     @Override
-    public boolean AdminDeletesYser(User user) {
+    public boolean AdminDeletesUser(User user) {
         try {
             sql.setPs(sql.getConn().prepareStatement("DELETE FROM salt WHERE user_id = ?"));
 

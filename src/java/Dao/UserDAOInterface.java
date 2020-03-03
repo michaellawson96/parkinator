@@ -24,6 +24,6 @@ public interface UserDAOInterface {
         String CheckUserExistsByEmailRecovery(User user);
         boolean CheckUserRecoveryAnswer(User user);
         boolean updateUserPassword(User user);
-        boolean AdminDeletesYser(User user);
+        boolean AdminDeletesUser(User user);
         boolean AdminUpdatesUserTypes(User user);
 }

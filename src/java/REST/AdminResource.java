@@ -141,6 +141,6 @@ public class AdminResource {
     public boolean DeletesUser(String content) {
         UserDao udao = new UserDao();
         User delete = convertJsonStringToUserForDelete(content);
-        return udao.AdminDeletesYser(delete);
+        return udao.AdminDeletesUser(delete);
     }
 }
