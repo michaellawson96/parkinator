@@ -50,7 +50,7 @@ public class UserDaoTestWithMocking {
     /**
      * Test of selectAllUsers method, of class UserDao.
      */
-    @Ignore
+    @Test
     public void testSelectAllUsers() throws SQLException {
         User u1 = new User(1, "Testing User1", "testinguser1@gmail.com", "$2a$12$Fodl2oDf233P40qSfkbVLOmX8R9a6kzuugosLS685hiVZr1qp7KWS", "user", "what is your mother's maiden name", "$2a$12$8XW5CMg.1ssMt9dvm5yMdeGjCTP51HfwFB8O5WDtNeFnNyxJmSBY6", false);
         User u2 = new User(2, "Testing User2", "testinguser2@gmail.com", "$2a$12$jgxPw.sQUTLOG2Yb1xCeFOVHgD5bbH8bkvzNufPIJ9xRnKOghpw9W", "user", "what is your mother's maiden name", "$2a$12$nXti9bKgnGXGHg5.TGTbEOUmYH2lqdduy0RvMIorAgihWVpaEwKKC", true);
@@ -107,7 +107,7 @@ public class UserDaoTestWithMocking {
     /**
      * Ignore of Login method, of class UserDao.
      */
-    @Ignore
+    @Test
     public void testLogin() throws SQLException {
         User u1 = new User(1, "Testing User1", "testinguser1@gmail.com", "$2a$12$Fodl2oDf233P40qSfkbVLOmX8R9a6kzuugosLS685hiVZr1qp7KWS", "user", "what is your mother's maiden name", "$2a$12$8XW5CMg.1ssMt9dvm5yMdeGjCTP51HfwFB8O5WDtNeFnNyxJmSBY6", false);
         //User u2 = new User(2, "Testing User2", "testinguser2@gmail.com", "$2a$12$jgxPw.sQUTLOG2Yb1xCeFOVHgD5bbH8bkvzNufPIJ9xRnKOghpw9W", "user", "what is your mother's maiden name", "$2a$12$nXti9bKgnGXGHg5.TGTbEOUmYH2lqdduy0RvMIorAgihWVpaEwKKC", true);
@@ -184,7 +184,7 @@ public class UserDaoTestWithMocking {
     /**
      * Test of register method, of class UserDao.
      */
-    @Ignore
+    @Test
     public void testRegister() throws SQLException {
         User u1 = new User(1, "Testing User1", "testinguser1@gmail.com", "$2a$12$Fodl2oDf233P40qSfkbVLOmX8R9a6kzuugosLS685hiVZr1qp7KWS", "user", "what is your mother's maiden name", "$2a$12$8XW5CMg.1ssMt9dvm5yMdeGjCTP51HfwFB8O5WDtNeFnNyxJmSBY6", false);
         //User u2 = new User(2, "Testing User2", "testinguser2@gmail.com", "$2a$12$jgxPw.sQUTLOG2Yb1xCeFOVHgD5bbH8bkvzNufPIJ9xRnKOghpw9W", "user", "what is your mother's maiden name", "$2a$12$nXti9bKgnGXGHg5.TGTbEOUmYH2lqdduy0RvMIorAgihWVpaEwKKC", true);
@@ -267,7 +267,7 @@ public class UserDaoTestWithMocking {
     /**
      * Test of SaltANDHash method, of class UserDao.
      */
-    @Ignore
+    @Test
     public void testSaltANDHash() {
         System.out.println("SaltANDHash");
         String needHashSalt = "";
@@ -281,7 +281,7 @@ public class UserDaoTestWithMocking {
     /**
      * Test of CheckUserExistsByEmail method, of class UserDao.
      */
-    @Ignore
+    @Test
     public void testCheckUserExistsByEmail() throws SQLException {
         User u1 = new User(1, "Testing User1", "testinguser1@gmail.com", "$2a$12$Fodl2oDf233P40qSfkbVLOmX8R9a6kzuugosLS685hiVZr1qp7KWS", "user", "what is your mother's maiden name", "$2a$12$8XW5CMg.1ssMt9dvm5yMdeGjCTP51HfwFB8O5WDtNeFnNyxJmSBY6", false);
         //User u2 = new User(2, "Testing User2", "testinguser2@gmail.com", "$2a$12$jgxPw.sQUTLOG2Yb1xCeFOVHgD5bbH8bkvzNufPIJ9xRnKOghpw9W", "user", "what is your mother's maiden name", "$2a$12$nXti9bKgnGXGHg5.TGTbEOUmYH2lqdduy0RvMIorAgihWVpaEwKKC", true);
@@ -325,7 +325,7 @@ public class UserDaoTestWithMocking {
     /**
      * Test of CheckUserExistsByEmail method, of class UserDao.
      */
-    @Ignore
+    @Test
     public void testCheckUserExistsByEmail_fail() throws SQLException {
         User u1 = new User(1, "Testing User1", "testinguser1@gmail.com", "$2a$12$Fodl2oDf233P40qSfkbVLOmX8R9a6kzuugosLS685hiVZr1qp7KWS", "user", "what is your mother's maiden name", "$2a$12$8XW5CMg.1ssMt9dvm5yMdeGjCTP51HfwFB8O5WDtNeFnNyxJmSBY6", false);
         //User u2 = new User(2, "Testing User2", "testinguser2@gmail.com", "$2a$12$jgxPw.sQUTLOG2Yb1xCeFOVHgD5bbH8bkvzNufPIJ9xRnKOghpw9W", "user", "what is your mother's maiden name", "$2a$12$nXti9bKgnGXGHg5.TGTbEOUmYH2lqdduy0RvMIorAgihWVpaEwKKC", true);
@@ -369,7 +369,7 @@ public class UserDaoTestWithMocking {
     /**
      * Test of updateUser method, of class UserDao.
      */
-    @Ignore
+    @Test
     public void testUpdateUser() throws SQLException {
         User u1 = new User(1, "Testing User1", "testinguser1@gmail.com", "$2a$12$Fodl2oDf233P40qSfkbVLOmX8R9a6kzuugosLS685hiVZr1qp7KWS", "user", "what is your mother's maiden name", "$2a$12$8XW5CMg.1ssMt9dvm5yMdeGjCTP51HfwFB8O5WDtNeFnNyxJmSBY6", false);
         //User u2 = new User(2, "Testing User2", "testinguser2@gmail.com", "$2a$12$jgxPw.sQUTLOG2Yb1xCeFOVHgD5bbH8bkvzNufPIJ9xRnKOghpw9W", "user", "what is your mother's maiden name", "$2a$12$nXti9bKgnGXGHg5.TGTbEOUmYH2lqdduy0RvMIorAgihWVpaEwKKC", true);
@@ -400,7 +400,7 @@ public class UserDaoTestWithMocking {
     /**
      * Test of getUserByEmail method, of class UserDao.
      */
-    @Ignore
+    @Test
     public void testGetUserByEmail() throws SQLException {
         User u1 = new User(1, "Testing User1", "testinguser1@gmail.com", "$2a$12$Fodl2oDf233P40qSfkbVLOmX8R9a6kzuugosLS685hiVZr1qp7KWS", "user", "what is your mother's maiden name", "$2a$12$8XW5CMg.1ssMt9dvm5yMdeGjCTP51HfwFB8O5WDtNeFnNyxJmSBY6", false);
         //User u2 = new User(2, "Testing User2", "testinguser2@gmail.com", "$2a$12$jgxPw.sQUTLOG2Yb1xCeFOVHgD5bbH8bkvzNufPIJ9xRnKOghpw9W", "user", "what is your mother's maiden name", "$2a$12$nXti9bKgnGXGHg5.TGTbEOUmYH2lqdduy0RvMIorAgihWVpaEwKKC", true);
@@ -441,7 +441,7 @@ public class UserDaoTestWithMocking {
         System.out.println(result);
     }
 
-    @Ignore
+    @Test
     public void testGetUserByEmail_fail() throws SQLException {
         User u1 = new User(1, "Testing User1", "testinguser1@gmail.com", "$2a$12$Fodl2oDf233P40qSfkbVLOmX8R9a6kzuugosLS685hiVZr1qp7KWS", "user", "what is your mother's maiden name", "$2a$12$8XW5CMg.1ssMt9dvm5yMdeGjCTP51HfwFB8O5WDtNeFnNyxJmSBY6", false);
         User u2 = new User(2, "Testing User2", "testinguser2@gmail.com", "$2a$12$jgxPw.sQUTLOG2Yb1xCeFOVHgD5bbH8bkvzNufPIJ9xRnKOghpw9W", "user", "what is your mother's maiden name", "$2a$12$nXti9bKgnGXGHg5.TGTbEOUmYH2lqdduy0RvMIorAgihWVpaEwKKC", true);
@@ -485,7 +485,7 @@ public class UserDaoTestWithMocking {
     /**
      * Test of CheckUserExistsByEmailRecovery method, of class UserDao.
      */
-    @Ignore
+    @Test
     public void testCheckUserExistsByEmailRecovery() throws SQLException {
         User u1 = new User(1, "Testing User1", "testinguser1@gmail.com", "$2a$12$Fodl2oDf233P40qSfkbVLOmX8R9a6kzuugosLS685hiVZr1qp7KWS", "user", "what is your mother's maiden name", "$2a$12$8XW5CMg.1ssMt9dvm5yMdeGjCTP51HfwFB8O5WDtNeFnNyxJmSBY6", false);
         //User u2 = new User(2, "Testing User2", "testinguser2@gmail.com", "$2a$12$jgxPw.sQUTLOG2Yb1xCeFOVHgD5bbH8bkvzNufPIJ9xRnKOghpw9W", "user", "what is your mother's maiden name", "$2a$12$nXti9bKgnGXGHg5.TGTbEOUmYH2lqdduy0RvMIorAgihWVpaEwKKC", true);
@@ -524,7 +524,7 @@ public class UserDaoTestWithMocking {
         assertEquals(expResult, result);
     }
 
-    @Ignore
+    @Test
     public void testCheckUserExistsByEmailRecovery_fail() throws SQLException {
         User u1 = new User(1, "Testing User1", "testinguser1@gmail.com", "$2a$12$Fodl2oDf233P40qSfkbVLOmX8R9a6kzuugosLS685hiVZr1qp7KWS", "user", "What is your childhood nickname", "$2a$12$8XW5CMg.1ssMt9dvm5yMdeGjCTP51HfwFB8O5WDtNeFnNyxJmSBY6", false);
         //User u2 = new User(2, "Testing User2", "testinguser2@gmail.com", "$2a$12$jgxPw.sQUTLOG2Yb1xCeFOVHgD5bbH8bkvzNufPIJ9xRnKOghpw9W", "user", "what is your mother's maiden name", "$2a$12$nXti9bKgnGXGHg5.TGTbEOUmYH2lqdduy0RvMIorAgihWVpaEwKKC", true);
@@ -566,7 +566,7 @@ public class UserDaoTestWithMocking {
     /**
      * Test of CheckUserRecoveryAnswer method, of class UserDao.
      */
-    @Ignore
+    @Test
     public void testCheckUserRecoveryAnswer() throws SQLException {
         User u1 = new User(1, "Testing User1", "testinguser1@gmail.com", "$2a$12$Fodl2oDf233P40qSfkbVLOmX8R9a6kzuugosLS685hiVZr1qp7KWS", "user", "what is your mother's maiden name", "$2a$12$8XW5CMg.1ssMt9dvm5yMdeGjCTP51HfwFB8O5WDtNeFnNyxJmSBY6", false);
         //User u2 = new User(2, "Testing User2", "testinguser2@gmail.com", "$2a$12$jgxPw.sQUTLOG2Yb1xCeFOVHgD5bbH8bkvzNufPIJ9xRnKOghpw9W", "user", "what is your mother's maiden name", "$2a$12$nXti9bKgnGXGHg5.TGTbEOUmYH2lqdduy0RvMIorAgihWVpaEwKKC", true);
@@ -609,7 +609,7 @@ public class UserDaoTestWithMocking {
     /**
      * Test of updateUserPassword method, of class UserDao.
      */
-    @Ignore
+    @Test
     public void testUpdateUserPassword() throws SQLException {
         User u1 = new User(1, "Testing User1", "testinguser1@gmail.com", "$2a$12$Fodl2oDf233P40qSfkbVLOmX8R9a6kzuugosLS685hiVZr1qp7KWS", "user", "what is your mother's maiden name", "$2a$12$8XW5CMg.1ssMt9dvm5yMdeGjCTP51HfwFB8O5WDtNeFnNyxJmSBY6", false);
         //User u2 = new User(2, "Testing User2", "testinguser2@gmail.com", "$2a$12$jgxPw.sQUTLOG2Yb1xCeFOVHgD5bbH8bkvzNufPIJ9xRnKOghpw9W", "user", "what is your mother's maiden name", "$2a$12$nXti9bKgnGXGHg5.TGTbEOUmYH2lqdduy0RvMIorAgihWVpaEwKKC", true);
@@ -655,7 +655,7 @@ public class UserDaoTestWithMocking {
         assertEquals(expResult, result);
     }
 
-    @Ignore
+    @Test
     public void testUpdateUserPassword_fail() throws SQLException {
         User u1 = new User(1, "Testing User1", "testinguser1@gmail.com", "$2a$12$Fodl2oDf233P40qSfkbVLOmX8R9a6kzuugosLS685hiVZr1qp7KWS", "user", "what is your mother's maiden name", "$2a$12$8XW5CMg.1ssMt9dvm5yMdeGjCTP51HfwFB8O5WDtNeFnNyxJmSBY6", false);
         //User u2 = new User(2, "Testing User2", "testinguser2@gmail.com", "$2a$12$jgxPw.sQUTLOG2Yb1xCeFOVHgD5bbH8bkvzNufPIJ9xRnKOghpw9W", "user", "what is your mother's maiden name", "$2a$12$nXti9bKgnGXGHg5.TGTbEOUmYH2lqdduy0RvMIorAgihWVpaEwKKC", true);
@@ -799,7 +799,7 @@ public class UserDaoTestWithMocking {
     /**
      * Test of AdminUpdatesUserTypes method, of class UserDao.
      */
-    @Ignore
+    @Test
     public void testAdminUpdatesUserTypes() throws SQLException {
         User u1 = new User(1, "Testing User1", "testinguser1@gmail.com", "$2a$12$Fodl2oDf233P40qSfkbVLOmX8R9a6kzuugosLS685hiVZr1qp7KWS", "user", "what is your mother's maiden name", "$2a$12$8XW5CMg.1ssMt9dvm5yMdeGjCTP51HfwFB8O5WDtNeFnNyxJmSBY6", false);
         //User u2 = new User(2, "Testing User2", "testinguser2@gmail.com", "$2a$12$jgxPw.sQUTLOG2Yb1xCeFOVHgD5bbH8bkvzNufPIJ9xRnKOghpw9W", "user", "what is your mother's maiden name", "$2a$12$nXti9bKgnGXGHg5.TGTbEOUmYH2lqdduy0RvMIorAgihWVpaEwKKC", true);
@@ -827,7 +827,7 @@ public class UserDaoTestWithMocking {
         assertEquals(expResult, result);
     }
 
-    @Ignore
+    @Test
     public void testAdminUpdatesUserTypes_fail() throws SQLException {
         User u1 = new User(1, "Testing User1", "testinguser1@gmail.com", "$2a$12$Fodl2oDf233P40qSfkbVLOmX8R9a6kzuugosLS685hiVZr1qp7KWS", "user", "what is your mother's maiden name", "$2a$12$8XW5CMg.1ssMt9dvm5yMdeGjCTP51HfwFB8O5WDtNeFnNyxJmSBY6", false);
         //User u2 = new User(2, "Testing User2", "testinguser2@gmail.com", "$2a$12$jgxPw.sQUTLOG2Yb1xCeFOVHgD5bbH8bkvzNufPIJ9xRnKOghpw9W", "user", "what is your mother's maiden name", "$2a$12$nXti9bKgnGXGHg5.TGTbEOUmYH2lqdduy0RvMIorAgihWVpaEwKKC", true);
