@@ -61,10 +61,10 @@ public class UserDao implements UserDAOInterface {
     @Override
     public boolean Login(String email, String hash) {
         try {
-            System.out.println(email);
+            //System.out.println(email);
             if (CheckUserExistsByEmail(email)) {
                 User u = getUserByEmail(email);
-                System.out.println(u.toString());
+                System.out.println(u.getEmail());
                 return BCrypt.checkpw(hash, u.getUserHash());
             } else {
                 System.out.println("didn't exist");
@@ -153,7 +153,7 @@ public class UserDao implements UserDAOInterface {
             rst = sql.getPs().executeQuery();
 
             if (rst.next()) {
-                System.out.println("user already exists");
+                System.out.println("user exists");
                 return true;
             }
             System.out.println("user doesn't exist yet");
@@ -211,7 +211,7 @@ public class UserDao implements UserDAOInterface {
                         rst.getString("hash"), rst.getString("user_type"), rst.getString("question"),
                         rst.getString("answer_hash"), rst.getBoolean("has_disabled_badge"));
             }
-            System.out.println("User has been added.");
+            System.out.println(user.toString());
 
             return user;
         } catch (SQLException se) {
@@ -262,6 +262,8 @@ public class UserDao implements UserDAOInterface {
             // Execute the query
             rst = sql.getPs().executeQuery();
             if (rst.next()) {
+                System.out.println(rst.getString("answer_hash"));
+                System.out.println(user.getAnswer_hash());
                 return BCrypt.checkpw(user.getAnswer_hash(), rst.getString("answer_hash"));
             }
             return false;
@@ -299,7 +301,7 @@ public class UserDao implements UserDAOInterface {
                 sql.getPs().setString(1, HashedSaltedPw[0]);
                 sql.getPs().setInt(2, u.getUserNo());
                 sql.getPs().executeUpdate();
-
+                
                 return true;
 
             } else {
