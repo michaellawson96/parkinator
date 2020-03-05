@@ -22,12 +22,12 @@ import java.util.ArrayList;
 public class UserDao implements UserDAOInterface {
 
     private SqlConnection sql = null;
-    
-    public UserDao(SqlConnection sql){
+
+    public UserDao(SqlConnection sql) {
         this.sql = sql;
     }
-    
-    public UserDao(){
+
+    public UserDao() {
         this.sql = new SqlConnection();
     }
 
@@ -64,7 +64,6 @@ public class UserDao implements UserDAOInterface {
             //System.out.println(email);
             if (CheckUserExistsByEmail(email)) {
                 User u = getUserByEmail(email);
-                System.out.println(u.getEmail());
                 return BCrypt.checkpw(hash, u.getUserHash());
             } else {
                 System.out.println("didn't exist");
@@ -146,14 +145,14 @@ public class UserDao implements UserDAOInterface {
     @Override
     public boolean CheckUserExistsByEmail(String email) {
         try {
-            sql.setPs(sql.getConn().prepareStatement("select * from users where email=?"));
+            sql.setPs(sql.getConn().prepareStatement("select * from users WHERE email=?"));
             sql.getPs().setString(1, email);
 
             ResultSet rst;
             rst = sql.getPs().executeQuery();
 
             if (rst.next()) {
-                System.out.println("user exists");
+                System.out.println("user exi");
                 return true;
             }
             System.out.println("user doesn't exist yet");
@@ -174,17 +173,20 @@ public class UserDao implements UserDAOInterface {
     public boolean updateUser(User user
     ) {
         try {
-            sql.setPs(sql.getConn().prepareStatement("UPDATE users SET user_fullname=?,question=?,answer_hash=?, has_disabled_badge=? WHERE email = ?"));
+            if (CheckUserExistsByEmail(user.getEmail())) {
+                sql.setPs(sql.getConn().prepareStatement("UPDATE users SET user_fullname=?,question=?,answer_hash=?, has_disabled_badge=? WHERE email = ?"));
 
-            sql.getPs().setString(1, user.getUserFullname());
-            sql.getPs().setString(2, user.getQuestion());
-            sql.getPs().setString(3, user.getAnswer_hash());
-            sql.getPs().setBoolean(4, user.getHasDisabledBadge());
-            sql.getPs().setString(5, user.getEmail());
+                sql.getPs().setString(1, user.getUserFullname());
+                sql.getPs().setString(2, user.getQuestion());
+                sql.getPs().setString(3, user.getAnswer_hash());
+                sql.getPs().setBoolean(4, user.getHasDisabledBadge());
+                sql.getPs().setString(5, user.getEmail());
 
-            sql.getPs().executeUpdate();
-
-            return true;
+                sql.getPs().executeUpdate();
+                return true;
+            } else {
+                return false;
+            }
 
         } catch (SQLException se) {
             System.out.println("SQL Exception occurred: " + se.getMessage());
@@ -206,12 +208,11 @@ public class UserDao implements UserDAOInterface {
             // Execute the query
             rst = sql.getPs().executeQuery();
             User user = null;
-            while (rst.next()) {
+            if (rst.next()) {
                 user = new User(rst.getInt("user_id"), rst.getString("user_fullname"), rst.getString("email"),
                         rst.getString("hash"), rst.getString("user_type"), rst.getString("question"),
                         rst.getString("answer_hash"), rst.getBoolean("has_disabled_badge"));
             }
-            System.out.println(user.toString());
 
             return user;
         } catch (SQLException se) {
@@ -301,7 +302,7 @@ public class UserDao implements UserDAOInterface {
                 sql.getPs().setString(1, HashedSaltedPw[0]);
                 sql.getPs().setInt(2, u.getUserNo());
                 sql.getPs().executeUpdate();
-                
+
                 return true;
 
             } else {
@@ -322,20 +323,23 @@ public class UserDao implements UserDAOInterface {
     @Override
     public boolean AdminDeletesUser(User user) {
         try {
-            sql.setPs(sql.getConn().prepareStatement("DELETE FROM salt WHERE user_id = ?"));
+            if (!CheckUserExistsByEmail(user.getEmail())) {
+                sql.setPs(sql.getConn().prepareStatement("DELETE FROM salt WHERE user_id = ?"));
 
-            sql.getPs().setInt(1, user.getUserNo());
+                sql.getPs().setInt(1, user.getUserNo());
 
-            sql.getPs().executeUpdate();            
-            
+                sql.getPs().executeUpdate();
 
-            sql.setPs(sql.getConn().prepareStatement("DELETE FROM users WHERE user_id = ?"));
+                sql.setPs(sql.getConn().prepareStatement("DELETE FROM users WHERE user_id = ?"));
 
-            sql.getPs().setInt(1, user.getUserNo());
+                sql.getPs().setInt(1, user.getUserNo());
 
-            sql.getPs().executeUpdate();
+                sql.getPs().executeUpdate();
 
-            return true;
+                return true;
+            } else {
+                return false;
+            }
 
         } catch (SQLException se) {
             System.out.println("SQL Exception occurred: " + se.getMessage());
@@ -347,10 +351,11 @@ public class UserDao implements UserDAOInterface {
             return false;
         }
     }
+
     @Override
     public boolean AdminUpdatesUserTypes(User user) {
         try {
-
+            if (CheckUserExistsByEmail(user.getEmail())) {
                 sql.setPs(sql.getConn().prepareStatement("UPDATE users SET user_type = ? WHERE email = ?"));
 
                 sql.getPs().setString(1, user.getUserType());
@@ -358,7 +363,10 @@ public class UserDao implements UserDAOInterface {
 
                 sql.getPs().executeUpdate();
 
-            return true;
+                return true;
+            } else {
+                return false;
+            }
 
         } catch (SQLException se) {
             System.out.println("SQL Exception occurred: " + se.getMessage());
@@ -369,5 +377,5 @@ public class UserDao implements UserDAOInterface {
             e.printStackTrace();
             return false;
         }
-    }    
+    }
 }
