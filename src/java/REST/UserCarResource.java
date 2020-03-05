@@ -7,7 +7,9 @@ package REST;
 
 import Dao.CarDAO;
 import Dao.CarDAOInterface;
+import Dao.HttpStatusBase;
 import Dto.Car;
+import Dto.HttpStatus;
 import java.util.ArrayList;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.UriInfo;
@@ -39,6 +41,7 @@ public class UserCarResource {
      */
     public UserCarResource() {
     }
+    HttpStatusBase hsb = new HttpStatusBase();
     
     private int convertJsonStringToUserNo(String jsonString) {
         int userNo = -1;
@@ -80,11 +83,24 @@ public class UserCarResource {
     public String getUserCars(String content) {
         CarDAOInterface cDAO = new CarDAO();
         int userNo = convertJsonStringToUserNo(content);
-        ArrayList<Car> cars = cDAO.getAllUserCars(userNo);
-        
+        ArrayList<Object> objs = cDAO.getAllUserCars(userNo);
+        String objType;
+        for (Object obj: objs){
+            if(obj instanceof HttpStatus){
+                objType = "HttpStatus";
+                break;
+            }
+            else{
+                objType = "Car";
+                break;
+            }
+        }
         JSONArray array = new JSONArray();
-            for (Car car : cars) {
-                array.add(convertCarToJson(car));
+            for (Object obj : objs) {
+                if(obj instanceof HttpStatus)
+                    array.add(obj);
+                else
+                array.add(convertCarToJson((Car)obj));
             }
             return array.toString();
     }
