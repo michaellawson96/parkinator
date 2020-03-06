@@ -7,12 +7,11 @@ package REST;
 
 import Dao.HttpStatusBase;
 import Dao.LotDAO;
-import Dto.Lot;
-import Dto.Zone;
+import Dto.ParkedCars;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.UriInfo;
-import javax.ws.rs.Produces;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.Produces;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -27,20 +26,21 @@ import org.json.simple.parser.ParseException;
  *
  * @author SeppQ
  */
-@Path("ParkingZones")
-public class ParkingZonesResource {
+@Path("bookings")
+public class BookingsResource {
     HttpStatusBase hsb = new HttpStatusBase();
     LotDAO ldao = new LotDAO();
     @Context
     private UriInfo context;
 
     /**
-     * Creates a new instance of ParkingZonesResource
+     * Creates a new instance of BookingsResource
      */
-    public ParkingZonesResource() {
+    public BookingsResource() {
     }
+
     private Object convertJsonStringToZone(String jsonString) {
-        Zone z = null;
+        ParkedCars pc = null;
         try {
             // create a parser to convert a string to a json object
             JSONParser parser = new JSONParser();
@@ -48,39 +48,50 @@ public class ParkingZonesResource {
             JSONObject obj = (JSONObject) parser.parse(jsonString);
 
             // create a new Customer and use get method to retrieve values for a key
-            z = new Zone();
+            pc = new ParkedCars();
             // note that JSONObject has all numbers as longs, and needs to be converted to an int if required.
 
-            z.setLot_id((int) obj.get("lot_id"));
-            z.setZone_name((String) obj.get("zone_name"));
-            z.setMax_spaces((int) obj.get("max_spaces"));
-            z.setIs_vip((boolean) obj.get("is_vip"));
-            z.setLot_id ((int) obj.get("lot_id"));
-            z.setMax_disabled_spaces((int) obj.get("max_disabled_spaces"));
-            
-         
+            pc.setZone_id((int) obj.get("zone_id"));
+            pc.setCar_id((int) obj.get("car_id"));
+            pc.setBookFrom((String) obj.get("bookFrom"));
+            pc.setBookTo((String) obj.get("bookTo"));
 
-        } // more detailed reporting can be done by catching specific exceptions, such as ParseException
+        } 
         catch (ParseException exp) {
             System.out.println(exp);
-            z = null;
+            pc = null;
             return hsb.ParseError();
         }
-        return z;
+        return pc;
     }
-    @Path("addZone")
+      
     @POST
+    @Path("addBooking/")  
     @Consumes(MediaType.TEXT_PLAIN)
     @Produces(MediaType.TEXT_PLAIN)
-    public Object addZone(String content) {
+    public Object addBooking(String content) {
         Object obj = convertJsonStringToZone(content);
-        if (obj instanceof Zone) {
-            Zone zone = (Zone) obj;
-            return ldao.Addzone(zone);
+        if (obj instanceof ParkedCars) {
+            ParkedCars pc = (ParkedCars) obj;
+            return ldao.AddBooking(pc);
         } else {
             return (String) obj;
         }
-        
+                
     }
     
+    @POST
+    @Path("checkOutdatedBookings/") 
+    @Consumes(MediaType.TEXT_PLAIN)
+    @Produces(MediaType.TEXT_PLAIN)
+    public Object checkOutdatedBookings(String content) {
+        Object obj = convertJsonStringToZone(content);
+        if (obj instanceof ParkedCars) {
+            ParkedCars pc = (ParkedCars) obj;
+            return ldao.CheckOutDatedParkings(pc);
+        } else {
+            return (String) obj;
+        }
+                
+    }    
 }
