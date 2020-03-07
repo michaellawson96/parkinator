@@ -65,10 +65,11 @@ public class UserCarResource {
     private JSONObject convertCarToJson(Car car) {
         JSONObject jObj = new JSONObject();
         jObj.put("car_id", car.getCarNo());
-        jObj.put("car_details", car.getCarDetails());
+        jObj.put("car_colour", car.getCarColour());
+        jObj.put("car_make", car.getCarMake());
+        jObj.put("car_model", car.getCarModel());
         jObj.put("car_reg", car.getCarReg());
         jObj.put("user_id", car.getUserNo());
-        
 
         return jObj;
     }

@@ -14,17 +14,21 @@ import java.util.Objects;
 public class Car {
     private int carNo;
     private String carReg;
-    private String carDetails;
+    private String carColour;
+    private String carMake;
+    private String carModel;
     private int userNo;
 
     public Car() {
     }
 
-    public Car(int carNo, String carReg, String carDetails, int userNo) {
-        this.carReg = carReg;
-        this.carDetails = carDetails;
-        this.userNo = userNo;
+    public Car(int carNo, String carReg, String carColour, String carMake, String carModel, int userNo) {
         this.carNo = carNo;
+        this.carReg = carReg;
+        this.carColour = carColour;
+        this.carMake = carMake;
+        this.carModel = carModel;
+        this.userNo = userNo;
     }
 
     public int getCarNo() {
@@ -43,12 +47,28 @@ public class Car {
         this.carReg = carReg;
     }
 
-    public String getCarDetails() {
-        return carDetails;
+    public String getCarColour() {
+        return carColour;
     }
 
-    public void setCarDetails(String carDetails) {
-        this.carDetails = carDetails;
+    public void setCarColour(String carColour) {
+        this.carColour = carColour;
+    }
+
+    public String getCarMake() {
+        return carMake;
+    }
+
+    public void setCarMake(String carMake) {
+        this.carMake = carMake;
+    }
+
+    public String getCarModel() {
+        return carModel;
+    }
+
+    public void setCarModel(String carModel) {
+        this.carModel = carModel;
     }
 
     public int getUserNo() {
@@ -61,11 +81,13 @@ public class Car {
 
     @Override
     public int hashCode() {
-        int hash = 3;
-        hash = 67 * hash + this.carNo;
-        hash = 67 * hash + Objects.hashCode(this.carReg);
-        hash = 67 * hash + Objects.hashCode(this.carDetails);
-        hash = 67 * hash + this.userNo;
+        int hash = 5;
+        hash = 71 * hash + this.carNo;
+        hash = 71 * hash + Objects.hashCode(this.carReg);
+        hash = 71 * hash + Objects.hashCode(this.carColour);
+        hash = 71 * hash + Objects.hashCode(this.carMake);
+        hash = 71 * hash + Objects.hashCode(this.carModel);
+        hash = 71 * hash + this.userNo;
         return hash;
     }
 
@@ -90,7 +112,13 @@ public class Car {
         if (!Objects.equals(this.carReg, other.carReg)) {
             return false;
         }
-        if (!Objects.equals(this.carDetails, other.carDetails)) {
+        if (!Objects.equals(this.carColour, other.carColour)) {
+            return false;
+        }
+        if (!Objects.equals(this.carMake, other.carMake)) {
+            return false;
+        }
+        if (!Objects.equals(this.carModel, other.carModel)) {
             return false;
         }
         return true;
@@ -98,8 +126,9 @@ public class Car {
 
     @Override
     public String toString() {
-        return "Car{" + "carNo=" + carNo + ", carReg=" + carReg + ", carDetails=" + carDetails + ", userNo=" + userNo + '}';
+        return "Car{" + "carNo=" + carNo + ", carReg=" + carReg + ", carColour=" + carColour + ", carMake=" + carMake + ", carModel=" + carModel + ", userNo=" + userNo + '}';
     }
+
     
     
 }
