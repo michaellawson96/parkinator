@@ -7,7 +7,11 @@ package REST;
 
 import Dao.HttpStatusBase;
 import Dao.LotDAO;
+import Dao.UserDAOInterface;
+import Dao.UserDao;
 import Dto.Lot;
+import Dto.User;
+import java.util.ArrayList;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.UriInfo;
 import javax.ws.rs.Consumes;
@@ -17,6 +21,7 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PUT;
 import javax.ws.rs.core.MediaType;
+import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
@@ -65,7 +70,32 @@ public class LotsResource {
         }
         return u;
     }
-    
+
+    private JSONObject convertLotToJson(Lot lot) {
+        JSONObject jObj = new JSONObject();
+        jObj.put("lot_id", lot.getLot_id());
+        jObj.put("parking_name", lot.getParking_name());
+        jObj.put("cc_id", lot.getCc_id());
+        return jObj;
+    }
+
+    @GET
+    @Path("getLots/")
+    @Produces(MediaType.TEXT_PLAIN)
+    @Consumes(MediaType.TEXT_PLAIN)
+    public String getLots() {
+        ArrayList<Lot> lot = (ArrayList<Lot>)ldao.selectAllLots();
+        if (lot == null || lot.isEmpty()) {
+            return hsb.CreateMessage(-1, "No Lots Found");
+        } else {
+            JSONArray array = new JSONArray();
+            for (Lot l : lot) {
+                array.add(convertLotToJson(l));
+            }
+            return array.toString();
+        }
+    }
+
     @POST
     @Path("addLots/")
     @Consumes(MediaType.TEXT_PLAIN)
@@ -80,7 +110,7 @@ public class LotsResource {
         }
 
     }
-    
+
     @POST
     @Path("removeLots/")
     @Consumes(MediaType.TEXT_PLAIN)

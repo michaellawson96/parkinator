@@ -19,4 +19,5 @@ public interface LotDaoInterface {
     String Addzone(Zone zone);
     String AddBooking(ParkedCars pc);
     String CheckOutDatedParkings(ParkedCars pc);
+    Object selectAllLots();
 }

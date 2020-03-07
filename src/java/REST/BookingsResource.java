@@ -69,7 +69,7 @@ public class BookingsResource {
     @Path("addBooking/")  
     @Consumes(MediaType.TEXT_PLAIN)
     @Produces(MediaType.TEXT_PLAIN)
-    public Object addBooking(String content) {
+    public String addBooking(String content) {
         Object obj = convertJsonStringToZone(content);
         if (obj instanceof ParkedCars) {
             ParkedCars pc = (ParkedCars) obj;
@@ -84,7 +84,7 @@ public class BookingsResource {
     @Path("checkOutdatedBookings/") 
     @Consumes(MediaType.TEXT_PLAIN)
     @Produces(MediaType.TEXT_PLAIN)
-    public Object checkOutdatedBookings(String content) {
+    public String checkOutdatedBookings(String content) {
         Object obj = convertJsonStringToZone(content);
         if (obj instanceof ParkedCars) {
             ParkedCars pc = (ParkedCars) obj;

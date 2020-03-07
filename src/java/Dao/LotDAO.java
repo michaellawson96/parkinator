@@ -16,6 +16,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 
 /**
@@ -27,6 +28,32 @@ public class LotDAO implements LotDaoInterface{
     private SqlConnection sql = new SqlConnection();
     private HttpStatusBase hsb = new HttpStatusBase();
 
+    
+    @Override
+    public Object selectAllLots() {
+        try {
+            sql.setPs(sql.getConn().prepareStatement("select * from parking_lots"));
+            ResultSet rst;
+            // Execute the query
+            rst = sql.getPs().executeQuery();
+            ArrayList<Lot> lot = new ArrayList<>();
+            while (rst.next()) {
+                lot.add(new Lot(rst.getInt("lot_id"), rst.getString("parking_name"), rst.getInt("cc_id")));
+            }
+            System.out.println("User has been added.");
+
+            return lot;
+        } catch (SQLException se) {
+            System.out.println("SQL Exception occurred: " + se.getMessage());
+            se.printStackTrace();
+            return hsb.SQlError();
+        } catch (Exception e) {
+            System.out.println("Exception occurred: " + e.getMessage());
+            e.printStackTrace();
+            return hsb.ExceptionError();
+        }
+    }    
+    
     public String AddLot(Lot lot) {
         try {
 
