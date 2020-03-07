@@ -80,7 +80,7 @@ public class LotsResource {
     }
 
     @GET
-    @Path("getLots/")
+    //@Path("getLots/")
     @Produces(MediaType.TEXT_PLAIN)
     @Consumes(MediaType.TEXT_PLAIN)
     public String getLots() {
