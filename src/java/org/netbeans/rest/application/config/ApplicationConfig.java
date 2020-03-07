@@ -30,15 +30,17 @@ public class ApplicationConfig extends Application {
      */
     private void addRestResourceClasses(Set<Class<?>> resources) {
         resources.add(REST.AdminResource.class);
+        resources.add(REST.BookingsResource.class);
         resources.add(REST.CarResource.class);
         resources.add(REST.LoginResourse.class);
+        resources.add(REST.LotsResource.class);
         resources.add(REST.NewCrossOriginResourceSharingFilter.class);
-        resources.add(REST.ParkingLotsResource.class);
         resources.add(REST.RecoveryPasswordResource.class);
         resources.add(REST.RecoveryResource.class);
         resources.add(REST.UserCarResource.class);
         resources.add(REST.UserDetailsResource.class);
         resources.add(REST.UserResource.class);
+        resources.add(REST.ZoneResource.class);
     }
     
 }
