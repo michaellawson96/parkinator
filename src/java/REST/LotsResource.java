@@ -80,24 +80,24 @@ public class LotsResource {
     }
 
     @GET
-    @Path("getLots/")
+    //@Path("getLots/")
     @Produces(MediaType.TEXT_PLAIN)
     @Consumes(MediaType.TEXT_PLAIN)
     public String getLots() {
-        ArrayList<Lot> lot = (ArrayList<Lot>)ldao.selectAllLots();
-        if (lot == null || lot.isEmpty()) {
+        ArrayList<Lot> lots = (ArrayList<Lot>)ldao.selectAllLots();
+        if (lots == null || lots.isEmpty()) {
             return hsb.CreateMessage(-1, "No Lots Found");
         } else {
             JSONArray array = new JSONArray();
-            for (Lot l : lot) {
-                array.add(convertLotToJson(l));
+            for (Lot lot : lots) {
+                array.add(convertLotToJson(lot));
             }
             return array.toString();
         }
     }
 
     @POST
-    @Path("addLots/")
+    //@Path("addLots/")
     @Consumes(MediaType.TEXT_PLAIN)
     @Produces(MediaType.TEXT_PLAIN)
     public String AddingParkingLot(String content) {

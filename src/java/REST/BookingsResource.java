@@ -66,7 +66,7 @@ public class BookingsResource {
     }
       
     @POST
-    @Path("addBooking/")  
+    //@Path("addBooking/")  
     @Consumes(MediaType.TEXT_PLAIN)
     @Produces(MediaType.TEXT_PLAIN)
     public String addBooking(String content) {
