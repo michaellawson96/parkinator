@@ -198,6 +198,29 @@ public class UserDao implements UserDAOInterface {
             return false;
         }
     }
+    
+    @Override
+    public boolean deleteUser(int uid) {
+        try {
+                sql.setPs(sql.getConn().prepareStatement("DELETE from users WHERE user_id = ?"));
+
+                sql.getPs().setInt(1, uid);
+
+
+                sql.getPs().executeUpdate();
+                return true;
+            }
+
+         catch (SQLException se) {
+            System.out.println("SQL Exception occurred: " + se.getMessage());
+            se.printStackTrace();
+            return false;
+        } catch (Exception e) {
+            System.out.println("Exception occurred: " + e.getMessage());
+            e.printStackTrace();
+            return false;
+        }
+    }
 
     @Override
     public User getUserByEmail(String email) {
