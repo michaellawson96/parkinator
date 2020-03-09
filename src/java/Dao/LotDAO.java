@@ -23,12 +23,11 @@ import java.util.Date;
  *
  * @author Lukas
  */
-public class LotDAO implements LotDaoInterface{
+public class LotDAO implements LotDaoInterface {
 
     private SqlConnection sql = new SqlConnection();
     private HttpStatusBase hsb = new HttpStatusBase();
 
-    
     @Override
     public Object selectAllLots() {
         try {
@@ -52,8 +51,8 @@ public class LotDAO implements LotDaoInterface{
             e.printStackTrace();
             return hsb.ExceptionError();
         }
-    }    
-    
+    }
+
     public String AddLot(Lot lot) {
         try {
 
@@ -114,7 +113,7 @@ public class LotDAO implements LotDaoInterface{
         } catch (SQLException se) {
             System.out.println("SQL Exception occurred: " + se.getMessage());
             se.printStackTrace();
-            return hsb.SQlError();
+            return se.getMessage();//hsb.SQlError();
         } catch (Exception e) {
             System.out.println("Exception occurred: " + e.getMessage());
             e.printStackTrace();
@@ -135,7 +134,10 @@ public class LotDAO implements LotDaoInterface{
             ResultSet rst2;
             rst2 = sql.getPs().executeQuery();
 
-            if (rst.getInt("max_spaces") > rst2.getInt("COUNT")) {
+                int maxSpaces = rst.getInt("max_spaces");        
+                int count = rst2.getInt("COUNT");
+            
+            if (maxSpaces > count) {
 
                 sql.setPs(sql.getConn().prepareStatement("INSERT INTO parked_cars(zone_id,car_id,book_from,book_to) VALUES (?,?,?,?)"));
                 sql.getPs().setInt(1, pc.getZone_id());

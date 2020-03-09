@@ -58,9 +58,16 @@ public class LotsResource {
             u = new Lot();
             // note that JSONObject has all numbers as longs, and needs to be converted to an int if required.
 
-            u.setLot_id((int) obj.get("lot_id"));
+            int lotId =  ((Long)obj.get("lot_id")).intValue();
+            u.setLot_id(lotId);
             u.setParking_name((String) obj.get("parking_name"));
-            u.setCc_id((int) obj.get("cc_id"));
+            if(((Long)obj.get("cc_id")) != null){
+            int ccId =  ((Long)obj.get("cc_id")).intValue();
+             u.setCc_id(ccId);
+            }else{
+                u.setCc_id(1);
+            }
+           
 
         } // more detailed reporting can be done by catching specific exceptions, such as ParseException
         catch (ParseException exp) {

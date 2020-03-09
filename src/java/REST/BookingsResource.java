@@ -28,6 +28,7 @@ import org.json.simple.parser.ParseException;
  */
 @Path("bookings")
 public class BookingsResource {
+
     HttpStatusBase hsb = new HttpStatusBase();
     LotDAO ldao = new LotDAO();
     @Context
@@ -50,21 +51,21 @@ public class BookingsResource {
             // create a new Customer and use get method to retrieve values for a key
             pc = new ParkedCars();
             // note that JSONObject has all numbers as longs, and needs to be converted to an int if required.
-
-            pc.setZone_id((int) obj.get("zone_id"));
-            pc.setCar_id((int) obj.get("car_id"));
+            int zoneId = ((Long) obj.get("zone_id")).intValue();
+            pc.setZone_id(zoneId);
+            int carId = ((Long) obj.get("car_id")).intValue();
+            pc.setCar_id(carId);
             pc.setBookFrom((String) obj.get("bookFrom"));
             pc.setBookTo((String) obj.get("bookTo"));
 
-        } 
-        catch (ParseException exp) {
+        } catch (ParseException exp) {
             System.out.println(exp);
             pc = null;
-            return hsb.ParseError();
+            return exp.getMessage();//hsb.ParseError();
         }
         return pc;
     }
-      
+
     @POST
     //@Path("addBooking/")  
     @Consumes(MediaType.TEXT_PLAIN)
@@ -77,11 +78,11 @@ public class BookingsResource {
         } else {
             return (String) obj;
         }
-                
+
     }
-    
+
     @POST
-    @Path("checkOutdatedBookings/") 
+    @Path("checkOutdatedBookings/")
     @Consumes(MediaType.TEXT_PLAIN)
     @Produces(MediaType.TEXT_PLAIN)
     public String checkOutdatedBookings(String content) {
@@ -92,6 +93,6 @@ public class BookingsResource {
         } else {
             return (String) obj;
         }
-                
-    }    
+
+    }
 }
