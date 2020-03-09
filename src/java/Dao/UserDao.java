@@ -174,13 +174,17 @@ public class UserDao implements UserDAOInterface {
     ) {
         try {
             if (CheckUserExistsByEmail(user.getEmail())) {
-                sql.setPs(sql.getConn().prepareStatement("UPDATE users SET user_fullname=?,question=?,answer_hash=?, has_disabled_badge=? WHERE email = ?"));
+                sql.setPs(sql.getConn().prepareStatement("UPDATE users SET user_fullname=?, user_type=?,question=?,answer_hash=?, has_disabled_badge=? WHERE email = ?"));
 
                 sql.getPs().setString(1, user.getUserFullname());
-                sql.getPs().setString(2, user.getQuestion());
-                sql.getPs().setString(3, user.getAnswer_hash());
-                sql.getPs().setBoolean(4, user.getHasDisabledBadge());
-                sql.getPs().setString(5, user.getEmail());
+                
+                sql.getPs().setString(2, user.getUserType());
+                
+                sql.getPs().setString(3, user.getQuestion());
+                sql.getPs().setString(4, user.getAnswer_hash());
+                sql.getPs().setBoolean(5, user.getHasDisabledBadge());
+                
+                sql.getPs().setString(6, user.getEmail());
 
                 sql.getPs().executeUpdate();
                 return true;
