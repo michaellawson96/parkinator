@@ -123,6 +123,10 @@ public class LotDAO implements LotDaoInterface {
             return hsb.ExceptionError();
         }
     }
+        private static java.sql.Date convertUtilToSql(java.util.Date uDate) {
+        java.sql.Date sDate = new java.sql.Date(uDate.getTime());
+        return sDate;
+    }
 
     @Override
     public String AddBooking(ParkedCars pc) {
@@ -142,12 +146,15 @@ public class LotDAO implements LotDaoInterface {
                     int count = rst2.getInt(1);
 
                     if (maxSpaces > count) {
-
+                        
+                        Date bookFrom = convertUtilToSql(pc.getBookFrom());
+                        Date bookTo = convertUtilToSql(pc.getBookTo());
+                        
                         sql.setPs(sql.getConn().prepareStatement("INSERT INTO parked_cars(zone_id,car_id,book_from,book_to) VALUES (?,?,?,?)"));
                         sql.getPs().setInt(1, pc.getZone_id());
                         sql.getPs().setInt(2, pc.getCar_id());
-                        sql.getPs().setDate(3, pc.getBookFrom());
-                        sql.getPs().setDate(4, pc.getBookTo());
+                        sql.getPs().setDate(3, bookFrom);
+                        sql.getPs().setDate(4, bookTo);
 
                         sql.getPs().executeUpdate();
 

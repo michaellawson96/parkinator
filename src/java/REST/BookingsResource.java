@@ -8,7 +8,9 @@ package REST;
 import Dao.HttpStatusBase;
 import Dao.LotDAO;
 import Dto.ParkedCars;
-import java.sql.Date;
+import java.util.Date;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.UriInfo;
 import javax.ws.rs.Consumes;
@@ -41,7 +43,7 @@ public class BookingsResource {
     public BookingsResource() {
     }
 
-    private Object convertJsonStringToZone(String jsonString) {
+    private Object convertJsonStringToZone(String jsonString)  {
         ParkedCars pc = null;
         try {
             // create a parser to convert a string to a json object
@@ -56,13 +58,18 @@ public class BookingsResource {
             pc.setZone_id(zoneId);
             int carId = ((Long) obj.get("car_id")).intValue();
             pc.setCar_id(carId);
-            pc.setBookFrom((Date) obj.get("bookFrom"));
-            pc.setBookTo((Date) obj.get("bookTo"));
+            DateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy");
+            Date from =  simpleDateFormat.parse(obj.get("bookFrom").toString());
+            pc.setBookFrom(from);
+            Date to = simpleDateFormat.parse(obj.get("bookTo").toString());
+            pc.setBookTo(to);
 
         } catch (ParseException exp) {
             System.out.println(exp);
             pc = null;
             return exp.getMessage();//hsb.ParseError();
+        } catch (java.text.ParseException jtp){
+            return jtp.getMessage();
         }
         return pc;
     }

@@ -20,6 +20,6 @@ public class bookingTest {
         Scanner sc = new Scanner(System.in);
         String c = sc.next();
          System.out.println(ar.addBooking(c));
-        // {"zone_id":2,"car_id":19,"bookFrom":"12/03/1999","bookTo":"12/03/2000"}      
+        // {"zone_id":2,"car_id":19,"bookFrom":"12-03-1999","bookTo":"12-03-2000"}      
     }
 }
