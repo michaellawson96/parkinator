@@ -17,7 +17,7 @@ public class registerTest {
         UserResource ur = new UserResource();
         
         
-        ur.register("{\"user_id\":null,\"user_fullname\":\"lukas krukonis\",\"email\":\"D00214215@student.dkit.ie\",\"hash\":\"asd\",\"user_type\":\"regular\",\"question\":\"What is the name of your favorite childhood friend?\",\"answer_hash\":\"asd\",\"has_disabled_badge\":false}");
+        ur.register("{\"user_id\":null,\"user_fullname\":\"lukas krukonis\",\"email\":\"a@gmail.com\",\"hash\":\"Lukiukas1\",\"user_type\":\"regular\",\"question\":\"What is your oldest sibling’s birthday month and year?\",\"answer_hash\":\"asd\",\"has_disabled_badge\":false}");
         //{"user_fullname":"asdasd","email":"asdsad@gmail.com","password":"Lukiukas","user_type":"regular","pass_question":"asdasd","pass_answer":"asdasd"}
     }
     
