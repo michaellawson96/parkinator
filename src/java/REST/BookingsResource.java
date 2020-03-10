@@ -8,6 +8,7 @@ package REST;
 import Dao.HttpStatusBase;
 import Dao.LotDAO;
 import Dto.ParkedCars;
+import java.sql.Date;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.UriInfo;
 import javax.ws.rs.Consumes;
@@ -55,8 +56,8 @@ public class BookingsResource {
             pc.setZone_id(zoneId);
             int carId = ((Long) obj.get("car_id")).intValue();
             pc.setCar_id(carId);
-            pc.setBookFrom((String) obj.get("bookFrom"));
-            pc.setBookTo((String) obj.get("bookTo"));
+            pc.setBookFrom((Date) obj.get("bookFrom"));
+            pc.setBookTo((Date) obj.get("bookTo"));
 
         } catch (ParseException exp) {
             System.out.println(exp);
@@ -89,7 +90,7 @@ public class BookingsResource {
         Object obj = convertJsonStringToZone(content);
         if (obj instanceof ParkedCars) {
             ParkedCars pc = (ParkedCars) obj;
-            return ldao.CheckOutDatedParkings(pc);
+            return "";//ldao.CheckOutDatedParkings(pc);
         } else {
             return (String) obj;
         }
