@@ -7,7 +7,9 @@ package REST;
 
 import Dao.CarDAO;
 import Dao.CarDAOInterface;
+import Dao.HttpStatusBase;
 import Dto.Car;
+import Dto.HttpStatus;
 import java.util.ArrayList;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.UriInfo;
@@ -39,6 +41,7 @@ public class UserCarResource {
      */
     public UserCarResource() {
     }
+    HttpStatusBase hsb = new HttpStatusBase();
     
     private int convertJsonStringToUserNo(String jsonString) {
         int userNo = -1;
@@ -62,10 +65,11 @@ public class UserCarResource {
     private JSONObject convertCarToJson(Car car) {
         JSONObject jObj = new JSONObject();
         jObj.put("car_id", car.getCarNo());
-        jObj.put("car_details", car.getCarDetails());
+        jObj.put("car_colour", car.getCarColour());
+        jObj.put("car_make", car.getCarMake());
+        jObj.put("car_model", car.getCarModel());
         jObj.put("car_reg", car.getCarReg());
         jObj.put("user_id", car.getUserNo());
-        
 
         return jObj;
     }
@@ -80,11 +84,24 @@ public class UserCarResource {
     public String getUserCars(String content) {
         CarDAOInterface cDAO = new CarDAO();
         int userNo = convertJsonStringToUserNo(content);
-        ArrayList<Car> cars = cDAO.getAllUserCars(userNo);
-        
+        ArrayList<Object> objs = cDAO.getAllUserCars(userNo);
+        String objType;
+        for (Object obj: objs){
+            if(obj instanceof HttpStatus){
+                objType = "HttpStatus";
+                break;
+            }
+            else{
+                objType = "Car";
+                break;
+            }
+        }
         JSONArray array = new JSONArray();
-            for (Car car : cars) {
-                array.add(convertCarToJson(car));
+            for (Object obj : objs) {
+                if(obj instanceof HttpStatus)
+                    array.add(obj);
+                else
+                array.add(convertCarToJson((Car)obj));
             }
             return array.toString();
     }

@@ -46,13 +46,16 @@ public class ZoneResource {
             // create a new Customer and use get method to retrieve values for a key
             z = new Zone();
             // note that JSONObject has all numbers as longs, and needs to be converted to an int if required.
-
-            z.setLot_id((int) obj.get("lot_id"));
+            int zoneId =  ((Long)obj.get("zone_id")).intValue();
+            z.setZone_id(zoneId);
             z.setZone_name((String) obj.get("zone_name"));
-            z.setMax_spaces((int) obj.get("max_spaces"));
+            int maxSpace =  ((Long)obj.get("max_spaces")).intValue();
+            z.setMax_spaces(maxSpace);
             z.setIs_vip((boolean) obj.get("is_vip"));
-            z.setLot_id ((int) obj.get("lot_id"));
-            z.setMax_disabled_spaces((int) obj.get("max_disabled_spaces"));
+            int lotId =  ((Long)obj.get("lot_id")).intValue();
+            z.setLot_id (lotId);
+            int maxDisableSpace =  ((Long)obj.get("max_disabled_spaces")).intValue();
+            z.setMax_disabled_spaces(maxDisableSpace);
             
          
 

@@ -19,6 +19,11 @@ public interface CarDAOInterface {
     boolean updateCar(Car car);
     boolean deleteCar(Car car);
     
-    ArrayList<Car> getAllUserCars(int userNo);
+    /**
+     *
+     * @param userNo
+     * @return
+     */
+    ArrayList<Object> getAllUserCars(int userNo);
     
 }

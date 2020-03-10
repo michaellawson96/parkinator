@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 4.9.1
+-- version 4.7.4
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Feb 27, 2020 at 11:08 AM
--- Server version: 10.4.8-MariaDB
--- PHP Version: 7.3.10
+-- Generation Time: Mar 07, 2020 at 06:08 PM
+-- Server version: 10.1.28-MariaDB
+-- PHP Version: 7.1.11
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET AUTOCOMMIT = 0;
@@ -19,7 +19,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `parkinator`
+-- Database: `testparkinator`
 --
 
 -- --------------------------------------------------------
@@ -31,7 +31,9 @@ SET time_zone = "+00:00";
 CREATE TABLE `cars` (
   `car_id` int(11) NOT NULL,
   `car_reg` varchar(20) NOT NULL,
-  `car_details` varchar(100) NOT NULL,
+  `car_colour` varchar(100) NOT NULL,
+  `car_make` varchar(100) NOT NULL,
+  `car_model` varchar(100) NOT NULL,
   `user_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
@@ -78,8 +80,9 @@ CREATE TABLE `parked_cars` (
 
 CREATE TABLE `parking_lots` (
   `lot_id` int(11) NOT NULL,
-  `image_link` varchar(100) NOT NULL,
-  `cc_id` int(11) NOT NULL
+  `cc_id` int(11) NOT NULL,
+  `latitude` double NOT NULL,
+  `longitude` double NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
@@ -114,9 +117,9 @@ CREATE TABLE `salt` (
 --
 
 INSERT INTO `salt` (`user_id`, `salt`, `answer_salt`) VALUES
-(1, '$2a$12$Fodl2oDf233P40qSfkbVLO', '$2a$12$8XW5CMg.1ssMt9dvm5yMde'),
-(2, '$2a$12$jgxPw.sQUTLOG2Yb1xCeFO', '$2a$12$nXti9bKgnGXGHg5.TGTbEO'),
-(3, '$2a$12$b3uCgzPSHx94wQunCwzPiO', '$2a$12$omWIaLeVXOwpGFveppMrlu');
+(14, '$2a$12$JEV2Q3QjkQUeBt3ppnKdt.', '$2a$12$CAi4ItWkf9y5TDmtvDybye'),
+(15, '$2a$12$jL1zKr8wqlta7zIG3RN8qu', '$2a$12$/BXnO.apyFUrX0SABxypUO'),
+(16, '$2a$12$wZrluDWmlSL5Gja10diRvO', '$2a$12$0Z51IHVEQmQC6gfdmjtOZu');
 
 -- --------------------------------------------------------
 
@@ -132,7 +135,7 @@ CREATE TABLE `users` (
   `user_type` varchar(20) NOT NULL,
   `question` varchar(50) NOT NULL,
   `answer_hash` varchar(60) NOT NULL,
-  `has_disabled_badge` tinyint(1) DEFAULT 0
+  `has_disabled_badge` tinyint(1) DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
@@ -140,9 +143,9 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`user_id`, `user_fullname`, `email`, `hash`, `user_type`, `question`, `answer_hash`, `has_disabled_badge`) VALUES
-(1, 'Testing User1', 'testinguser1@gmail.com', '$2a$12$Fodl2oDf233P40qSfkbVLOmX8R9a6kzuugosLS685hiVZr1qp7KWS', 'user', 'what is your mother\'s maiden name', '$2a$12$8XW5CMg.1ssMt9dvm5yMdeGjCTP51HfwFB8O5WDtNeFnNyxJmSBY6', 0),
-(2, 'Testing User2', 'testinguser2@gmail.com', '$2a$12$jgxPw.sQUTLOG2Yb1xCeFOVHgD5bbH8bkvzNufPIJ9xRnKOghpw9W', 'user', 'what is your mother\'s maiden name', '$2a$12$nXti9bKgnGXGHg5.TGTbEOUmYH2lqdduy0RvMIorAgihWVpaEwKKC', 1),
-(3, 'Testing User3', 'testinguser3@gmail.com', '$2a$12$b3uCgzPSHx94wQunCwzPiOMyCbgGp1qE6UEhUgtqNMXZL28tk.zOq', 'user', 'what is your mother\'s maiden name', '$2a$12$omWIaLeVXOwpGFveppMrluN9EsvXR1ufV4YheHYWXtftgn0HZ67oG', 0);
+(14, 'Michael Lawson', 'michael.c.k.lawson@gmail.com', '$2a$12$JEV2Q3QjkQUeBt3ppnKdt.tEw3w3CbHXhgwPK5eh.wDYctKp6knCy', 'admin', 'What is your oldest sibling\'s middle name?', '$2a$12$CAi4ItWkf9y5TDmtvDybyeBwRuOrF3.ZD7ih5OZxVjTCB7mFewXNq', 0),
+(15, 'test1', 'test1@email.com', '$2a$12$jL1zKr8wqlta7zIG3RN8qu05ujys5GukLBD2wtTRvO2m4YSVolx9S', 'regular', 'What was your childhood nickname?', '$2a$12$/BXnO.apyFUrX0SABxypUOX0Y2ZSAmNoCU2NbBoZTo0H88x0Bu7WK', 0),
+(16, 'Test2', 'test2@gmail.com', '$2a$12$wZrluDWmlSL5Gja10diRvO4e1NnbV0xLbtKnQeZNz8HIYMRHbjXQu', 'regular', 'What was your childhood nickname?', '$2a$12$0Z51IHVEQmQC6gfdmjtOZucqtS02hXKxMiRV5dIQxUSfj5kcoWcdi', 0);
 
 -- --------------------------------------------------------
 
@@ -229,7 +232,7 @@ ALTER TABLE `vips`
 -- AUTO_INCREMENT for table `cars`
 --
 ALTER TABLE `cars`
-  MODIFY `car_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `car_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `clamping_companies`
@@ -253,7 +256,7 @@ ALTER TABLE `parking_zones`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
+  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
 
 --
 -- Constraints for dumped tables
@@ -263,7 +266,7 @@ ALTER TABLE `users`
 -- Constraints for table `cars`
 --
 ALTER TABLE `cars`
-  ADD CONSTRAINT `cars_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`);
+  ADD CONSTRAINT `cars_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Constraints for table `lot_managers`
@@ -295,7 +298,7 @@ ALTER TABLE `parking_zones`
 -- Constraints for table `salt`
 --
 ALTER TABLE `salt`
-  ADD CONSTRAINT `salt_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`);
+  ADD CONSTRAINT `salt_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Constraints for table `vips`

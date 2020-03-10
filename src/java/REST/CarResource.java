@@ -51,7 +51,9 @@ public class CarResource {
             int carNumber =  ((Long)obj.get("car_id")).intValue();
             c.setCarNo(carNumber);
             c.setCarReg((String) obj.get("car_reg"));
-            c.setCarDetails((String) obj.get("car_details"));
+            c.setCarColour((String) obj.get("car_colour"));
+            c.setCarMake((String) obj.get("car_make"));
+            c.setCarModel((String) obj.get("car_model"));
             int userNumber =  ((Long)obj.get("user_id")).intValue();
             c.setUserNo(userNumber);
         } // more detailed reporting can be done by catching specific exceptions, such as ParseException
@@ -80,8 +82,7 @@ public class CarResource {
     
     /**
      * PUT method for updating or deleting an instance of CarResource
-     * Sample input for UPDATE: {"car_details":"Red Renault Megane","user_id":14,"car_reg":"09-MN-6919","car_id":5,"action":"update"}
-     * Sample input for DELETE: {"car_details":"Red Renault Megane","user_id":14,"car_reg":"09-MN-6919","car_id":5,"action":"delete"}
+     * Sample input for UPDATE: {"car_colour":"Red", "car_make":"Renault", "car_model":"Megane", "user_id":14,"car_reg":"09-MN-6919","car_id":5}
      * @param content representation for the resource
      */
     @PUT
@@ -99,8 +100,7 @@ public class CarResource {
     
     /**
      * PUT method for updating or deleting an instance of CarResource
-     * Sample input for UPDATE: {"car_details":"Red Renault Megane","user_id":14,"car_reg":"09-MN-6919","car_id":5,"action":"update"}
-     * Sample input for DELETE: {"car_details":"Red Renault Megane","user_id":14,"car_reg":"09-MN-6919","car_id":5,"action":"delete"}
+     * Sample input for DELETE: {"car_colour":"Red", "car_make":"Renault", "car_model":"Megane", "user_id":14,"car_reg":"09-MN-6919","car_id":5}
      * @param content representation for the resource
      */
     @PUT
