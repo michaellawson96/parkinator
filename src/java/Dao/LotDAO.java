@@ -6,19 +6,52 @@
 package Dao;
 
 import static Dao.UserDao.SaltANDHash;
+import Dto.Car;
 import Dto.Lot;
+import Dto.ParkedCars;
 import Dto.User;
+import Dto.Zone;
 import SqlConnection.SqlConnection;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
 
 /**
  *
  * @author Lukas
  */
-public class LotDAO {
+public class LotDAO implements LotDaoInterface {
 
     private SqlConnection sql = new SqlConnection();
     private HttpStatusBase hsb = new HttpStatusBase();
+
+    @Override
+    public Object selectAllLots() {
+        try {
+            sql.setPs(sql.getConn().prepareStatement("select * from parking_lots"));
+            ResultSet rst;
+            // Execute the query
+            rst = sql.getPs().executeQuery();
+            ArrayList<Lot> lot = new ArrayList<>();
+            while (rst.next()) {
+                lot.add(new Lot(rst.getInt("lot_id"), rst.getString("parking_name"), rst.getInt("cc_id")));
+            }
+            System.out.println("User has been added.");
+
+            return lot;
+        } catch (SQLException se) {
+            System.out.println("SQL Exception occurred: " + se.getMessage());
+            se.printStackTrace();
+            return hsb.SQlError();
+        } catch (Exception e) {
+            System.out.println("Exception occurred: " + e.getMessage());
+            e.printStackTrace();
+            return hsb.ExceptionError();
+        }
+    }
 
     public String AddLot(Lot lot) {
         try {
@@ -29,7 +62,7 @@ public class LotDAO {
 
             sql.getPs().executeUpdate();
 
-            return hsb.CreateMessage(1, "Parking lot added Successfully");
+            return hsb.CreateMessage(1, "Parking Lot added Successfully");
 
         } catch (SQLException se) {
             System.out.println("SQL Exception occurred: " + se.getMessage());
@@ -41,16 +74,16 @@ public class LotDAO {
             return hsb.ExceptionError();
         }
     }
-    public String Addzone(Lot lot) {
+
+    public String RemoveLot(Lot lot) {
         try {
 
-            sql.setPs(sql.getConn().prepareStatement("INSERT INTO parking_lots(Parking_name,cc_id) VALUES (?,?)"));
-            sql.getPs().setString(1, lot.getParking_name());
-            sql.getPs().setInt(2, lot.getCc_id());
+            sql.setPs(sql.getConn().prepareStatement("DELETE FROM parking_lots WHERE lot_id = ?"));
+            sql.getPs().setInt(1, lot.getLot_id());
 
             sql.getPs().executeUpdate();
 
-            return hsb.CreateMessage(1, "Parking lot added Successfully");
+            return hsb.CreateMessage(1, "Parking Lot Deleted Successfully");
 
         } catch (SQLException se) {
             System.out.println("SQL Exception occurred: " + se.getMessage());
@@ -61,5 +94,106 @@ public class LotDAO {
             e.printStackTrace();
             return hsb.ExceptionError();
         }
-    }    
+    }
+
+    public String Addzone(Zone zone) {
+        try {
+
+            sql.setPs(sql.getConn().prepareStatement("INSERT INTO parking_zones(zone_name,max_spaces,is_vip,lot_id,max_disabled_spaces) VALUES (?,?,?,?,?)"));
+            sql.getPs().setString(1, zone.getZone_name());
+            sql.getPs().setInt(2, zone.getMax_spaces());
+            sql.getPs().setBoolean(3, zone.isIs_vip());
+            sql.getPs().setInt(4, zone.getLot_id());
+            sql.getPs().setInt(5, zone.getMax_disabled_spaces());
+
+            sql.getPs().executeUpdate();
+
+            return hsb.CreateMessage(1, "Parking Zone added Successfully");
+
+        } catch (SQLException se) {
+            System.out.println("SQL Exception occurred: " + se.getMessage());
+            se.printStackTrace();
+            return se.getMessage();//hsb.SQlError();
+        } catch (Exception e) {
+            System.out.println("Exception occurred: " + e.getMessage());
+            e.printStackTrace();
+            return hsb.ExceptionError();
+        }
+    }
+
+    public String AddBooking(ParkedCars pc) {
+        try {
+
+            sql.setPs(sql.getConn().prepareStatement("SELECT max_spaces FROM parking_zones WHERE zone_id = ?"));
+            sql.getPs().setInt(1, pc.getZone_id());
+            ResultSet rst;
+            rst = sql.getPs().executeQuery();
+
+            sql.setPs(sql.getConn().prepareStatement("SELECT COUNT(*) FROM parked_cars WHERE zone_id = ?"));
+            sql.getPs().setInt(1, pc.getZone_id());
+            ResultSet rst2;
+            rst2 = sql.getPs().executeQuery();
+
+                int maxSpaces = rst.getInt("max_spaces");        
+                int count = rst2.getInt("COUNT");
+            
+            if (maxSpaces > count) {
+
+                sql.setPs(sql.getConn().prepareStatement("INSERT INTO parked_cars(zone_id,car_id,book_from,book_to) VALUES (?,?,?,?)"));
+                sql.getPs().setInt(1, pc.getZone_id());
+                sql.getPs().setInt(2, pc.getCar_id());
+                sql.getPs().setString(3, pc.getBookFrom());
+                sql.getPs().setString(4, pc.getBookTo());
+
+                sql.getPs().executeUpdate();
+
+                return hsb.CreateMessage(1, "Parking Spot Booked Successfully From : " + pc.getBookFrom() + " To : " + pc.getBookTo());
+            } else {
+                return hsb.CreateMessage(1, "Sorry But no parking spots Left!");
+            }
+
+        } catch (SQLException se) {
+            System.out.println("SQL Exception occurred: " + se.getMessage());
+            se.printStackTrace();
+            return hsb.SQlError();
+        } catch (Exception e) {
+            System.out.println("Exception occurred: " + e.getMessage());
+            e.printStackTrace();
+            return hsb.ExceptionError();
+        }
+
+    }
+
+    public String CheckOutDatedParkings(ParkedCars pc) {
+        try {
+            DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
+            Date date = new Date();
+            System.out.println(dateFormat.format(date));
+
+            sql.setPs(sql.getConn().prepareStatement("SELECT book_to FROM parked_cars WHERE book_to <= ?"));
+            sql.getPs().setString(1, dateFormat.format(date));
+
+            ResultSet rst;
+            rst = sql.getPs().executeQuery();
+
+            while (rst.next()) {
+                sql.setPs(sql.getConn().prepareStatement("DELETE * FROM parked_cars WHERE book_to = ?"));
+                sql.getPs().setString(1, rst.getString("book_to"));
+
+                sql.getPs().executeUpdate();
+                return hsb.CreateMessage(1, "OutDated Booking has Been Removed");
+            }
+
+            return hsb.CreateMessage(-1, "No OutDated Bookings");
+
+        } catch (SQLException se) {
+            System.out.println("SQL Exception occurred: " + se.getMessage());
+            se.printStackTrace();
+            return hsb.SQlError();
+        } catch (Exception e) {
+            System.out.println("Exception occurred: " + e.getMessage());
+            e.printStackTrace();
+            return hsb.ExceptionError();
+        }
+    }
 }

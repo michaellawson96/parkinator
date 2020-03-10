@@ -21,15 +21,24 @@ public class CarDAO implements CarDAOInterface {
 
     
     private SqlConnection sql = new SqlConnection();
+    private HttpStatusBase hsb = new HttpStatusBase();
+    
+    public CarDAO(SqlConnection sql){
+        this.sql = sql;
+    }
+    public CarDAO(){
+    }
     
     @Override
     public boolean insertCar(Car car) {
         try {
-                sql.setPs(sql.getConn().prepareStatement("INSERT INTO cars(car_reg, car_details, user_id) VALUES (?,?,?)"));
+                sql.setPs(sql.getConn().prepareStatement("INSERT INTO cars(car_reg, car_colour, car_make, car_model, user_id) VALUES (?,?,?,?,?)"));
 
                 sql.getPs().setString(1, car.getCarReg());
-                sql.getPs().setString(2, car.getCarDetails());
-                sql.getPs().setInt(3, car.getUserNo());
+                sql.getPs().setString(2, car.getCarColour());
+                sql.getPs().setString(3, car.getCarMake());
+                sql.getPs().setString(4, car.getCarModel());
+                sql.getPs().setInt(5, car.getUserNo());
 
                 sql.getPs().executeUpdate();
                 return true;
@@ -47,12 +56,14 @@ public class CarDAO implements CarDAOInterface {
     @Override
     public boolean updateCar(Car car) {
         try {
-                sql.setPs(sql.getConn().prepareStatement("UPDATE cars SET car_reg =?, car_details=?, user_id=? WHERE car_id=?"));
+                sql.setPs(sql.getConn().prepareStatement("UPDATE cars SET car_reg =?, car_colour=?, car_make=?, car_model=?, user_id=? WHERE car_id=?"));
 
                 sql.getPs().setString(1, car.getCarReg());
-                sql.getPs().setString(2, car.getCarDetails());
-                sql.getPs().setInt(3, car.getUserNo());
-                sql.getPs().setInt(4, car.getCarNo());
+                sql.getPs().setString(2, car.getCarColour());
+                sql.getPs().setString(3, car.getCarMake());
+                sql.getPs().setString(4, car.getCarModel());
+                sql.getPs().setInt(5, car.getUserNo());
+                sql.getPs().setInt(6, car.getCarNo());
 
                 sql.getPs().executeUpdate();
                 return true;
@@ -90,28 +101,30 @@ public class CarDAO implements CarDAOInterface {
     }
 
     @Override
-    public ArrayList<Car> getAllUserCars(int userNo) {
+    public ArrayList<Object> getAllUserCars(int userNo) {
+        ArrayList<Object> objs = new ArrayList<>();
         try {
             sql.setPs(sql.getConn().prepareStatement("select * from cars where user_id = ?"));
             sql.getPs().setInt(1, userNo);
             ResultSet rst;
             // Execute the query
             rst = sql.getPs().executeQuery();
-            ArrayList<Car> cars = new ArrayList<>();
             while (rst.next()) {
-                cars.add(new Car(rst.getInt("car_id"),rst.getString("car_reg"),rst.getString("car_details"),rst.getInt("user_id")));
+                objs.add(new Car(rst.getInt("car_id"),rst.getString("car_reg"),rst.getString("car_colour"),rst.getString("car_make"),rst.getString("car_model"),rst.getInt("user_id")));
             }
             System.out.println("Car has been added.");
 
-            return cars;
+            return objs;
         } catch (SQLException se) {
             System.out.println("SQL Exception occurred: " + se.getMessage());
             se.printStackTrace();
-            return null;
+            objs.add(hsb.SQlError());
+            return objs;
         } catch (Exception e) {
             System.out.println("Exception occurred: " + e.getMessage());
             e.printStackTrace();
-            return null;
+            objs.add(hsb.ExceptionError());
+            return objs;
         }
     }
     
