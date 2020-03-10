@@ -290,8 +290,6 @@ public class UserDao implements UserDAOInterface {
             // Execute the query
             rst = sql.getPs().executeQuery();
             if (rst.next()) {
-                System.out.println(rst.getString("answer_hash"));
-                System.out.println(user.getAnswer_hash());
                 return BCrypt.checkpw(user.getAnswer_hash(), rst.getString("answer_hash"));
             }
             return false;
