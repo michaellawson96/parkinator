@@ -128,4 +128,32 @@ public class CarDAO implements CarDAOInterface {
         }
     }
     
+    
+    @Override
+    public ArrayList<Object> selectAllCars() {
+        ArrayList<Object> objs = new ArrayList<>();
+        try {
+            sql.setPs(sql.getConn().prepareStatement("select * from cars"));
+            ResultSet rst;
+            // Execute the query
+            rst = sql.getPs().executeQuery();
+            while (rst.next()) {
+                objs.add(new Car(rst.getInt("car_id"),rst.getString("car_reg"),rst.getString("car_colour"),rst.getString("car_make"),rst.getString("car_model"),rst.getInt("user_id")));
+            }
+            System.out.println("Car has been added.");
+
+            return objs;
+        } catch (SQLException se) {
+            System.out.println("SQL Exception occurred: " + se.getMessage());
+            se.printStackTrace();
+            objs.add(hsb.SQlError());
+            return objs;
+        } catch (Exception e) {
+            System.out.println("Exception occurred: " + e.getMessage());
+            e.printStackTrace();
+            objs.add(hsb.ExceptionError());
+            return objs;
+        }
+    }
+    
 }
