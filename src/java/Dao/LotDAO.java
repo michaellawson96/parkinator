@@ -238,4 +238,9 @@ public class LotDAO implements LotDaoInterface {
 
     }
 
+    @Override
+    public Object selectAllBookignsByUserId(User u) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
 }

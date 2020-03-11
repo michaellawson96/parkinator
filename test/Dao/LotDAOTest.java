@@ -98,9 +98,9 @@ public class LotDAOTest {
      */
     @Test
     public void testSelectAllBookigns() throws SQLException {
-        ParkedCars p1 = new ParkedCars(1, 1, 11/11/11, 11/11/11);
-        ParkedCars p2 = new ParkedCars(2, 2, 22/11/22, 22/11/22);
-        ParkedCars p3 = new ParkedCars(3, 3, 33/11/33, 33/11/3);
+        ParkedCars p1 = new ParkedCars(1, 1, new java.sql.Date(11/11/11), new java.sql.Date(11/11/11));
+        ParkedCars p2 = new ParkedCars(2, 2, new java.sql.Date(22/11/22), new java.sql.Date(22/11/22));
+        ParkedCars p3 = new ParkedCars(3, 3, new java.sql.Date(33/11/33), new java.sql.Date(33/11/33));
 
         ArrayList<ParkedCars> expectedResults = new ArrayList();
 
@@ -127,7 +127,7 @@ public class LotDAOTest {
         when(rs.getInt("zone_id")).thenReturn(p1.getZone_id(), p2.getZone_id(), p3.getZone_id());
         when(rs.getInt("car_id")).thenReturn(p1.getCar_id(), p2.getCar_id(), p3.getCar_id());
         when(rs.getDate("bookFrom")).thenReturn(p1.getBookFrom(), p2.getBookFrom(), p3.getBookFrom());
-        when(rs.getDate("bookTo")).thenReturn(p1.getBookTo(), p2.getBookTo(), p3.getBookTo());
+        when(rs.getDate("bookTo")).thenReturn(p1.getBookTo(),p2.getBookTo(), p3.getBookTo());
 
         int numUsersInTable = 3;
         LotDAO lotDao = new LotDAO(sql);
