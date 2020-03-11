@@ -52,6 +52,7 @@ public class LotDAO implements LotDaoInterface {
             return hsb.ExceptionError();
         }
     }
+
     @Override
     public Object selectAllBookigns() {
         try {
@@ -74,11 +75,39 @@ public class LotDAO implements LotDaoInterface {
             e.printStackTrace();
             return hsb.ExceptionError();
         }
-    }    
+    }
+
+    @Override
+    public Object selectAllBookignsByUserId(User u) {
+        try {
+            sql.setPs(sql.getConn().prepareStatement("select * from parked_cars WHERE = ?"));
+            sql.getPs().setInt(1,u.getUserNo());
+
+            ResultSet rst;
+            // Execute the query
+            rst = sql.getPs().executeQuery();
+            ArrayList<ParkedCars> pc = new ArrayList<>();
+            while (rst.next()) {
+                pc.add(new ParkedCars(rst.getInt("zone_id"), rst.getInt("car_id"), rst.getDate("bookFrom"), rst.getDate("bookTo")));
+            }
+
+            return pc;
+        } catch (SQLException se) {
+            System.out.println("SQL Exception occurred: " + se.getMessage());
+            se.printStackTrace();
+            return hsb.SQlError();
+        } catch (Exception e) {
+            System.out.println("Exception occurred: " + e.getMessage());
+            e.printStackTrace();
+            return hsb.ExceptionError();
+        }
+    }
+
     @Override
     public Object selectAllZones() {
         try {
             sql.setPs(sql.getConn().prepareStatement("select * from parking_zones"));
+
             ResultSet rst;
             // Execute the query
             rst = sql.getPs().executeQuery();
@@ -97,7 +126,7 @@ public class LotDAO implements LotDaoInterface {
             e.printStackTrace();
             return hsb.ExceptionError();
         }
-    }       
+    }
 
     @Override
     public String AddLot(Lot lot) {
@@ -169,7 +198,8 @@ public class LotDAO implements LotDaoInterface {
             return hsb.ExceptionError();
         }
     }
-        private static java.sql.Date convertUtilToSql(java.util.Date uDate) {
+
+    private static java.sql.Date convertUtilToSql(java.util.Date uDate) {
         java.sql.Date sDate = new java.sql.Date(uDate.getTime());
         return sDate;
     }
@@ -192,10 +222,10 @@ public class LotDAO implements LotDaoInterface {
                     int count = rst2.getInt(1);
 
                     if (maxSpaces > count) {
-                        
+
                         Date bookFrom = convertUtilToSql(pc.getBookFrom());
                         Date bookTo = convertUtilToSql(pc.getBookTo());
-                        
+
                         sql.setPs(sql.getConn().prepareStatement("INSERT INTO parked_cars(zone_id,car_id,book_from,book_to) VALUES (?,?,?,?)"));
                         sql.getPs().setInt(1, pc.getZone_id());
                         sql.getPs().setInt(2, pc.getCar_id());
@@ -226,6 +256,5 @@ public class LotDAO implements LotDaoInterface {
         }
 
     }
-
 
 }

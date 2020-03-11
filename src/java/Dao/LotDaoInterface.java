@@ -7,6 +7,7 @@ package Dao;
 
 import Dto.Lot;
 import Dto.ParkedCars;
+import Dto.User;
 import Dto.Zone;
 
 /**
@@ -21,4 +22,5 @@ public interface LotDaoInterface {
     Object selectAllLots();
     Object selectAllZones();
      Object selectAllBookigns();
+     Object selectAllBookignsByUserId(User u);
 }
