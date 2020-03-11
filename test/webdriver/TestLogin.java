@@ -15,14 +15,14 @@ import org.openqa.selenium.chrome.ChromeDriver;
  *
  * @author snake
  */
-public class TestLogin_Pass {
+public class TestLogin {
 
     @Test
     public void Login_Pass() {
-        System.setProperty("webdriver.chrome.driver", "C:\\Users\\USER\\Downloads\\chromedriver_win32 (2)\\chromedriver.exe");
+        System.setProperty("webdriver.chrome.driver", "C:\\Users\\snake\\OneDrive - Dundalk Institute of Technology\\Attachments\\Web Testing\\chromedriver_win32 (1)\\chromedriver.exe");
         WebDriver driver = new ChromeDriver();
 
-        String baseUrl = "http://localhost:33986/parkinator/test-resbeans.html";
+        String baseUrl = "http://localhost:8080/parkinator/test-resbeans.html";
         driver.get(baseUrl);
 
         driver.findElement(By.linkText("Login")).click();
@@ -44,10 +44,10 @@ public class TestLogin_Pass {
     
     @Test
     public void Login_fail() {
-        System.setProperty("webdriver.chrome.driver", "C:\\Users\\USER\\Downloads\\chromedriver_win32 (2)\\chromedriver.exe");
+        System.setProperty("webdriver.chrome.driver", "C:\\Users\\snake\\OneDrive - Dundalk Institute of Technology\\Attachments\\Web Testing\\chromedriver_win32 (1)\\chromedriver.exe");
         WebDriver driver = new ChromeDriver();
 
-        String baseUrl = "http://localhost:33986/parkinator/test-resbeans.html";
+        String baseUrl = "http://localhost:8080/parkinator/test-resbeans.html";
         driver.get(baseUrl);
 
         driver.findElement(By.linkText("Login")).click();

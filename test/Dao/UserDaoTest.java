@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package JUnitTesting;
+package Dao;
 
 import Dao.UserDao;
 import Dto.User;
@@ -17,7 +17,6 @@ import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
-import org.junit.Ignore;
 import static org.junit.Assert.*;
 import org.junit.Test;
 import static org.mockito.Mockito.*;
@@ -26,9 +25,9 @@ import static org.mockito.Mockito.*;
  *
  * @author snake
  */
-public class UserDaoTestWithMocking {
+public class UserDaoTest {
 
-    public UserDaoTestWithMocking() {
+    public UserDaoTest() {
     }
 
     @BeforeClass
