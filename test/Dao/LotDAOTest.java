@@ -156,6 +156,7 @@ public class LotDAOTest {
         Connection conn = mock(Connection.class);
         PreparedStatement ps = mock(PreparedStatement.class);
         ResultSet rs = mock(ResultSet.class);
+
         LotDAO lotDao = new LotDAO(sql);
 
         // Fill mock objects with appropriatel dummy data
@@ -270,9 +271,9 @@ public class LotDAOTest {
      */
     @Ignore
     public void testAddBooking() throws SQLException {
-        ParkedCars p1 = new ParkedCars(1, 1, new Date(11 / 11 / 11), new Date(11 / 11 / 11));
-        ParkedCars p2 = new ParkedCars(2, 2, new java.sql.Date(22 / 11 / 22), new java.sql.Date(22 / 11 / 22));
-        ParkedCars p3 = new ParkedCars(3, 3, new java.sql.Date(33 / 11 / 33), new java.sql.Date(33 / 11 / 33));
+        Zone z1 = new Zone(1, "Test Zone1", 99, false, 1, 33);
+        Zone z2 = new Zone(2, "Test Zone2", 99, true, 2, 33);
+        Zone z3 = new Zone(3, "Test Zone3", 99, false, 3, 33);
 
         String expectedResults = "";
 
@@ -280,11 +281,26 @@ public class LotDAOTest {
         Connection conn = mock(Connection.class);
         PreparedStatement ps = mock(PreparedStatement.class);
         ResultSet rs = mock(ResultSet.class);
+
         LotDAO lotDao = new LotDAO(sql);
 
-        // Fill mock objects with appropriatel dummy data
         when(sql.getConn()).thenReturn(conn);
-        when(conn.prepareStatement("select * from parked_cars")).thenReturn(ps);
+        when(conn.prepareStatement("SELECT max_spaces FROM parking_zones WHERE zone_id = ?")).thenReturn(ps);
+        when(sql.getPs()).thenReturn(ps, ps);
+        when(ps.executeQuery()).thenReturn(rs);
+
+        when(sql.getConn()).thenReturn(conn);
+        when(conn.prepareStatement("SELECT COUNT(*) FROM parked_cars WHERE zone_id = ?")).thenReturn(ps);
+        when(sql.getPs()).thenReturn(ps, ps);
+        when(ps.executeQuery()).thenReturn(rs);
+
+        when(rs.next()).thenReturn(true, true);
+
+        when(rs.getInt("max_spaces")).thenReturn(z1.getMax_spaces());
+        when(rs.getInt(1)).thenReturn(z1.getZone_id());
+
+        when(sql.getConn()).thenReturn(conn);
+        when(conn.prepareStatement("INSERT INTO parked_cars(zone_id,car_id,book_from,book_to) VALUES (?,?,?,?)")).thenReturn(ps);
         when(sql.getPs()).thenReturn(ps, ps, ps, ps, ps);
 
         Object result = lotDao.selectAllBookigns();
