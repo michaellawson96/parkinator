@@ -53,7 +53,7 @@ public class Zone {
         this.max_spaces = max_spaces;
     }
 
-    public boolean isIs_vip() {
+    public boolean getIs_vip() {
         return is_vip;
     }
 

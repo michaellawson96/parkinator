@@ -19,7 +19,8 @@ public class bookingTest {
         BookingsResource ar = new BookingsResource();
         Scanner sc = new Scanner(System.in);
         String c = sc.next();
-         System.out.println(ar.addBooking(c));
-        // {"zone_id":1,"car_id":19,"bookFrom":"12/03/1999","bookTo":"12/03/2000"}      
+        System.out.println(ar.addBooking(c));
+        // {"zone_id":1,"car_id":3,"bookFrom":"12-03-1999","bookTo":"12-03-2000"} 
+        //System.out.println(ar.getBookings());
     }
 }

@@ -591,12 +591,13 @@ public class UserDaoTestWithMocking {
     /**
      * Test of CheckUserRecoveryAnswer method, of class UserDao.
      */
-    @Ignore
+    @Test
     public void testCheckUserRecoveryAnswer() throws SQLException {
         User u1 = new User(1, "Testing User1", "testinguser1@gmail.com", "$2a$12$Fodl2oDf233P40qSfkbVLOmX8R9a6kzuugosLS685hiVZr1qp7KWS", "user", "what is your mother's maiden name", "$2a$12$8XW5CMg.1ssMt9dvm5yMdeGjCTP51HfwFB8O5WDtNeFnNyxJmSBY6", false);
         //User u2 = new User(2, "Testing User2", "testinguser2@gmail.com", "$2a$12$jgxPw.sQUTLOG2Yb1xCeFOVHgD5bbH8bkvzNufPIJ9xRnKOghpw9W", "user", "what is your mother's maiden name", "$2a$12$nXti9bKgnGXGHg5.TGTbEOUmYH2lqdduy0RvMIorAgihWVpaEwKKC", true);
         //User u3 = new User(3, "Testing User3", "testinguser3@gmail.com", "$2a$12$b3uCgzPSHx94wQunCwzPiOMyCbgGp1qE6UEhUgtqNMXZL28tk.zOq", "user", "what is your mother's maiden name", "$2a$12$omWIaLeVXOwpGFveppMrluN9EsvXR1ufV4YheHYWXtftgn0HZ67oG", false);
-        User u4 = new User(4, "Testing User4", "testinguser4@gmail.com", "Testinguser4", "user", "what is your mother's maiden name", "Testing User4", true);
+        User u4 = new User(4, "Testing User4", "testinguser4@gmail.com", "Testinguser4", "user", "what is your mother's maiden name", "Testinguser5", true);
+        User u5 = new User(5, "Testing User5", "testinguser5@gmail.com", "$2a$12$cCN9T2rgk5KH942v2CtxouhZLyRshPHC0foy2qm6.whbspG.DkqGS", "user", "what is your mother's maiden name", "$2a$12$U.g5VIG8OxEq67KY9b7sz.D6cOM1syXVwQ08aw4fW02/Yz1m4zf6S", true);
 
         boolean expResult = true;
 
@@ -612,20 +613,44 @@ public class UserDaoTestWithMocking {
         when(sql.getPs()).thenReturn(ps, ps);
         when(ps.executeQuery()).thenReturn(rs);
 
-        // Fill in the resultset
-        when(rs.getInt("user_id")).thenReturn(u1.getUserNo());
-        when(rs.getString("user_fullname")).thenReturn(u1.getUserFullname());
-        when(rs.getString("email")).thenReturn(u1.getEmail());
-        when(rs.getString("hash")).thenReturn(u1.getUserHash());
-        when(rs.getString("user_type")).thenReturn(u1.getUserType());
-        when(rs.getString("question")).thenReturn(u1.getQuestion());
-        when(rs.getString("answer_hash")).thenReturn(u1.getAnswer_hash());
-        when(rs.getBoolean("has_disabled_badge")).thenReturn(u1.getHasDisabledBadge());
-
         when(rs.next()).thenReturn(true);
 
+        when(rs.getString("answer_hash")).thenReturn(u5.getAnswer_hash());
+
         UserDao userDao = new UserDao(sql);
-        boolean result = userDao.CheckUserRecoveryAnswer(u1);
+        boolean result = userDao.CheckUserRecoveryAnswer(u4);
+
+        assertEquals(expResult, result);
+    }
+
+    @Test
+    public void testCheckUserRecoveryAnswer_fail() throws SQLException {
+        User u1 = new User(1, "Testing User1", "testinguser1@gmail.com", "$2a$12$Fodl2oDf233P40qSfkbVLOmX8R9a6kzuugosLS685hiVZr1qp7KWS", "user", "what is your mother's maiden name", "$2a$12$8XW5CMg.1ssMt9dvm5yMdeGjCTP51HfwFB8O5WDtNeFnNyxJmSBY6", false);
+        //User u2 = new User(2, "Testing User2", "testinguser2@gmail.com", "$2a$12$jgxPw.sQUTLOG2Yb1xCeFOVHgD5bbH8bkvzNufPIJ9xRnKOghpw9W", "user", "what is your mother's maiden name", "$2a$12$nXti9bKgnGXGHg5.TGTbEOUmYH2lqdduy0RvMIorAgihWVpaEwKKC", true);
+        //User u3 = new User(3, "Testing User3", "testinguser3@gmail.com", "$2a$12$b3uCgzPSHx94wQunCwzPiOMyCbgGp1qE6UEhUgtqNMXZL28tk.zOq", "user", "what is your mother's maiden name", "$2a$12$omWIaLeVXOwpGFveppMrluN9EsvXR1ufV4YheHYWXtftgn0HZ67oG", false);
+        User u4 = new User(4, "Testing User4", "testinguser4@gmail.com", "Testinguser4", "user", "what is your mother's maiden name", "Testinguser5", true);
+        User u5 = new User(5, "Testing User5", "testinguser5@gmail.com", "$2a$12$cCN9T2rgk5KH942v2CtxouhZLyRshPHC0foy2qm6.whbspG.DkqGS", "user", "what is your mother's maiden name", "$2a$12$U.g5VIG8OxEq67KY9b7sz.D6cOM1syXVwQ08aw4fW02/Yz1m4zf6S", true);
+
+        boolean expResult = false;
+
+        // Create mock objects
+        SqlConnection sql = mock(SqlConnection.class);
+        Connection conn = mock(Connection.class);
+        PreparedStatement ps = mock(PreparedStatement.class);
+        ResultSet rs = mock(ResultSet.class);
+
+        // Fill mock objects with appropriatel dummy data
+        when(sql.getConn()).thenReturn(conn);
+        when(conn.prepareStatement("select * from users WHERE email = ?")).thenReturn(ps);
+        when(sql.getPs()).thenReturn(ps, ps);
+        when(ps.executeQuery()).thenReturn(rs);
+
+        when(rs.next()).thenReturn(false);
+
+        when(rs.getString("answer_hash")).thenReturn("aintgonnawork");
+
+        UserDao userDao = new UserDao(sql);
+        boolean result = userDao.CheckUserRecoveryAnswer(u4);
 
         assertEquals(expResult, result);
     }
@@ -638,6 +663,8 @@ public class UserDaoTestWithMocking {
         User u1 = new User(1, "Testing User1", "testinguser1@gmail.com", "$2a$12$Fodl2oDf233P40qSfkbVLOmX8R9a6kzuugosLS685hiVZr1qp7KWS", "user", "what is your mother's maiden name", "$2a$12$8XW5CMg.1ssMt9dvm5yMdeGjCTP51HfwFB8O5WDtNeFnNyxJmSBY6", false);
         //User u2 = new User(2, "Testing User2", "testinguser2@gmail.com", "$2a$12$jgxPw.sQUTLOG2Yb1xCeFOVHgD5bbH8bkvzNufPIJ9xRnKOghpw9W", "user", "what is your mother's maiden name", "$2a$12$nXti9bKgnGXGHg5.TGTbEOUmYH2lqdduy0RvMIorAgihWVpaEwKKC", true);
         //User u3 = new User(3, "Testing User3", "testinguser3@gmail.com", "$2a$12$b3uCgzPSHx94wQunCwzPiOMyCbgGp1qE6UEhUgtqNMXZL28tk.zOq", "user", "what is your mother's maiden name", "$2a$12$omWIaLeVXOwpGFveppMrluN9EsvXR1ufV4YheHYWXtftgn0HZ67oG", false);
+        User u4 = new User(4, "Testing User4", "testinguser4@gmail.com", "Testinguser4", "user", "what is your mother's maiden name", "Testinguser5", true);
+        User u5 = new User(5, "Testing User5", "testinguser5@gmail.com", "$2a$12$cCN9T2rgk5KH942v2CtxouhZLyRshPHC0foy2qm6.whbspG.DkqGS", "user", "what is your mother's maiden name", "$2a$12$U.g5VIG8OxEq67KY9b7sz.D6cOM1syXVwQ08aw4fW02/Yz1m4zf6S", true);
 
         boolean expResult = true;
 
@@ -654,7 +681,7 @@ public class UserDaoTestWithMocking {
         when(conn.prepareStatement("UPDATE users SET hash = ? WHERE email = ?")).thenReturn(ps);
         when(sql.getPs()).thenReturn(ps, ps, ps);
         //---------------------------------------------------------------------
-        
+
         when(sql.getConn()).thenReturn(conn);
         when(conn.prepareStatement("select * from users WHERE email = ?")).thenReturn(ps);
         when(sql.getPs()).thenReturn(ps, ps);
@@ -673,7 +700,6 @@ public class UserDaoTestWithMocking {
         when(rs.getString("answer_hash")).thenReturn(u1.getAnswer_hash());
         when(rs.getBoolean("has_disabled_badge")).thenReturn(u1.getHasDisabledBadge());
 
-
         System.out.println("Updating salts table in database");
         //---------------------------------------------------------------------
 
@@ -683,52 +709,21 @@ public class UserDaoTestWithMocking {
 
         // Want 3 results in the resultset, so need true to be returned 3 times
         //---------------------------------------------------------------------
-
         UserDao userDao = new UserDao(sql);
-        boolean result = userDao.updateUserPassword(u1);
+        boolean result = userDao.updateUserPassword(u4);
 
         assertEquals(expResult, result);
     }
 
     @Test
     public void testUpdateUserPassword_fail() throws SQLException {
-        User u1 = new User(1, "Testing User1", "testinguser1@gmail.com", "$2a$12$Fodl2oDf233P40qSfkbVLOmX8R9a6kzuugosLS685hiVZr1qp7KWS", "user", "what is your mother's maiden name", "$2a$12$8XW5CMg.1ssMt9dvm5yMdeGjCTP51HfwFB8O5WDtNeFnNyxJmSBY6", false);
+        User u1 = new User(1, "Testing User1", "testinguser1@gmail.com", "notgoingtowork", "user", "what is your mother's maiden name", "$2a$12$8XW5CMg.1ssMt9dvm5yMdeGjCTP51HfwFB8O5WDtNeFnNyxJmSBY6", false);
         //User u2 = new User(2, "Testing User2", "testinguser2@gmail.com", "$2a$12$jgxPw.sQUTLOG2Yb1xCeFOVHgD5bbH8bkvzNufPIJ9xRnKOghpw9W", "user", "what is your mother's maiden name", "$2a$12$nXti9bKgnGXGHg5.TGTbEOUmYH2lqdduy0RvMIorAgihWVpaEwKKC", true);
         //User u3 = new User(3, "Testing User3", "testinguser3@gmail.com", "$2a$12$b3uCgzPSHx94wQunCwzPiOMyCbgGp1qE6UEhUgtqNMXZL28tk.zOq", "user", "what is your mother's maiden name", "$2a$12$omWIaLeVXOwpGFveppMrluN9EsvXR1ufV4YheHYWXtftgn0HZ67oG", false);
 
-        boolean expResult = true;
+        boolean expResult = false;
 
-        System.out.println("Updating users table in database");
-        //---------------------------------------------------------------------
-        // Create mock objects
         SqlConnection sql = mock(SqlConnection.class);
-        Connection conn = mock(Connection.class);
-        PreparedStatement ps = mock(PreparedStatement.class);
-        ResultSet rs = mock(ResultSet.class);
-
-        // Fill mock objects with appropriatel dummy data
-        when(sql.getConn()).thenReturn(conn);
-        when(conn.prepareStatement("UPDATE users SET hash = ? WHERE email = ?")).thenReturn(ps);
-        when(sql.getPs()).thenReturn(ps, ps, ps);
-
-        // Want 3 results in the resultset, so need true to be returned 3 times
-        when(rs.next()).thenReturn(true, false);
-        //---------------------------------------------------------------------
-
-        System.out.println("Updating salts table in database");
-        //---------------------------------------------------------------------
-        SqlConnection sql2 = mock(SqlConnection.class);
-        Connection conn2 = mock(Connection.class);
-        PreparedStatement ps2 = mock(PreparedStatement.class);
-        ResultSet rs2 = mock(ResultSet.class);
-
-        when(sql2.getConn()).thenReturn(conn2);
-        when(conn2.prepareStatement("UPDATE salt SET salt = ? WHERE user_id = ?")).thenReturn(ps2);
-        when(sql2.getPs()).thenReturn(ps2, ps2, ps2);
-
-        // Want 3 results in the resultset, so need true to be returned 3 times
-        when(rs2.next()).thenReturn(true, false);
-        //---------------------------------------------------------------------
 
         UserDao userDao = new UserDao(sql);
         boolean result = userDao.updateUserPassword(u1);
@@ -754,12 +749,12 @@ public class UserDaoTestWithMocking {
         Connection conn = mock(Connection.class);
         PreparedStatement ps = mock(PreparedStatement.class);
         ResultSet rs = mock(ResultSet.class);
-        
+
         when(sql.getConn()).thenReturn(conn);
         when(conn.prepareStatement("select * from users WHERE email = ?")).thenReturn(ps);
         when(sql.getPs()).thenReturn(ps, ps);
         when(ps.executeQuery()).thenReturn(rs);
-        
+
         when(rs.next()).thenReturn(false);
 
         // Fill mock objects with appropriatel dummy data
@@ -802,7 +797,7 @@ public class UserDaoTestWithMocking {
         when(conn.prepareStatement("select * from users WHERE email = ?")).thenReturn(ps);
         when(sql.getPs()).thenReturn(ps, ps);
         when(ps.executeQuery()).thenReturn(rs);
-        
+
         when(rs.next()).thenReturn(true);
 
         UserDao userDao = new UserDao(sql);
@@ -827,7 +822,7 @@ public class UserDaoTestWithMocking {
         Connection conn = mock(Connection.class);
         PreparedStatement ps = mock(PreparedStatement.class);
         ResultSet rs = mock(ResultSet.class);
-        
+
         when(sql.getConn()).thenReturn(conn);
         when(conn.prepareStatement("select * from users WHERE email = ?")).thenReturn(ps);
         when(sql.getPs()).thenReturn(ps, ps);
@@ -873,7 +868,7 @@ public class UserDaoTestWithMocking {
         Connection conn = mock(Connection.class);
         PreparedStatement ps = mock(PreparedStatement.class);
         ResultSet rs = mock(ResultSet.class);
-        
+
         when(sql.getConn()).thenReturn(conn);
         when(conn.prepareStatement("select * from users WHERE email = ?")).thenReturn(ps);
         when(sql.getPs()).thenReturn(ps, ps);
@@ -891,7 +886,6 @@ public class UserDaoTestWithMocking {
         when(rs.getString("question")).thenReturn(u1.getQuestion());
         when(rs.getString("answer_hash")).thenReturn(u1.getAnswer_hash());
         when(rs.getBoolean("has_disabled_badge")).thenReturn(u1.getHasDisabledBadge());
-
 
         UserDao userDao = new UserDao(sql);
         boolean result = userDao.AdminUpdatesUserTypes(u1);

@@ -5,6 +5,7 @@
  */
 package Dto;
 
+import java.util.Date;
 import java.util.Objects;
 
 /**
@@ -14,10 +15,10 @@ import java.util.Objects;
 public class ParkedCars {
     private int zone_id;
     private int car_id;
-    private String bookFrom;
-    private String bookTo;
+    private Date bookFrom;
+    private Date bookTo;
 
-    public ParkedCars(int zone_id, int car_id, String bookFrom, String bookTo) {
+    public ParkedCars(int zone_id, int car_id, Date bookFrom, Date bookTo) {
         this.zone_id = zone_id;
         this.car_id = car_id;
         this.bookFrom = bookFrom;
@@ -43,19 +44,19 @@ public class ParkedCars {
         this.car_id = car_id;
     }
 
-    public String getBookFrom() {
+    public Date getBookFrom() {
         return bookFrom;
     }
 
-    public void setBookFrom(String bookFrom) {
+    public void setBookFrom(Date bookFrom) {
         this.bookFrom = bookFrom;
     }
 
-    public String getBookTo() {
+    public Date getBookTo() {
         return bookTo;
     }
 
-    public void setBookTo(String bookTo) {
+    public void setBookTo(Date bookTo) {
         this.bookTo = bookTo;
     }
 
