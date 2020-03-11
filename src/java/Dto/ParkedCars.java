@@ -16,15 +16,15 @@ public class ParkedCars {
 
     private int zone_id;
     private int car_id;
-    private Date bookFrom;
-    private Date bookTo;
+    private Date book_from;
+    private Date book_to;
     private int user_id;
 
-    public ParkedCars(int zone_id, int car_id, Date bookFrom, Date bookTo, int user_id) {
+    public ParkedCars(int zone_id, int car_id, Date book_from, Date book_to, int user_id) {
         this.zone_id = zone_id;
         this.car_id = car_id;
-        this.bookFrom = bookFrom;
-        this.bookTo = bookTo;
+        this.book_from = book_from;
+        this.book_to = book_to;
         this.user_id = user_id;
     }
 
@@ -49,19 +49,19 @@ public class ParkedCars {
     }
 
     public Date getBookFrom() {
-        return bookFrom;
+        return book_from;
     }
 
-    public void setBookFrom(Date bookFrom) {
-        this.bookFrom = bookFrom;
+    public void setBookFrom(Date book_from) {
+        this.book_from = book_from;
     }
 
     public Date getBookTo() {
-        return bookTo;
+        return book_to;
     }
 
-    public void setBookTo(Date bookTo) {
-        this.bookTo = bookTo;
+    public void setBookTo(Date book_to) {
+        this.book_to = book_to;
     }
 
     public int getUser_id() {
@@ -77,8 +77,8 @@ public class ParkedCars {
         int hash = 7;
         hash = 29 * hash + this.zone_id;
         hash = 29 * hash + this.car_id;
-        hash = 29 * hash + Objects.hashCode(this.bookFrom);
-        hash = 29 * hash + Objects.hashCode(this.bookTo);
+        hash = 29 * hash + Objects.hashCode(this.book_from);
+        hash = 29 * hash + Objects.hashCode(this.book_to);
         hash = 29 * hash + this.user_id;
         return hash;
     }
@@ -104,10 +104,10 @@ public class ParkedCars {
         if (this.user_id != other.user_id) {
             return false;
         }
-        if (!Objects.equals(this.bookFrom, other.bookFrom)) {
+        if (!Objects.equals(this.book_from, other.book_from)) {
             return false;
         }
-        if (!Objects.equals(this.bookTo, other.bookTo)) {
+        if (!Objects.equals(this.book_to, other.book_to)) {
             return false;
         }
         return true;
@@ -115,7 +115,7 @@ public class ParkedCars {
 
     @Override
     public String toString() {
-        return "ParkedCars{" + "zone_id=" + zone_id + ", car_id=" + car_id + ", bookFrom=" + bookFrom + ", bookTo=" + bookTo + ", user_id=" + user_id + '}';
+        return "ParkedCars{" + "zone_id=" + zone_id + ", car_id=" + car_id + ", book_from=" + book_from + ", book_to=" + book_to + ", user_id=" + user_id + '}';
     }
 
 }

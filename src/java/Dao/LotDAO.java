@@ -62,7 +62,7 @@ public class LotDAO implements LotDaoInterface {
             rst = sql.getPs().executeQuery();
             ArrayList<ParkedCars> pc = new ArrayList<>();
             while (rst.next()) {
-                pc.add(new ParkedCars(rst.getInt("zone_id"), rst.getInt("car_id"), rst.getDate("bookFrom"), rst.getDate("bookTo"), rst.getInt("user_id")));
+                pc.add(new ParkedCars(rst.getInt("zone_id"), rst.getInt("car_id"), rst.getDate("book_From"), rst.getDate("book_to"), rst.getInt("user_id")));
             }
 
             return pc;
@@ -223,14 +223,14 @@ public class LotDAO implements LotDaoInterface {
 
                     if (maxSpaces > count) {
 
-                        Date bookFrom = convertUtilToSql(pc.getBookFrom());
-                        Date bookTo = convertUtilToSql(pc.getBookTo());
+                        Date book_from = convertUtilToSql(pc.getBookFrom());
+                        Date book_to = convertUtilToSql(pc.getBookTo());
 
                         sql.setPs(sql.getConn().prepareStatement("INSERT INTO parked_cars(zone_id,car_id,book_from,book_to,user_id) VALUES (?,?,?,?,?)"));
                         sql.getPs().setInt(1, pc.getZone_id());
                         sql.getPs().setInt(2, pc.getCar_id());
-                        sql.getPs().setDate(3, bookFrom);
-                        sql.getPs().setDate(4, bookTo);
+                        sql.getPs().setDate(3, book_from);
+                        sql.getPs().setDate(4, book_to);
                         sql.getPs().setInt(5, pc.getUser_id());
                        
 
