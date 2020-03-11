@@ -9,6 +9,7 @@ import Dao.HttpStatusBase;
 import Dao.LotDAO;
 import Dto.Lot;
 import Dto.ParkedCars;
+import Dto.User;
 import Dto.Zone;
 import java.util.Date;
 import java.text.DateFormat;
@@ -67,7 +68,8 @@ public class BookingsResource {
             pc.setBookFrom(from);
             Date to = simpleDateFormat.parse(obj.get("bookTo").toString());
             pc.setBookTo(to);
-
+            int userId = ((Long) obj.get("user_id")).intValue();
+            pc.setUser_id(userId);
         } catch (ParseException exp) {
             System.out.println(exp);
             pc = null;
@@ -77,13 +79,34 @@ public class BookingsResource {
         }
         return pc;
     }
-    
+   private Object convertJsonStringToUser(String jsonString)  {
+        User u = null;
+        try {
+            // create a parser to convert a string to a json object
+            JSONParser parser = new JSONParser();
+            // parser returns an object. You should know or check what to convert to (an JSONObject or JSONArray)
+            JSONObject obj = (JSONObject) parser.parse(jsonString);
+
+            // create a new Customer and use get method to retrieve values for a key
+            u = new User();
+            // note that JSONObject has all numbers as longs, and needs to be converted to an int if required.
+            int user_id = ((Long) obj.get("user_id")).intValue();
+            u.setUserNo(user_id);
+
+        } catch (ParseException exp) {
+            System.out.println(exp);
+            u = null;
+            return hsb.ParseError();
+        }
+        return u;
+    }    
     private JSONObject convertBookingToJson(ParkedCars pc) {
         JSONObject jObj = new JSONObject();
         jObj.put("zone_id", pc.getZone_id());
         jObj.put("car_id", pc.getCar_id());
         jObj.put("bookFrom", pc.getBookFrom());
         jObj.put("bookTo", pc.getBookTo());     
+        jObj.put("user_id", pc.getUser_id()); 
         return jObj;
     }    
     @GET
@@ -120,7 +143,9 @@ public class BookingsResource {
     @Consumes(MediaType.TEXT_PLAIN)
     @Produces(MediaType.TEXT_PLAIN)
     public String displayBookings(String content) {
-        ArrayList<ParkedCars> pc = (ArrayList<ParkedCars>)ldao.selectAllBookigns();
+        Object obj = convertJsonStringToUser(content);
+        User u = (User) obj;
+        ArrayList<ParkedCars> pc = (ArrayList<ParkedCars>)ldao.selectAllBookignsByUserId(u);
         if (pc == null || pc.isEmpty()) {
             return hsb.CreateMessage(-1, "No bookings found Found");
         } else {
@@ -128,7 +153,7 @@ public class BookingsResource {
             for (ParkedCars pcs : pc) {
                 array.add(convertBookingToJson(pcs));
             }
-            return hsb.CreateMessage(1, array.toString());
+            return array.toString();
         }
 
     }

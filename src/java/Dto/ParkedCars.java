@@ -13,19 +13,23 @@ import java.util.Objects;
  * @author SeppQ
  */
 public class ParkedCars {
+
     private int zone_id;
     private int car_id;
     private Date bookFrom;
     private Date bookTo;
+    private int user_id;
 
-    public ParkedCars(int zone_id, int car_id, Date bookFrom, Date bookTo) {
+    public ParkedCars(int zone_id, int car_id, Date bookFrom, Date bookTo, int user_id) {
         this.zone_id = zone_id;
         this.car_id = car_id;
         this.bookFrom = bookFrom;
         this.bookTo = bookTo;
+        this.user_id = user_id;
     }
 
     public ParkedCars() {
+
     }
 
     public int getZone_id() {
@@ -60,13 +64,22 @@ public class ParkedCars {
         this.bookTo = bookTo;
     }
 
+    public int getUser_id() {
+        return user_id;
+    }
+
+    public void setUser_id(int user_id) {
+        this.user_id = user_id;
+    }
+
     @Override
     public int hashCode() {
-        int hash = 5;
+        int hash = 7;
         hash = 29 * hash + this.zone_id;
         hash = 29 * hash + this.car_id;
         hash = 29 * hash + Objects.hashCode(this.bookFrom);
         hash = 29 * hash + Objects.hashCode(this.bookTo);
+        hash = 29 * hash + this.user_id;
         return hash;
     }
 
@@ -88,6 +101,9 @@ public class ParkedCars {
         if (this.car_id != other.car_id) {
             return false;
         }
+        if (this.user_id != other.user_id) {
+            return false;
+        }
         if (!Objects.equals(this.bookFrom, other.bookFrom)) {
             return false;
         }
@@ -99,7 +115,7 @@ public class ParkedCars {
 
     @Override
     public String toString() {
-        return "ParkedCars{" + "zone_id=" + zone_id + ", car_id=" + car_id + ", bookFrom=" + bookFrom + ", bookTo=" + bookTo + '}';
+        return "ParkedCars{" + "zone_id=" + zone_id + ", car_id=" + car_id + ", bookFrom=" + bookFrom + ", bookTo=" + bookTo + ", user_id=" + user_id + '}';
     }
-    
+
 }

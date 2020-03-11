@@ -25,16 +25,8 @@ import java.sql.Date;
  */
 public class LotDAO implements LotDaoInterface {
 
-    private SqlConnection sql;
+    private SqlConnection sql = new SqlConnection();
     private HttpStatusBase hsb = new HttpStatusBase();
-
-    public LotDAO(SqlConnection sql) {
-        this.sql = sql;
-    }
-
-    public LotDAO() {
-        this.sql = new SqlConnection();
-    }
 
     @Override
     public Object selectAllLots() {
@@ -70,7 +62,33 @@ public class LotDAO implements LotDaoInterface {
             rst = sql.getPs().executeQuery();
             ArrayList<ParkedCars> pc = new ArrayList<>();
             while (rst.next()) {
-                pc.add(new ParkedCars(rst.getInt("zone_id"), rst.getInt("car_id"), rst.getDate("bookFrom"), rst.getDate("bookTo")));
+                pc.add(new ParkedCars(rst.getInt("zone_id"), rst.getInt("car_id"), rst.getDate("bookFrom"), rst.getDate("bookTo"), rst.getInt("user_id")));
+            }
+
+            return pc;
+        } catch (SQLException se) {
+            System.out.println("SQL Exception occurred: " + se.getMessage());
+            se.printStackTrace();
+            return hsb.SQlError();
+        } catch (Exception e) {
+            System.out.println("Exception occurred: " + e.getMessage());
+            e.printStackTrace();
+            return hsb.ExceptionError();
+        }
+    }
+
+    @Override
+    public Object selectAllBookignsByUserId(User u) {
+        try {
+            sql.setPs(sql.getConn().prepareStatement("select * from parked_cars WHERE user_id = ?"));
+            sql.getPs().setInt(1,u.getUserNo());
+
+            ResultSet rst;
+            // Execute the query
+            rst = sql.getPs().executeQuery();
+            ArrayList<ParkedCars> pc = new ArrayList<>();
+            while (rst.next()) {
+                pc.add(new ParkedCars(rst.getInt("zone_id"), rst.getInt("car_id"), rst.getDate("book_from"), rst.getDate("book_to"), rst.getInt("user_id")));
             }
 
             return pc;
@@ -89,6 +107,7 @@ public class LotDAO implements LotDaoInterface {
     public Object selectAllZones() {
         try {
             sql.setPs(sql.getConn().prepareStatement("select * from parking_zones"));
+
             ResultSet rst;
             // Execute the query
             rst = sql.getPs().executeQuery();
@@ -180,7 +199,7 @@ public class LotDAO implements LotDaoInterface {
         }
     }
 
-    public static java.sql.Date convertUtilToSql(java.util.Date uDate) {
+    private static java.sql.Date convertUtilToSql(java.util.Date uDate) {
         java.sql.Date sDate = new java.sql.Date(uDate.getTime());
         return sDate;
     }
@@ -207,11 +226,13 @@ public class LotDAO implements LotDaoInterface {
                         Date bookFrom = convertUtilToSql(pc.getBookFrom());
                         Date bookTo = convertUtilToSql(pc.getBookTo());
 
-                        sql.setPs(sql.getConn().prepareStatement("INSERT INTO parked_cars(zone_id,car_id,book_from,book_to) VALUES (?,?,?,?)"));
+                        sql.setPs(sql.getConn().prepareStatement("INSERT INTO parked_cars(zone_id,car_id,book_from,book_to,user_id) VALUES (?,?,?,?,?)"));
                         sql.getPs().setInt(1, pc.getZone_id());
                         sql.getPs().setInt(2, pc.getCar_id());
                         sql.getPs().setDate(3, bookFrom);
                         sql.getPs().setDate(4, bookTo);
+                        sql.getPs().setInt(5, pc.getUser_id());
+                       
 
                         sql.getPs().executeUpdate();
 
@@ -220,10 +241,10 @@ public class LotDAO implements LotDaoInterface {
                         return hsb.CreateMessage(1, "Sorry But no parking spots Left!");
                     }
                 } else {
-                    return hsb.CreateMessage(-1, "Something Went Wrong on out server");
+                    return hsb.CreateMessage(-1, "1Something Went Wrong on out server");
                 }
             } else {
-                return hsb.CreateMessage(-1, "Something Went Wrong on out server");
+                return hsb.CreateMessage(-1, "2Something Went Wrong on out server");
 
             }
         } catch (SQLException se) {
@@ -236,11 +257,6 @@ public class LotDAO implements LotDaoInterface {
             return hsb.ExceptionError();
         }
 
-    }
-
-    @Override
-    public Object selectAllBookignsByUserId(User u) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
 }
