@@ -180,7 +180,7 @@ public class LotDAO implements LotDaoInterface {
         }
     }
 
-    private static java.sql.Date convertUtilToSql(java.util.Date uDate) {
+    public static java.sql.Date convertUtilToSql(java.util.Date uDate) {
         java.sql.Date sDate = new java.sql.Date(uDate.getTime());
         return sDate;
     }

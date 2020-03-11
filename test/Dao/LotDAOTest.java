@@ -98,7 +98,7 @@ public class LotDAOTest {
      */
     @Test
     public void testSelectAllBookigns() throws SQLException {
-        ParkedCars p1 = new ParkedCars(1, 1, new java.sql.Date(11/11/11), new java.sql.Date(11/11/11));
+        ParkedCars p1 = new ParkedCars(1, 1, new Date(11/11/11), new Date(11/11/11));
         ParkedCars p2 = new ParkedCars(2, 2, new java.sql.Date(22/11/22), new java.sql.Date(22/11/22));
         ParkedCars p3 = new ParkedCars(3, 3, new java.sql.Date(33/11/33), new java.sql.Date(33/11/33));
 
@@ -113,6 +113,7 @@ public class LotDAOTest {
         Connection conn = mock(Connection.class);
         PreparedStatement ps = mock(PreparedStatement.class);
         ResultSet rs = mock(ResultSet.class);
+        LotDAO lotDao = new LotDAO(sql);
 
         // Fill mock objects with appropriatel dummy data
         when(sql.getConn()).thenReturn(conn);
@@ -126,11 +127,10 @@ public class LotDAOTest {
         // Fill in the resultset
         when(rs.getInt("zone_id")).thenReturn(p1.getZone_id(), p2.getZone_id(), p3.getZone_id());
         when(rs.getInt("car_id")).thenReturn(p1.getCar_id(), p2.getCar_id(), p3.getCar_id());
-        when(rs.getDate("bookFrom")).thenReturn(p1.getBookFrom(), p2.getBookFrom(), p3.getBookFrom());
-        when(rs.getDate("bookTo")).thenReturn(p1.getBookTo(),p2.getBookTo(), p3.getBookTo());
+        when(rs.getDate("bookFrom")).thenReturn(LotDAO.convertUtilToSql(p1.getBookFrom()), LotDAO.convertUtilToSql(p3.getBookFrom()), LotDAO.convertUtilToSql(p3.getBookFrom()));
+        when(rs.getDate("bookTo")).thenReturn(LotDAO.convertUtilToSql(p1.getBookTo()), LotDAO.convertUtilToSql(p3.getBookTo()), LotDAO.convertUtilToSql(p3.getBookTo()));
 
         int numUsersInTable = 3;
-        LotDAO lotDao = new LotDAO(sql);
         Object result = lotDao.selectAllBookigns();
 
         assertEquals(expectedResults, result);
@@ -140,14 +140,45 @@ public class LotDAOTest {
      * Test of selectAllZones method, of class LotDAO.
      */
     @Test
-    public void testSelectAllZones() {
-        System.out.println("selectAllZones");
-        LotDAO instance = new LotDAO();
-        Object expResult = null;
-        Object result = instance.selectAllZones();
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+    public void testSelectAllZones() throws SQLException {
+        Zone z1 = new Zone(1, "Test Zone1", 99, false, 1, 33);
+        Zone z2 = new Zone(2, "Test Zone2", 99, true, 2, 33);
+        Zone z3 = new Zone(3, "Test Zone3", 99, false, 3, 33);
+
+        ArrayList<Zone> expectedResults = new ArrayList();
+
+        expectedResults.add(z1);
+        expectedResults.add(z2);
+        expectedResults.add(z3);
+
+        // Create mock objects
+        SqlConnection sql = mock(SqlConnection.class);
+        Connection conn = mock(Connection.class);
+        PreparedStatement ps = mock(PreparedStatement.class);
+        ResultSet rs = mock(ResultSet.class);
+
+        // Fill mock objects with appropriatel dummy data
+        when(sql.getConn()).thenReturn(conn);
+        when(conn.prepareStatement("select * from parking_zones")).thenReturn(ps);
+        when(sql.getPs()).thenReturn(ps);
+        when(ps.executeQuery()).thenReturn(rs);
+
+        // Want 3 results in the resultset, so need true to be returned 3 times
+        when(rs.next()).thenReturn(true, true, true, false);
+
+        // Fill in the resultset
+        when(rs.getInt("zone_id")).thenReturn(z1.getZone_id(), z2.getZone_id(), z3.getZone_id());
+        when(rs.getString("zone_name")).thenReturn(z1.getZone_name(), z2.getZone_name(), z3.getZone_name());
+        when(rs.getInt("max_spaces")).thenReturn(z1.getMax_spaces(), z2.getMax_spaces(), z3.getMax_spaces());
+        when(rs.getBoolean("is_vip")).thenReturn(z1.getIs_vip(), z2.getIs_vip(), z3.getIs_vip());
+        when(rs.getInt("lot_id")).thenReturn(z1.getLot_id(), z2.getLot_id(), z3.getLot_id());
+        when(rs.getInt("max_disabled_spaces")).thenReturn(z1.getMax_disabled_spaces(), z2.getMax_disabled_spaces(), z3.getMax_disabled_spaces());
+
+        int numUsersInTable = 3;
+        LotDAO lotDao = new LotDAO(sql);
+        Object result = lotDao.selectAllZones();
+
+        assertEquals(expectedResults, result);
     }
 
     /**
