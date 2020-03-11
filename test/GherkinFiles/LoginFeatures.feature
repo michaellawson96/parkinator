@@ -1,6 +1,6 @@
 
 @RunWith 
-Feature: TestingLogin_Pass
+Feature: TestingLogin
 
    Scenario: Loging In Passing valid information
       Given on "http://localhost:8080/parkinator/test-resbeans.html" page

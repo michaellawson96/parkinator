@@ -17,7 +17,7 @@ import org.openqa.selenium.support.ui.Select;
  *
  * @author USER
  */
-public class RegisterUsersCar {
+public class TestRegisterUsersCar {
     @Test
     public void RegisterUsersCar_Pass() {
         
