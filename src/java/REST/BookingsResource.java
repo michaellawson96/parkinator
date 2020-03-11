@@ -62,7 +62,7 @@ public class BookingsResource {
             pc.setZone_id(zoneId);
             int carId = ((Long) obj.get("car_id")).intValue();
             pc.setCar_id(carId);
-            DateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy");
+            DateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
             Date from =  simpleDateFormat.parse(obj.get("bookFrom").toString());
             pc.setBookFrom(from);
             Date to = simpleDateFormat.parse(obj.get("bookTo").toString());
@@ -115,5 +115,21 @@ public class BookingsResource {
         }
 
     }
+    @POST
+    @Path("displayBookings/")  
+    @Consumes(MediaType.TEXT_PLAIN)
+    @Produces(MediaType.TEXT_PLAIN)
+    public String displayBookings(String content) {
+        ArrayList<ParkedCars> pc = (ArrayList<ParkedCars>)ldao.selectAllBookigns();
+        if (pc == null || pc.isEmpty()) {
+            return hsb.CreateMessage(-1, "No bookings found Found");
+        } else {
+            JSONArray array = new JSONArray();
+            for (ParkedCars pcs : pc) {
+                array.add(convertBookingToJson(pcs));
+            }
+            return hsb.CreateMessage(1, array.toString());
+        }
 
+    }
 }
