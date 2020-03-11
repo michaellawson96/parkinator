@@ -130,8 +130,8 @@ public class LotDAOTest {
         // Fill in the resultset
         when(rs.getInt("zone_id")).thenReturn(p1.getZone_id(), p2.getZone_id(), p3.getZone_id());
         when(rs.getInt("car_id")).thenReturn(p1.getCar_id(), p2.getCar_id(), p3.getCar_id());
-        when(rs.getDate("bookFrom")).thenReturn(LotDAO.convertUtilToSql(p1.getBookFrom()), LotDAO.convertUtilToSql(p3.getBookFrom()), LotDAO.convertUtilToSql(p3.getBookFrom()));
-        when(rs.getDate("bookTo")).thenReturn(LotDAO.convertUtilToSql(p1.getBookTo()), LotDAO.convertUtilToSql(p3.getBookTo()), LotDAO.convertUtilToSql(p3.getBookTo()));
+        when(rs.getDate("book_from")).thenReturn(LotDAO.convertUtilToSql(p1.getBookFrom()), LotDAO.convertUtilToSql(p3.getBookFrom()), LotDAO.convertUtilToSql(p3.getBookFrom()));
+        when(rs.getDate("book_to")).thenReturn(LotDAO.convertUtilToSql(p1.getBookTo()), LotDAO.convertUtilToSql(p3.getBookTo()), LotDAO.convertUtilToSql(p3.getBookTo()));
         when(rs.getInt("user_id")).thenReturn(p1.getUser_id(), p2.getUser_id(), p3.getUser_id());
 
         int numUsersInTable = 3;
