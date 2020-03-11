@@ -10,9 +10,9 @@ import REST.*;
  * @author USER
  */
 public class carTest {
-     public static CarResource cr = new CarResource();
+     public static CcResource cr = new CcResource();
     public static void main(String[] args) {
-        System.out.println(cr.updateCar("{car_details: \"dcwecwedc\", car_id: 8, car_reg: \"dcwwec\", user_id: 14}"));
+        System.out.println(cr.ccUpdate("{\"cc_id\":6,\"cc_name\":\"Clamputen\"}"));
         //{"user_id":11}
 }
 }

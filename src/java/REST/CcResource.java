@@ -48,6 +48,7 @@ public class CcResource {
     
     /**
      * USER CREATE METHOD
+     * @param content
      * @return String "true" || String "false"
      */
     @POST
@@ -98,9 +99,9 @@ public class CcResource {
     @Consumes(MediaType.TEXT_PLAIN)
     @Produces(MediaType.TEXT_PLAIN)
     public boolean ccUpdate(String content) {
-        CcDAOInterface uDAO = new CcDAO();
-        Cc u = convertJsonStringToCc(content);
-        return uDAO.updateCc(u);
+        CcDAOInterface ccDAO = new CcDAO();
+        Cc cc = convertJsonStringToCc(content);
+        return ccDAO.updateCc(cc);
     }
     
     /**
@@ -154,7 +155,8 @@ public class CcResource {
             // create a new Customer and use get method to retrieve values for a key
             cc = new Cc();
             // note that JSONObject has all numbers as longs, and needs to be converted to an int if required.
-            
+            int ccNumber =  ((Long)obj.get("cc_id")).intValue();
+            cc.setCcNo(ccNumber);
             cc.setCcName((String) obj.get("cc_name"));
         } // more detailed reporting can be done by catching specific exceptions, such as ParseException
         catch (ParseException exp) {
