@@ -7,8 +7,13 @@ package REST;
 
 import Dao.HttpStatusBase;
 import Dao.LotDAO;
+import Dto.Lot;
 import Dto.ParkedCars;
-import java.sql.Date;
+import Dto.Zone;
+import java.util.Date;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.UriInfo;
 import javax.ws.rs.Consumes;
@@ -18,6 +23,7 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PUT;
 import javax.ws.rs.core.MediaType;
+import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
@@ -41,7 +47,7 @@ public class BookingsResource {
     public BookingsResource() {
     }
 
-    private Object convertJsonStringToZone(String jsonString) {
+    private Object convertJsonStringToZone(String jsonString)  {
         ParkedCars pc = null;
         try {
             // create a parser to convert a string to a json object
@@ -56,17 +62,45 @@ public class BookingsResource {
             pc.setZone_id(zoneId);
             int carId = ((Long) obj.get("car_id")).intValue();
             pc.setCar_id(carId);
-            pc.setBookFrom((Date) obj.get("bookFrom"));
-            pc.setBookTo((Date) obj.get("bookTo"));
+            DateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy");
+            Date from =  simpleDateFormat.parse(obj.get("bookFrom").toString());
+            pc.setBookFrom(from);
+            Date to = simpleDateFormat.parse(obj.get("bookTo").toString());
+            pc.setBookTo(to);
 
         } catch (ParseException exp) {
             System.out.println(exp);
             pc = null;
             return exp.getMessage();//hsb.ParseError();
+        } catch (java.text.ParseException jtp){
+            return jtp.getMessage();
         }
         return pc;
     }
-
+    
+    private JSONObject convertBookingToJson(ParkedCars pc) {
+        JSONObject jObj = new JSONObject();
+        jObj.put("zone_id", pc.getZone_id());
+        jObj.put("car_id", pc.getCar_id());
+        jObj.put("bookFrom", pc.getBookFrom());
+        jObj.put("bookTo", pc.getBookTo());     
+        return jObj;
+    }    
+    @GET
+    @Produces(MediaType.TEXT_PLAIN)
+    @Consumes(MediaType.TEXT_PLAIN)
+    public String getBookings() {
+        ArrayList<ParkedCars> pc = (ArrayList<ParkedCars>)ldao.selectAllBookigns();
+        if (pc == null || pc.isEmpty()) {
+            return hsb.CreateMessage(-1, "No bookings found Found");
+        } else {
+            JSONArray array = new JSONArray();
+            for (ParkedCars pcs : pc) {
+                array.add(convertBookingToJson(pcs));
+            }
+            return array.toString();
+        }
+    }
     @POST
     //@Path("addBooking/")  
     @Consumes(MediaType.TEXT_PLAIN)
@@ -82,18 +116,4 @@ public class BookingsResource {
 
     }
 
-    @POST
-    @Path("checkOutdatedBookings/")
-    @Consumes(MediaType.TEXT_PLAIN)
-    @Produces(MediaType.TEXT_PLAIN)
-    public String checkOutdatedBookings(String content) {
-        Object obj = convertJsonStringToZone(content);
-        if (obj instanceof ParkedCars) {
-            ParkedCars pc = (ParkedCars) obj;
-            return "";//ldao.CheckOutDatedParkings(pc);
-        } else {
-            return (String) obj;
-        }
-
-    }
 }

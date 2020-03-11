@@ -52,6 +52,52 @@ public class LotDAO implements LotDaoInterface {
             return hsb.ExceptionError();
         }
     }
+    @Override
+    public Object selectAllBookigns() {
+        try {
+            sql.setPs(sql.getConn().prepareStatement("select * from parked_cars"));
+            ResultSet rst;
+            // Execute the query
+            rst = sql.getPs().executeQuery();
+            ArrayList<ParkedCars> pc = new ArrayList<>();
+            while (rst.next()) {
+                pc.add(new ParkedCars(rst.getInt("zone_id"), rst.getInt("car_id"), rst.getDate("bookFrom"), rst.getDate("bookTo")));
+            }
+
+            return pc;
+        } catch (SQLException se) {
+            System.out.println("SQL Exception occurred: " + se.getMessage());
+            se.printStackTrace();
+            return hsb.SQlError();
+        } catch (Exception e) {
+            System.out.println("Exception occurred: " + e.getMessage());
+            e.printStackTrace();
+            return hsb.ExceptionError();
+        }
+    }    
+    @Override
+    public Object selectAllZones() {
+        try {
+            sql.setPs(sql.getConn().prepareStatement("select * from parking_zones"));
+            ResultSet rst;
+            // Execute the query
+            rst = sql.getPs().executeQuery();
+            ArrayList<Zone> z = new ArrayList<>();
+            while (rst.next()) {
+                z.add(new Zone(rst.getInt("zone_id"), rst.getString("zone_name"), rst.getInt("max_spaces"), rst.getBoolean("is_vip"), rst.getInt("lot_id"), rst.getInt("max_disabled_spaces")));
+            }
+
+            return z;
+        } catch (SQLException se) {
+            System.out.println("SQL Exception occurred: " + se.getMessage());
+            se.printStackTrace();
+            return hsb.SQlError();
+        } catch (Exception e) {
+            System.out.println("Exception occurred: " + e.getMessage());
+            e.printStackTrace();
+            return hsb.ExceptionError();
+        }
+    }       
 
     @Override
     public String AddLot(Lot lot) {
@@ -105,7 +151,7 @@ public class LotDAO implements LotDaoInterface {
             sql.setPs(sql.getConn().prepareStatement("INSERT INTO parking_zones(zone_name,max_spaces,is_vip,lot_id,max_disabled_spaces) VALUES (?,?,?,?,?)"));
             sql.getPs().setString(1, zone.getZone_name());
             sql.getPs().setInt(2, zone.getMax_spaces());
-            sql.getPs().setBoolean(3, zone.isIs_vip());
+            sql.getPs().setBoolean(3, zone.getIs_vip());
             sql.getPs().setInt(4, zone.getLot_id());
             sql.getPs().setInt(5, zone.getMax_disabled_spaces());
 
@@ -122,6 +168,10 @@ public class LotDAO implements LotDaoInterface {
             e.printStackTrace();
             return hsb.ExceptionError();
         }
+    }
+        private static java.sql.Date convertUtilToSql(java.util.Date uDate) {
+        java.sql.Date sDate = new java.sql.Date(uDate.getTime());
+        return sDate;
     }
 
     @Override
@@ -142,12 +192,15 @@ public class LotDAO implements LotDaoInterface {
                     int count = rst2.getInt(1);
 
                     if (maxSpaces > count) {
-
+                        
+                        Date bookFrom = convertUtilToSql(pc.getBookFrom());
+                        Date bookTo = convertUtilToSql(pc.getBookTo());
+                        
                         sql.setPs(sql.getConn().prepareStatement("INSERT INTO parked_cars(zone_id,car_id,book_from,book_to) VALUES (?,?,?,?)"));
                         sql.getPs().setInt(1, pc.getZone_id());
                         sql.getPs().setInt(2, pc.getCar_id());
-                        sql.getPs().setDate(3, pc.getBookFrom());
-                        sql.getPs().setDate(4, pc.getBookTo());
+                        sql.getPs().setDate(3, bookFrom);
+                        sql.getPs().setDate(4, bookTo);
 
                         sql.getPs().executeUpdate();
 
@@ -174,38 +227,5 @@ public class LotDAO implements LotDaoInterface {
 
     }
 
-    @Override
-    public String CheckOutDatedParkings(ParkedCars pc) {
-//        try {
-//            DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
-//            Date date = new Date();
-//            System.out.println(dateFormat.format(date));
-//
-//            sql.setPs(sql.getConn().prepareStatement("SELECT book_to FROM parked_cars WHERE book_to <= ?"));
-//            sql.getPs().setString(1, dateFormat.format(date));
-//
-//            ResultSet rst;
-//            rst = sql.getPs().executeQuery();
-//
-//            while (rst.next()) {
-//                sql.setPs(sql.getConn().prepareStatement("DELETE * FROM parked_cars WHERE book_to = ?"));
-//                sql.getPs().setString(1, rst.getString("book_to"));
-//
-//                sql.getPs().executeUpdate();
-//                return hsb.CreateMessage(1, "OutDated Booking has Been Removed");
-//            }
-//
-//            return hsb.CreateMessage(-1, "No OutDated Bookings");
-//
-//        } catch (SQLException se) {
-//            System.out.println("SQL Exception occurred: " + se.getMessage());
-//            se.printStackTrace();
-//            return hsb.SQlError();
-//        } catch (Exception e) {
-//            System.out.println("Exception occurred: " + e.getMessage());
-//            e.printStackTrace();
-//            return hsb.ExceptionError();
-//        }
-return "yes";
-  }
+
 }

@@ -8,14 +8,18 @@ package REST;
 import Dao.CarDAO;
 import Dao.CarDAOInterface;
 import Dto.Car;
+import Dto.HttpStatus;
+import java.util.ArrayList;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.UriInfo;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
+import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
@@ -64,6 +68,18 @@ public class CarResource {
         return c;
     }
     
+     private JSONObject convertCarToJson(Car car) {
+        JSONObject jObj = new JSONObject();
+        jObj.put("car_id", car.getCarNo());
+        jObj.put("car_colour", car.getCarColour());
+        jObj.put("car_make", car.getCarMake());
+        jObj.put("car_model", car.getCarModel());
+        jObj.put("car_reg", car.getCarReg());
+        jObj.put("user_id", car.getUserNo());
+
+        return jObj;
+    }
+     
     /**
      * POST method for creating an instance of CarResource
      * @param content representation for the resource
@@ -86,7 +102,6 @@ public class CarResource {
      * @param content representation for the resource
      */
     @PUT
-    @Path("update/")
     @Consumes(MediaType.TEXT_PLAIN)
     @Produces(MediaType.TEXT_PLAIN)
     public boolean updateCar(String content) {
@@ -99,11 +114,11 @@ public class CarResource {
     }
     
     /**
-     * PUT method for updating or deleting an instance of CarResource
+     * POST method for updating or deleting an instance of CarResource
      * Sample input for DELETE: {"car_colour":"Red", "car_make":"Renault", "car_model":"Megane", "user_id":14,"car_reg":"09-MN-6919","car_id":5}
      * @param content representation for the resource
      */
-    @PUT
+    @POST
     @Path("delete/")
     @Consumes(MediaType.TEXT_PLAIN)
     @Produces(MediaType.TEXT_PLAIN)
@@ -116,5 +131,33 @@ public class CarResource {
         return cDAO.deleteCar(c);
     }
     
-    
+    /**
+     * Get method for creating an instance of CarResource
+     * @param content representation for the resource
+     */
+    @GET
+    @Produces(MediaType.TEXT_PLAIN)
+    public String getUserCars(String content) {
+        CarDAOInterface cDAO = new CarDAO();
+        ArrayList<Object> objs = cDAO.selectAllCars();
+        String objType;
+        for (Object obj: objs){
+            if(obj instanceof HttpStatus){
+                objType = "HttpStatus";
+                break;
+            }
+            else{
+                objType = "Car";
+                break;
+            }
+        }
+        JSONArray array = new JSONArray();
+            for (Object obj : objs) {
+                if(obj instanceof HttpStatus)
+                    array.add(obj);
+                else
+                array.add(convertCarToJson((Car)obj));
+            }
+            return array.toString();
+    }
 }

@@ -7,14 +7,18 @@ package REST;
 
 import Dao.HttpStatusBase;
 import Dao.LotDAO;
+import Dto.Lot;
 import Dto.Zone;
+import java.util.ArrayList;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.UriInfo;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.GET;
 import javax.ws.rs.Produces;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.core.MediaType;
+import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
@@ -67,7 +71,32 @@ public class ZoneResource {
         }
         return z;
     }
-    
+    private JSONObject convertZoneToJson(Zone zone) {
+        JSONObject jObj = new JSONObject();
+        jObj.put("zone_id", zone.getZone_id());
+        jObj.put("zone_name", zone.getZone_name());
+        jObj.put("max_spaces", zone.getMax_spaces());
+        jObj.put("is_vip", zone.getIs_vip());
+        jObj.put("lot_id", zone.getLot_id());
+        jObj.put("max_disabled_spaces", zone.getMax_disabled_spaces());        
+        return jObj;
+    }    
+     @GET
+    //@Path("getLots/")
+    @Produces(MediaType.TEXT_PLAIN)
+    @Consumes(MediaType.TEXT_PLAIN)
+    public String getLots() {
+        ArrayList<Zone> zone = (ArrayList<Zone>)ldao.selectAllZones();
+        if (zone == null || zone.isEmpty()) {
+            return hsb.CreateMessage(-1, "No Lots Found");
+        } else {
+            JSONArray array = new JSONArray();
+            for (Zone zones : zone) {
+                array.add(convertZoneToJson(zones));
+            }
+            return array.toString();
+        }
+    }   
     @POST
     @Consumes(MediaType.TEXT_PLAIN)
     @Produces(MediaType.TEXT_PLAIN)
