@@ -15,7 +15,7 @@ import org.openqa.selenium.chrome.ChromeDriver;
  *
  * @author snake
  */
-public class TestLogin_Pass {
+public class TestLogin {
 
     @Test
     public void Login_Pass() {
