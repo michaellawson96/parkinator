@@ -232,14 +232,14 @@ public class LotDAO implements LotDaoInterface {
 
                     if (maxSpaces > count) {
 
-                        Date bookFrom = convertUtilToSql(pc.getBookFrom());
-                        Date bookTo = convertUtilToSql(pc.getBookTo());
+                        Date book_from = convertUtilToSql(pc.getBookFrom());
+                        Date book_to = convertUtilToSql(pc.getBookTo());
 
                         sql.setPs(sql.getConn().prepareStatement("INSERT INTO parked_cars(zone_id,car_id,book_from,book_to,user_id) VALUES (?,?,?,?,?)"));
                         sql.getPs().setInt(1, pc.getZone_id());
                         sql.getPs().setInt(2, pc.getCar_id());
-                        sql.getPs().setDate(3, bookFrom);
-                        sql.getPs().setDate(4, bookTo);
+                        sql.getPs().setDate(3, book_from);
+                        sql.getPs().setDate(4, book_to);
                         sql.getPs().setInt(5, pc.getUser_id());
                        
 

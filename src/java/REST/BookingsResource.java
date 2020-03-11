@@ -64,9 +64,9 @@ public class BookingsResource {
             int carId = ((Long) obj.get("car_id")).intValue();
             pc.setCar_id(carId);
             DateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
-            Date from =  simpleDateFormat.parse(obj.get("bookFrom").toString());
+            Date from =  simpleDateFormat.parse(obj.get("book_from").toString());
             pc.setBookFrom(from);
-            Date to = simpleDateFormat.parse(obj.get("bookTo").toString());
+            Date to = simpleDateFormat.parse(obj.get("book_to").toString());
             pc.setBookTo(to);
             int userId = ((Long) obj.get("user_id")).intValue();
             pc.setUser_id(userId);
@@ -104,8 +104,8 @@ public class BookingsResource {
         JSONObject jObj = new JSONObject();
         jObj.put("zone_id", pc.getZone_id());
         jObj.put("car_id", pc.getCar_id());
-        jObj.put("bookFrom", pc.getBookFrom());
-        jObj.put("bookTo", pc.getBookTo());     
+        jObj.put("book_from", pc.getBookFrom());
+        jObj.put("book_to", pc.getBookTo());     
         jObj.put("user_id", pc.getUser_id()); 
         return jObj;
     }    
