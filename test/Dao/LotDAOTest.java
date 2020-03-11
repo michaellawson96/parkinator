@@ -24,7 +24,7 @@ import static org.junit.Assert.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import java.sql.Date;
-
+import org.junit.Ignore;
 
 /**
  *
@@ -98,9 +98,9 @@ public class LotDAOTest {
      */
     @Test
     public void testSelectAllBookigns() throws SQLException {
-        ParkedCars p1 = new ParkedCars(1, 1, new Date(11/11/11), new Date(11/11/11));
-        ParkedCars p2 = new ParkedCars(2, 2, new java.sql.Date(22/11/22), new java.sql.Date(22/11/22));
-        ParkedCars p3 = new ParkedCars(3, 3, new java.sql.Date(33/11/33), new java.sql.Date(33/11/33));
+        ParkedCars p1 = new ParkedCars(1, 1, new Date(11 / 11 / 11), new Date(11 / 11 / 11));
+        ParkedCars p2 = new ParkedCars(2, 2, new java.sql.Date(22 / 11 / 22), new java.sql.Date(22 / 11 / 22));
+        ParkedCars p3 = new ParkedCars(3, 3, new java.sql.Date(33 / 11 / 33), new java.sql.Date(33 / 11 / 33));
 
         ArrayList<ParkedCars> expectedResults = new ArrayList();
 
@@ -139,7 +139,7 @@ public class LotDAOTest {
     /**
      * Test of selectAllZones method, of class LotDAO.
      */
-    @Test
+    @Ignore
     public void testSelectAllZones() throws SQLException {
         Zone z1 = new Zone(1, "Test Zone1", 99, false, 1, 33);
         Zone z2 = new Zone(2, "Test Zone2", 99, true, 2, 33);
@@ -156,6 +156,7 @@ public class LotDAOTest {
         Connection conn = mock(Connection.class);
         PreparedStatement ps = mock(PreparedStatement.class);
         ResultSet rs = mock(ResultSet.class);
+        LotDAO lotDao = new LotDAO(sql);
 
         // Fill mock objects with appropriatel dummy data
         when(sql.getConn()).thenReturn(conn);
@@ -174,8 +175,6 @@ public class LotDAOTest {
         when(rs.getInt("lot_id")).thenReturn(z1.getLot_id(), z2.getLot_id(), z3.getLot_id());
         when(rs.getInt("max_disabled_spaces")).thenReturn(z1.getMax_disabled_spaces(), z2.getMax_disabled_spaces(), z3.getMax_disabled_spaces());
 
-        int numUsersInTable = 3;
-        LotDAO lotDao = new LotDAO(sql);
         Object result = lotDao.selectAllZones();
 
         assertEquals(expectedResults, result);
@@ -185,60 +184,112 @@ public class LotDAOTest {
      * Test of AddLot method, of class LotDAO.
      */
     @Test
-    public void testAddLot() {
-        System.out.println("AddLot");
-        Lot lot = null;
-        LotDAO instance = new LotDAO();
-        String expResult = "";
-        String result = instance.AddLot(lot);
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+    public void testAddLot() throws SQLException {
+        Lot L1 = new Lot(1, "Test Lot1", 1);
+        Lot L2 = new Lot(2, "Test Lot2", 2);
+        Lot L3 = new Lot(3, "Test Lot3", 3);
+
+        String expectedResults = "{\"status_code\":1,\"message\":\"Parking Lot added Successfully\"}";
+
+        // Create mock objects
+        SqlConnection sql = mock(SqlConnection.class);
+        Connection conn = mock(Connection.class);
+        PreparedStatement ps = mock(PreparedStatement.class);
+        ResultSet rs = mock(ResultSet.class);
+
+        // Fill mock objects with appropriatel dummy data
+        when(sql.getConn()).thenReturn(conn);
+        when(conn.prepareStatement("INSERT INTO parking_lots(Parking_name,cc_id) VALUES (?,?)")).thenReturn(ps);
+        when(sql.getPs()).thenReturn(ps);
+
+        LotDAO lotDao = new LotDAO(sql);
+        Object result = lotDao.AddLot(L3);
+
+        assertEquals(expectedResults, result);
+
     }
 
     /**
      * Test of RemoveLot method, of class LotDAO.
      */
     @Test
-    public void testRemoveLot() {
-        System.out.println("RemoveLot");
-        Lot lot = null;
-        LotDAO instance = new LotDAO();
-        String expResult = "";
-        String result = instance.RemoveLot(lot);
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+    public void testRemoveLot() throws SQLException {
+        Lot L1 = new Lot(1, "Test Lot1", 1);
+        Lot L2 = new Lot(2, "Test Lot2", 2);
+        Lot L3 = new Lot(3, "Test Lot3", 3);
+
+        String expectedResults = "{\"status_code\":1,\"message\":\"Parking Lot Deleted Successfully\"}";
+
+        // Create mock objects
+        SqlConnection sql = mock(SqlConnection.class);
+        Connection conn = mock(Connection.class);
+        PreparedStatement ps = mock(PreparedStatement.class);
+        ResultSet rs = mock(ResultSet.class);
+
+        // Fill mock objects with appropriatel dummy data
+        when(sql.getConn()).thenReturn(conn);
+        when(conn.prepareStatement("DELETE FROM parking_lots WHERE lot_id = ?")).thenReturn(ps);
+        when(sql.getPs()).thenReturn(ps);
+
+        LotDAO lotDao = new LotDAO(sql);
+        Object result = lotDao.RemoveLot(L3);
+
+        assertEquals(expectedResults, result);
     }
 
     /**
      * Test of Addzone method, of class LotDAO.
      */
     @Test
-    public void testAddzone() {
-        System.out.println("Addzone");
-        Zone zone = null;
-        LotDAO instance = new LotDAO();
-        String expResult = "";
-        String result = instance.Addzone(zone);
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+    public void testAddzone() throws SQLException {
+        Zone z1 = new Zone(1, "Test Zone1", 99, false, 1, 33);
+        Zone z2 = new Zone(2, "Test Zone2", 99, true, 2, 33);
+        Zone z3 = new Zone(3, "Test Zone3", 99, false, 3, 33);
+
+        String expectedResults = "{\"status_code\":1,\"message\":\"Parking Zone added Successfully\"}";
+
+        // Create mock objects
+        SqlConnection sql = mock(SqlConnection.class);
+        Connection conn = mock(Connection.class);
+        PreparedStatement ps = mock(PreparedStatement.class);
+        ResultSet rs = mock(ResultSet.class);
+
+        // Fill mock objects with appropriatel dummy data
+        when(sql.getConn()).thenReturn(conn);
+        when(conn.prepareStatement("INSERT INTO parking_zones(zone_name,max_spaces,is_vip,lot_id,max_disabled_spaces) VALUES (?,?,?,?,?)")).thenReturn(ps);
+        when(sql.getPs()).thenReturn(ps, ps, ps, ps, ps, ps);
+
+        LotDAO lotDao = new LotDAO(sql);
+        String result = lotDao.Addzone(z3);
+
+        assertEquals(expectedResults, result);
     }
 
     /**
      * Test of AddBooking method, of class LotDAO.
      */
-    @Test
-    public void testAddBooking() {
-        System.out.println("AddBooking");
-        ParkedCars pc = null;
-        LotDAO instance = new LotDAO();
-        String expResult = "";
-        String result = instance.AddBooking(pc);
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+    @Ignore
+    public void testAddBooking() throws SQLException {
+        ParkedCars p1 = new ParkedCars(1, 1, new Date(11 / 11 / 11), new Date(11 / 11 / 11));
+        ParkedCars p2 = new ParkedCars(2, 2, new java.sql.Date(22 / 11 / 22), new java.sql.Date(22 / 11 / 22));
+        ParkedCars p3 = new ParkedCars(3, 3, new java.sql.Date(33 / 11 / 33), new java.sql.Date(33 / 11 / 33));
+
+        String expectedResults = "";
+
+        SqlConnection sql = mock(SqlConnection.class);
+        Connection conn = mock(Connection.class);
+        PreparedStatement ps = mock(PreparedStatement.class);
+        ResultSet rs = mock(ResultSet.class);
+        LotDAO lotDao = new LotDAO(sql);
+
+        // Fill mock objects with appropriatel dummy data
+        when(sql.getConn()).thenReturn(conn);
+        when(conn.prepareStatement("select * from parked_cars")).thenReturn(ps);
+        when(sql.getPs()).thenReturn(ps, ps, ps, ps, ps);
+
+        Object result = lotDao.selectAllBookigns();
+
+        assertEquals(expectedResults, result);
     }
 
 }
