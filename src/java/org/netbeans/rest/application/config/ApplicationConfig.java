@@ -32,6 +32,7 @@ public class ApplicationConfig extends Application {
         resources.add(REST.AdminResource.class);
         resources.add(REST.BookingsResource.class);
         resources.add(REST.CarResource.class);
+        resources.add(REST.CcResource.class);
         resources.add(REST.LoginResourse.class);
         resources.add(REST.LotsResource.class);
         resources.add(REST.NewCrossOriginResourceSharingFilter.class);
