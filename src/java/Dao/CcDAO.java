@@ -15,7 +15,8 @@ import java.util.ArrayList;
  *
  * @author USER
  */
-public class CcDAO implements CcDAOInterface{
+public class CcDAO implements CcDAOInterface {
+
     private SqlConnection sql = null;
 
     public CcDAO(SqlConnection sql) {
@@ -50,20 +51,20 @@ public class CcDAO implements CcDAOInterface{
             return null;
         }
     }
-    
+
     @Override
     public boolean insertCc(String cc_name) {
 
         try {
 
-                    sql.setPs(sql.getConn().prepareStatement("INSERT INTO clamping_companies(cc_name) VALUES (?)"));
-                    sql.getPs().setString(1, cc_name);
+            sql.setPs(sql.getConn().prepareStatement("INSERT INTO clamping_companies(cc_name) VALUES (?)"));
+            sql.getPs().setString(1, cc_name);
 
-                    sql.getPs().executeUpdate();
+            sql.getPs().executeUpdate();
 
-                    System.out.println("cc recorded");
+            System.out.println("cc recorded");
 
-                    return true;
+            return true;
 
         } catch (SQLException se) {
             System.out.println("SQL Exception occurred: " + se.getMessage());
@@ -75,18 +76,17 @@ public class CcDAO implements CcDAOInterface{
             return false;
         }
     }
-    
+
     @Override
     public boolean updateCc(Cc cc) {
         try {
-                sql.setPs(sql.getConn().prepareStatement("UPDATE clamping_companies SET cc_name=? WHERE cc_id = ?"));
+            sql.setPs(sql.getConn().prepareStatement("UPDATE clamping_companies SET cc_name=? WHERE cc_id = ?"));
 
-                sql.getPs().setString(1, cc.getCcName());
-                sql.getPs().setInt(2, cc.getCcNo());
-                
+            sql.getPs().setString(1, cc.getCcName());
+            sql.getPs().setInt(2, cc.getCcNo());
 
-                sql.getPs().executeUpdate();
-                return true;
+            sql.getPs().executeUpdate();
+            return true;
 
         } catch (SQLException se) {
             System.out.println("SQL Exception occurred: " + se.getMessage());
@@ -98,20 +98,17 @@ public class CcDAO implements CcDAOInterface{
             return false;
         }
     }
-    
+
     @Override
-    public boolean deleteCc(int uid) {
+    public boolean deleteCc(int id) {
         try {
-                sql.setPs(sql.getConn().prepareStatement("DELETE from clamping_companies WHERE cc_id = ?"));
+            sql.setPs(sql.getConn().prepareStatement("DELETE from clamping_companies WHERE cc_id = ?"));
 
-                sql.getPs().setInt(1, uid);
+            sql.getPs().setInt(1, id);
 
-
-                sql.getPs().executeUpdate();
-                return true;
-            }
-
-         catch (SQLException se) {
+            sql.getPs().executeUpdate();
+            return true;
+        } catch (SQLException se) {
             System.out.println("SQL Exception occurred: " + se.getMessage());
             se.printStackTrace();
             return false;
