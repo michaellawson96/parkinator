@@ -187,7 +187,7 @@ public class LotDAOTest {
     /**
      * Test of selectAllZones method, of class LotDAO.
      */
-    @Ignore
+    @Test
     public void testSelectAllZones() throws SQLException {
         Zone z1 = new Zone(1, "Test Zone1", 99, false, 1, 33);
         Zone z2 = new Zone(2, "Test Zone2", 99, true, 2, 33);

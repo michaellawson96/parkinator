@@ -104,8 +104,8 @@ public class BookingsResource {
         JSONObject jObj = new JSONObject();
         jObj.put("zone_id", pc.getZone_id());
         jObj.put("car_id", pc.getCar_id());
-        jObj.put("book_from", pc.getBookFrom());
-        jObj.put("book_to", pc.getBookTo());     
+        jObj.put("book_from", pc.getBookFrom().toString());
+        jObj.put("book_to", pc.getBookTo().toString());     
         jObj.put("user_id", pc.getUser_id()); 
         return jObj;
     }    

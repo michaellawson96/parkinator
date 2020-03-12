@@ -21,10 +21,10 @@ public class TestRegisterUsersCar {
     @Test
     public void RegisterUsersCar_Pass() {
         
-        System.setProperty("webdriver.chrome.driver", "C:\\Users\\USER\\Downloads\\chromedriver_win32 (2)\\chromedriver.exe");
+        System.setProperty("webdriver.chrome.driver", "C:\\Users\\Lukas\\Desktop\\chromedriver_win32 (1)\\chromedriver.exe");
         WebDriver driver = new ChromeDriver();
 
-        String baseUrl = "http://localhost:33986/parkinator/test-resbeans.html";
+        String baseUrl = "http://localhost:41919/parkinator/test-resbeans.html";
         driver.get(baseUrl);
 
         driver.findElement(By.linkText("car")).click();
@@ -33,7 +33,7 @@ public class TestRegisterUsersCar {
         
         Select dropDown = new Select(dropDownElement);
         
-        dropDown.selectByValue("POST(text/plain)[2]");
+        dropDown.selectByValue("POST(text/plain)[1]");
         
         driver.findElement(By.id("blobParam")).clear();
 
@@ -54,10 +54,10 @@ public class TestRegisterUsersCar {
     @Test
     public void RegisterUsersCar_Fail() {
         
-        System.setProperty("webdriver.chrome.driver", "C:\\Users\\USER\\Downloads\\chromedriver_win32 (2)\\chromedriver.exe");
+        System.setProperty("webdriver.chrome.driver", "C:\\Users\\Lukas\\Desktop\\chromedriver_win32 (1)\\chromedriver.exe");
         WebDriver driver = new ChromeDriver();
 
-        String baseUrl = "http://localhost:33986/parkinator/test-resbeans.html";
+        String baseUrl = "http://localhost:41919/parkinator/test-resbeans.html";
         driver.get(baseUrl);
 
         driver.findElement(By.linkText("car")).click();
@@ -66,7 +66,7 @@ public class TestRegisterUsersCar {
         
         Select dropDown = new Select(dropDownElement);
         
-        dropDown.selectByValue("POST(text/plain)[2]");
+        dropDown.selectByValue("POST(text/plain)[1]");
         
         driver.findElement(By.id("blobParam")).clear();
 
