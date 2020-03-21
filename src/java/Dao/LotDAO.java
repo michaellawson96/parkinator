@@ -25,8 +25,17 @@ import java.sql.Date;
  */
 public class LotDAO implements LotDaoInterface {
 
-    private SqlConnection sql = new SqlConnection();
+    private SqlConnection sql;
     private HttpStatusBase hsb = new HttpStatusBase();
+    
+    public LotDAO(SqlConnection sql) {
+        this.sql = sql;
+    }
+
+    public LotDAO() {
+        this.sql = new SqlConnection();
+    }
+
 
     @Override
     public Object selectAllLots() {
@@ -62,7 +71,7 @@ public class LotDAO implements LotDaoInterface {
             rst = sql.getPs().executeQuery();
             ArrayList<ParkedCars> pc = new ArrayList<>();
             while (rst.next()) {
-                pc.add(new ParkedCars(rst.getInt("zone_id"), rst.getInt("car_id"), rst.getDate("book_From"), rst.getDate("book_to"), rst.getInt("user_id")));
+                pc.add(new ParkedCars(rst.getInt("zone_id"), rst.getInt("car_id"), rst.getDate("book_from"), rst.getDate("book_to"), rst.getInt("user_id")));
             }
 
             return pc;
@@ -199,7 +208,7 @@ public class LotDAO implements LotDaoInterface {
         }
     }
 
-    private static java.sql.Date convertUtilToSql(java.util.Date uDate) {
+    public static java.sql.Date convertUtilToSql(java.util.Date uDate) {
         java.sql.Date sDate = new java.sql.Date(uDate.getTime());
         return sDate;
     }

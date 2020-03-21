@@ -8,6 +8,7 @@ package Dao;
 import Dto.Car;
 import Dto.Lot;
 import Dto.ParkedCars;
+import Dto.User;
 import Dto.Zone;
 import SqlConnection.SqlConnection;
 import java.sql.Connection;
@@ -98,9 +99,13 @@ public class LotDAOTest {
      */
     @Test
     public void testSelectAllBookigns() throws SQLException {
-        ParkedCars p1 = new ParkedCars(1, 1, new Date(11 / 11 / 11), new Date(11 / 11 / 11));
-        ParkedCars p2 = new ParkedCars(2, 2, new java.sql.Date(22 / 11 / 22), new java.sql.Date(22 / 11 / 22));
-        ParkedCars p3 = new ParkedCars(3, 3, new java.sql.Date(33 / 11 / 33), new java.sql.Date(33 / 11 / 33));
+
+        SqlConnection sql = mock(SqlConnection.class);
+        LotDAO lotDao = new LotDAO(sql);
+
+        ParkedCars p1 = new ParkedCars(1, 1, new Date(11 / 11 / 11), new Date(11 / 11 / 11), 1);
+        ParkedCars p2 = new ParkedCars(2, 2, new Date(22 / 11 / 22), new Date(22 / 11 / 22), 1);
+        ParkedCars p3 = new ParkedCars(3, 3, new Date(33 / 11 / 33), new Date(33 / 11 / 33), 1);
 
         ArrayList<ParkedCars> expectedResults = new ArrayList();
 
@@ -109,11 +114,9 @@ public class LotDAOTest {
         expectedResults.add(p3);
 
         // Create mock objects
-        SqlConnection sql = mock(SqlConnection.class);
         Connection conn = mock(Connection.class);
         PreparedStatement ps = mock(PreparedStatement.class);
         ResultSet rs = mock(ResultSet.class);
-        LotDAO lotDao = new LotDAO(sql);
 
         // Fill mock objects with appropriatel dummy data
         when(sql.getConn()).thenReturn(conn);
@@ -127,11 +130,56 @@ public class LotDAOTest {
         // Fill in the resultset
         when(rs.getInt("zone_id")).thenReturn(p1.getZone_id(), p2.getZone_id(), p3.getZone_id());
         when(rs.getInt("car_id")).thenReturn(p1.getCar_id(), p2.getCar_id(), p3.getCar_id());
-        when(rs.getDate("bookFrom")).thenReturn(LotDAO.convertUtilToSql(p1.getBookFrom()), LotDAO.convertUtilToSql(p3.getBookFrom()), LotDAO.convertUtilToSql(p3.getBookFrom()));
-        when(rs.getDate("bookTo")).thenReturn(LotDAO.convertUtilToSql(p1.getBookTo()), LotDAO.convertUtilToSql(p3.getBookTo()), LotDAO.convertUtilToSql(p3.getBookTo()));
+        when(rs.getDate("book_from")).thenReturn(LotDAO.convertUtilToSql(p1.getBookFrom()), LotDAO.convertUtilToSql(p3.getBookFrom()), LotDAO.convertUtilToSql(p3.getBookFrom()));
+        when(rs.getDate("book_to")).thenReturn(LotDAO.convertUtilToSql(p1.getBookTo()), LotDAO.convertUtilToSql(p3.getBookTo()), LotDAO.convertUtilToSql(p3.getBookTo()));
+        when(rs.getInt("user_id")).thenReturn(p1.getUser_id(), p2.getUser_id(), p3.getUser_id());
 
         int numUsersInTable = 3;
         Object result = lotDao.selectAllBookigns();
+
+        assertEquals(expectedResults, result);
+    }
+    
+    @Test
+    public void testSelectAllBookignsByUserId() throws SQLException {
+
+        SqlConnection sql = mock(SqlConnection.class);
+        LotDAO lotDao = new LotDAO(sql);
+
+        ParkedCars p1 = new ParkedCars(1, 1, new Date(11 / 11 / 11), new Date(11 / 11 / 11), 1);
+        ParkedCars p2 = new ParkedCars(2, 2, new Date(22 / 11 / 22), new Date(22 / 11 / 22), 1);
+        ParkedCars p3 = new ParkedCars(3, 3, new Date(33 / 11 / 33), new Date(33 / 11 / 33), 1);
+        User u1 = new User(1, "Testing User1", "testinguser1@gmail.com", "$2a$12$Fodl2oDf233P40qSfkbVLOmX8R9a6kzuugosLS685hiVZr1qp7KWS", "user", "what is your mother's maiden name", "$2a$12$8XW5CMg.1ssMt9dvm5yMdeGjCTP51HfwFB8O5WDtNeFnNyxJmSBY6", false);
+
+        ArrayList<ParkedCars> expectedResults = new ArrayList();
+
+        expectedResults.add(p1);
+        expectedResults.add(p2);
+        expectedResults.add(p3);
+
+        // Create mock objects
+        Connection conn = mock(Connection.class);
+        PreparedStatement ps = mock(PreparedStatement.class);
+        ResultSet rs = mock(ResultSet.class);
+
+        // Fill mock objects with appropriatel dummy data
+        when(sql.getConn()).thenReturn(conn);
+        when(conn.prepareStatement("select * from parked_cars WHERE user_id = ?")).thenReturn(ps);
+        when(sql.getPs()).thenReturn(ps);
+        when(ps.executeQuery()).thenReturn(rs);
+
+        // Want 3 results in the resultset, so need true to be returned 3 times
+        when(rs.next()).thenReturn(true, true, true, false);
+
+        // Fill in the resultset
+        when(rs.getInt("zone_id")).thenReturn(p1.getZone_id(), p2.getZone_id(), p3.getZone_id());
+        when(rs.getInt("car_id")).thenReturn(p1.getCar_id(), p2.getCar_id(), p3.getCar_id());
+        when(rs.getDate("book_from")).thenReturn(LotDAO.convertUtilToSql(p1.getBookFrom()), LotDAO.convertUtilToSql(p3.getBookFrom()), LotDAO.convertUtilToSql(p3.getBookFrom()));
+        when(rs.getDate("book_to")).thenReturn(LotDAO.convertUtilToSql(p1.getBookTo()), LotDAO.convertUtilToSql(p3.getBookTo()), LotDAO.convertUtilToSql(p3.getBookTo()));
+        when(rs.getInt("user_id")).thenReturn(p1.getUser_id(), p2.getUser_id(), p3.getUser_id());
+
+        int numUsersInTable = 3;
+        Object result = lotDao.selectAllBookignsByUserId(u1);
 
         assertEquals(expectedResults, result);
     }
@@ -139,7 +187,7 @@ public class LotDAOTest {
     /**
      * Test of selectAllZones method, of class LotDAO.
      */
-    @Ignore
+    @Test
     public void testSelectAllZones() throws SQLException {
         Zone z1 = new Zone(1, "Test Zone1", 99, false, 1, 33);
         Zone z2 = new Zone(2, "Test Zone2", 99, true, 2, 33);

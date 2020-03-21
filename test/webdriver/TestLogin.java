@@ -19,17 +19,17 @@ public class TestLogin {
 
     @Test
     public void Login_Pass() {
-        System.setProperty("webdriver.chrome.driver", "C:\\Users\\snake\\OneDrive - Dundalk Institute of Technology\\Attachments\\Web Testing\\chromedriver_win32 (1)\\chromedriver.exe");
+        System.setProperty("webdriver.chrome.driver", "C:\\Users\\Lukas\\Desktop\\chromedriver_win32 (1)\\chromedriver.exe");
         WebDriver driver = new ChromeDriver();
 
-        String baseUrl = "http://localhost:8080/parkinator/test-resbeans.html";
+        String baseUrl = "http://localhost:41919/parkinator/test-resbeans.html";
         driver.get(baseUrl);
 
         driver.findElement(By.linkText("Login")).click();
 
         driver.findElement(By.id("blobParam")).clear();
 
-        driver.findElement(By.id("blobParam")).sendKeys("{\"email\":\"testinguser1@gmail.com\", \"hash\":\"Testinguser1\"}");
+        driver.findElement(By.id("blobParam")).sendKeys("{\"email\":\"test1@email.com\", \"hash\":\"TestPassword1\"}");
         
         driver.findElement(By.linkText("Test")).click();
         
@@ -44,10 +44,10 @@ public class TestLogin {
     
     @Test
     public void Login_fail() {
-        System.setProperty("webdriver.chrome.driver", "C:\\Users\\snake\\OneDrive - Dundalk Institute of Technology\\Attachments\\Web Testing\\chromedriver_win32 (1)\\chromedriver.exe");
+        System.setProperty("webdriver.chrome.driver", "C:\\Users\\Lukas\\Desktop\\chromedriver_win32 (1)\\chromedriver.exe");
         WebDriver driver = new ChromeDriver();
 
-        String baseUrl = "http://localhost:8080/parkinator/test-resbeans.html";
+        String baseUrl = "http://localhost:41919/parkinator/test-resbeans.html";
         driver.get(baseUrl);
 
         driver.findElement(By.linkText("Login")).click();
