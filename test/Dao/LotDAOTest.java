@@ -348,7 +348,7 @@ public class LotDAOTest {
         when(rs.getInt(1)).thenReturn(z1.getZone_id());
 
         when(sql.getConn()).thenReturn(conn);
-        when(conn.prepareStatement("INSERT INTO parked_cars(zone_id,car_id,book_from,book_to) VALUES (?,?,?,?)")).thenReturn(ps);
+        when(conn.prepareStatement("INSERT INTO parked_cars(zone_id,car_id,book_from,book_to,user_id) VALUES (?,?,?,?,?)")).thenReturn(ps);
         when(sql.getPs()).thenReturn(ps, ps, ps, ps, ps);
 
         Object result = lotDao.selectAllBookings();

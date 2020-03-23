@@ -196,7 +196,7 @@ public class CarDAOTest {
 
         // Fill mock objects with appropriatel dummy data
         when(sql.getConn()).thenReturn(conn);
-        when(conn.prepareStatement("select * from cars where user_id = ?")).thenReturn(ps);
+        when(conn.prepareStatement("select * from cars")).thenReturn(ps);
         when(sql.getPs()).thenReturn(ps);
         when(ps.executeQuery()).thenReturn(rs);
 
@@ -213,7 +213,7 @@ public class CarDAOTest {
 
         int numUsersInTable = 3;
         CarDAO carDao = new CarDAO(sql);
-        ArrayList<Object> result = carDao.getAllUserCars(c1.getUserNo());
+        ArrayList<Object> result = carDao.selectAllCars();
 
         // Check that the number of entries retrieved matches the (known) number 
         // of entries in the supplied dummy data

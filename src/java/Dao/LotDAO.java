@@ -112,6 +112,7 @@ public class LotDAO implements LotDaoInterface {
     }
 
     @Override
+    //missing mocking
     public Object selectAllZoneByLotId(Lot l) {
         try {
             sql.setPs(sql.getConn().prepareStatement("select * from parking_zones WHERE lot_id = ?"));
@@ -313,6 +314,7 @@ public class LotDAO implements LotDaoInterface {
 
     }
 
+    //missing mocking
     public Object CheckIfLotExist(Lot lot) {
         try {
             sql.setPs(sql.getConn().prepareStatement("select * from parking_lots WHERE parking_name = ?"));
@@ -339,6 +341,7 @@ public class LotDAO implements LotDaoInterface {
         }
     }
 
+    //missing mocking
     public Object CheckIfzoneExist(Zone zone) {
         try {
             sql.setPs(sql.getConn().prepareStatement("select * from parking_zones WHERE zone_name = ?"));
@@ -365,6 +368,7 @@ public class LotDAO implements LotDaoInterface {
         }
     }
 
+    //missing mocking
     public Object CheckIfBookingExistUnderThatZone(ParkedCars pc) {
         try {
             sql.setPs(sql.getConn().prepareStatement("select * from parked_cars WHERE zone_id = ?"));
@@ -391,6 +395,7 @@ public class LotDAO implements LotDaoInterface {
         }
     }
 
+    //missing mocking
     public Object getBookingDate(ParkedCars pc) {
         try {
             sql.setPs(sql.getConn().prepareStatement("select * from parked_cars WHERE book_from = ?"));
