@@ -15,12 +15,22 @@ import Dto.Zone;
  * @author Lukas
  */
 public interface LotDaoInterface {
+
     String AddLot(Lot lot);
+
     String RemoveLot(Lot lot);
+
     String Addzone(Zone zone);
+
     String AddBooking(ParkedCars pc);
+
     Object selectAllLots();
+
     Object selectAllZones();
-     Object selectAllBookigns();
-     Object selectAllBookignsByUserId(User u);
+
+    Object selectAllBookigns();
+
+    Object selectAllBookignsByUserId(User u);
+
+    Object selectAllZoneByLotId(Lot l);
 }
