@@ -59,10 +59,10 @@ public class UserDao implements UserDAOInterface {
     }
 
     @Override
-    public boolean Login(String email, String hash) {
+    public boolean login(String email, String hash) {
         try {
             //System.out.println(email);
-            if (CheckUserExistsByEmail(email)) {
+            if (checkUserExistsByEmail(email)) {
                 User u = getUserByEmail(email);
                 return BCrypt.checkpw(hash, u.getUserHash());
             } else {
@@ -89,7 +89,7 @@ public class UserDao implements UserDAOInterface {
 
                 System.out.println("valid email supplied");
 
-                if (!CheckUserExistsByEmail(email)) {
+                if (!checkUserExistsByEmail(email)) {
                     sql.setPs(sql.getConn().prepareStatement("INSERT INTO users(user_fullname, email, hash, user_type, question, answer_hash, has_disabled_badge) VALUES (?,?,?,?,?,?,?)"));
                     sql.getPs().setString(1, fullname);
                     sql.getPs().setString(2, email);
@@ -143,7 +143,7 @@ public class UserDao implements UserDAOInterface {
     }
 
     @Override
-    public boolean CheckUserExistsByEmail(String email) {
+    public boolean checkUserExistsByEmail(String email) {
         try {
             sql.setPs(sql.getConn().prepareStatement("select * from users WHERE email=?"));
             sql.getPs().setString(1, email);
@@ -173,7 +173,7 @@ public class UserDao implements UserDAOInterface {
     public boolean updateUser(User user
     ) {
         try {
-            if (CheckUserExistsByEmail(user.getEmail())) {
+            if (checkUserExistsByEmail(user.getEmail())) {
                 sql.setPs(sql.getConn().prepareStatement("UPDATE users SET user_fullname=?, user_type=?,question=?,answer_hash=?, has_disabled_badge=? WHERE email = ?"));
 
                 sql.getPs().setString(1, user.getUserFullname());
@@ -254,7 +254,7 @@ public class UserDao implements UserDAOInterface {
     }
 
     @Override
-    public String CheckUserExistsByEmailRecovery(User user) {
+    public String checkUserExistsByEmailRecovery(User user) {
         try {
             sql.setPs(sql.getConn().prepareStatement("select * from users where email=?"));
             sql.getPs().setString(1, user.getEmail());
@@ -281,7 +281,7 @@ public class UserDao implements UserDAOInterface {
     }
 
     @Override
-    public boolean CheckUserRecoveryAnswer(User user) {
+    public boolean checkUserRecoveryAnswer(User user) {
         try {
 
             sql.setPs(sql.getConn().prepareStatement("select * from users WHERE email = ?"));
@@ -346,9 +346,9 @@ public class UserDao implements UserDAOInterface {
     }
 
     @Override
-    public boolean AdminDeletesUser(User user) {
+    public boolean adminDeletesUser(User user) {
         try {
-            if (!CheckUserExistsByEmail(user.getEmail())) {
+            if (!checkUserExistsByEmail(user.getEmail())) {
                 sql.setPs(sql.getConn().prepareStatement("DELETE FROM salt WHERE user_id = ?"));
 
                 sql.getPs().setInt(1, user.getUserNo());
@@ -378,9 +378,9 @@ public class UserDao implements UserDAOInterface {
     }
 
     @Override
-    public boolean AdminUpdatesUserTypes(User user) {
+    public boolean adminUpdatesUserTypes(User user) {
         try {
-            if (CheckUserExistsByEmail(user.getEmail())) {
+            if (checkUserExistsByEmail(user.getEmail())) {
                 sql.setPs(sql.getConn().prepareStatement("UPDATE users SET user_type = ? WHERE email = ?"));
 
                 sql.getPs().setString(1, user.getUserType());

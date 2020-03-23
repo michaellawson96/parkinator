@@ -113,7 +113,7 @@ public class BookingsResource {
     @Produces(MediaType.TEXT_PLAIN)
     @Consumes(MediaType.TEXT_PLAIN)
     public String getBookings() {
-        ArrayList<ParkedCars> pc = (ArrayList<ParkedCars>)ldao.selectAllBookigns();
+        ArrayList<ParkedCars> pc = (ArrayList<ParkedCars>)ldao.selectAllBookings();
         if (pc == null || pc.isEmpty()) {
             return hsb.CreateMessage(-1, "No bookings found Found");
         } else {
@@ -132,7 +132,7 @@ public class BookingsResource {
         Object obj = convertJsonStringToZone(content);
         if (obj instanceof ParkedCars) {
             ParkedCars pc = (ParkedCars) obj;
-            return ldao.AddBooking(pc);
+            return ldao.addBooking(pc);
         } else {
             return (String) obj;
         }
@@ -145,7 +145,7 @@ public class BookingsResource {
     public String displayBookings(String content) {
         Object obj = convertJsonStringToUser(content);
         User u = (User) obj;
-        ArrayList<ParkedCars> pc = (ArrayList<ParkedCars>)ldao.selectAllBookignsByUserId(u);
+        ArrayList<ParkedCars> pc = (ArrayList<ParkedCars>)ldao.selectAllBookingsByUserId(u);
         if (pc == null || pc.isEmpty()) {
             return hsb.CreateMessage(-1, "No bookings found Found");
         } else {

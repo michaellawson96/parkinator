@@ -23,9 +23,9 @@ public class AdminTest {
         AdminResource ar = new AdminResource();
         Scanner sc = new Scanner(System.in);
         String c = sc.next();
-        // System.out.println(ar.DeletesUser(c));
+        // System.out.println(ar.deleteUser(c));
         // {"user_id":16}       
-        System.out.println(ar.UpdatesUserType(c));
+        System.out.println(ar.updateUserType(c));
         //{"email":"a@gmail.com","user_type":"admin"}
     }
 }

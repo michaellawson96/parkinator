@@ -130,19 +130,19 @@ public class AdminResource {
     @PUT
     @Consumes(MediaType.TEXT_PLAIN)
     @Produces(MediaType.TEXT_PLAIN)
-    public boolean UpdatesUserType(String content) {
+    public boolean updateUserType(String content) {
         UserDao udao = new UserDao();
         User update = convertJsonStringToUserForUpdate(content);
-        return udao.AdminUpdatesUserTypes(update);
+        return udao.adminUpdatesUserTypes(update);
     }
 
     @POST
     @Consumes(MediaType.TEXT_PLAIN)
     @Produces(MediaType.TEXT_PLAIN)
-    public boolean DeletesUser(String content) {
+    public boolean deleteUser(String content) {
         UserDao udao = new UserDao();
         User delete = convertJsonStringToUserForDelete(content);
-        return udao.AdminDeletesUser(delete);
+        return udao.adminDeletesUser(delete);
     }
    
 }

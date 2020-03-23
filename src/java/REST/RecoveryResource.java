@@ -61,10 +61,10 @@ public class RecoveryResource {
     @POST
     @Consumes(MediaType.TEXT_PLAIN)
     @Produces(MediaType.TEXT_PLAIN)
-    public String CheckEmail(String content) {
+    public String checkEmail(String content) {
         UserDao udao = new UserDao();
         User email = convertJsonStringToUser(content);
-        String check = udao.CheckUserExistsByEmailRecovery(email);
+        String check = udao.checkUserExistsByEmailRecovery(email);
         return check;
         
     }

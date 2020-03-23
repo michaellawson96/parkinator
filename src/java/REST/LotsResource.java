@@ -107,11 +107,11 @@ public class LotsResource {
     //@Path("addLots/")
     @Consumes(MediaType.TEXT_PLAIN)
     @Produces(MediaType.TEXT_PLAIN)
-    public String AddingParkingLot(String content) {
+    public String addParkingLot(String content) {
         Object obj = convertJsonStringToLots(content);
         if (obj instanceof Lot) {
             Lot lot = (Lot) obj;
-            return ldao.AddLot(lot);
+            return ldao.addLot(lot);
         } else {
             return (String) obj;
         }
@@ -122,11 +122,11 @@ public class LotsResource {
     @Path("removeLots/")
     @Consumes(MediaType.TEXT_PLAIN)
     @Produces(MediaType.TEXT_PLAIN)
-    public String RemoveParkingLot(String content) {
+    public String removeParkingLot(String content) {
         Object obj = convertJsonStringToLots(content);
         if (obj instanceof Lot) {
             Lot lot = (Lot) obj;
-            return ldao.RemoveLot(lot);
+            return ldao.removeLot(lot);
         } else {
             return (String) obj;
         }

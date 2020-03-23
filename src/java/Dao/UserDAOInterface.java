@@ -16,15 +16,15 @@ public interface UserDAOInterface {
         boolean updateUser(User user);
         ArrayList<User> selectAllUsers();
         boolean deleteUser(int uid);
-        boolean CheckUserExistsByEmail(String email);
-        boolean Login(String email, String hash); 
+        boolean checkUserExistsByEmail(String email);
+        boolean login(String email, String hash); 
         boolean register(String fullname, String email, String hash, String user_Type, 
                 String question, String answer_Hash, boolean has_disabled_badge); 
         
         User getUserByEmail(String email);
-        String CheckUserExistsByEmailRecovery(User user);
-        boolean CheckUserRecoveryAnswer(User user);
+        String checkUserExistsByEmailRecovery(User user);
+        boolean checkUserRecoveryAnswer(User user);
         boolean updateUserPassword(User user);
-        boolean AdminDeletesUser(User user);
-        boolean AdminUpdatesUserTypes(User user);
+        boolean adminDeletesUser(User user);
+        boolean adminUpdatesUserTypes(User user);
 }

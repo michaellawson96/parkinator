@@ -19,10 +19,10 @@ public class LotTest {
         LotsResource ar = new LotsResource();
         Scanner sc = new Scanner(System.in);
         String c = sc.next();
-        System.out.println(ar.AddingParkingLot(c));
+        System.out.println(ar.addParkingLot(c));
         //{"lot_id":1,"parking_name":"testing123","cc_id":1}
 
-       // System.out.println(ar.RemoveParkingLot(c));
+       // System.out.println(ar.removeParkingLot(c));
         //{"lot_id":5}
     }
 

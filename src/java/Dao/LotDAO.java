@@ -62,7 +62,7 @@ public class LotDAO implements LotDaoInterface {
     }
 
     @Override
-    public Object selectAllBookigns() {
+    public Object selectAllBookings() {
         try {
             sql.setPs(sql.getConn().prepareStatement("select * from parked_cars"));
             ResultSet rst;
@@ -86,7 +86,7 @@ public class LotDAO implements LotDaoInterface {
     }
 
     @Override
-    public Object selectAllBookignsByUserId(User u) {
+    public Object selectAllBookingsByUserId(User u) {
         try {
             sql.setPs(sql.getConn().prepareStatement("select * from parked_cars WHERE user_id = ?"));
             sql.getPs().setInt(1, u.getUserNo());
@@ -163,7 +163,7 @@ public class LotDAO implements LotDaoInterface {
     }
 
     @Override
-    public String AddLot(Lot lot) {
+    public String addLot(Lot lot) {
         try {
 
             if (CheckIfLotExist(lot) instanceof Boolean) {
@@ -193,7 +193,7 @@ public class LotDAO implements LotDaoInterface {
     }
 
     @Override
-    public String RemoveLot(Lot lot) {
+    public String removeLot(Lot lot) {
         try {
 
             sql.setPs(sql.getConn().prepareStatement("DELETE FROM parking_lots WHERE lot_id = ?"));
@@ -215,7 +215,7 @@ public class LotDAO implements LotDaoInterface {
     }
 
     @Override
-    public String Addzone(Zone zone) {
+    public String addzone(Zone zone) {
         try {
             if (CheckIfzoneExist(zone) instanceof Boolean) {
                 if ((boolean) CheckIfzoneExist(zone) == false) {
@@ -253,7 +253,7 @@ public class LotDAO implements LotDaoInterface {
     }
 
     @Override
-    public String AddBooking(ParkedCars pc) {
+    public String addBooking(ParkedCars pc) {
         try {
             if (CheckIfBookingExistUnderThatZone(pc) instanceof Boolean && getBookingDate(pc) instanceof Boolean) {
                 if ((boolean) CheckIfBookingExistUnderThatZone(pc) == false || (boolean) getBookingDate(pc) == false) {

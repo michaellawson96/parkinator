@@ -3,8 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package Dao;
+package DaoIntegration;
 
+import Dao.*;
 import Dao.UserDao;
 import Dto.User;
 import SqlConnection.SqlConnection;
