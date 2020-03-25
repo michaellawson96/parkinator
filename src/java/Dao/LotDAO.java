@@ -421,4 +421,25 @@ public class LotDAO implements LotDaoInterface {
             return hsb.ExceptionError();
         }
     }
+    
+    public String removebooking(Lot lot) {
+        try {
+
+            sql.setPs(sql.getConn().prepareStatement("DELETE FROM parking_lots WHERE lot_id = ?"));
+            sql.getPs().setInt(1, lot.getLot_id());
+
+            sql.getPs().executeUpdate();
+
+            return hsb.CreateMessage(1, "Parking Lot Deleted Successfully");
+
+        } catch (SQLException se) {
+            System.out.println("SQL Exception occurred: " + se.getMessage());
+            se.printStackTrace();
+            return hsb.SQlError();
+        } catch (Exception e) {
+            System.out.println("Exception occurred: " + e.getMessage());
+            e.printStackTrace();
+            return hsb.ExceptionError();
+        }
+    } 
 }
