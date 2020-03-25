@@ -33,4 +33,8 @@ public interface LotDaoInterface {
     Object selectAllBookingsByUserId(User u);
 
     Object selectAllZoneByLotId(Lot l);
+    
+    String updateBooking(ParkedCars pc);
+    
+    String removeBooking(ParkedCars pc);
 }

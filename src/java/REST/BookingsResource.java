@@ -7,6 +7,8 @@ package REST;
 
 import Dao.HttpStatusBase;
 import Dao.LotDAO;
+import Dao.LotDaoInterface;
+import Dto.Car;
 import Dto.Lot;
 import Dto.ParkedCars;
 import Dto.User;
@@ -48,7 +50,7 @@ public class BookingsResource {
     public BookingsResource() {
     }
 
-    private Object convertJsonStringToZone(String jsonString)  {
+    private Object convertJsonStringToBooking(String jsonString)  {
         ParkedCars pc = null;
         try {
             // create a parser to convert a string to a json object
@@ -79,6 +81,7 @@ public class BookingsResource {
         }
         return pc;
     }
+    
    private Object convertJsonStringToUser(String jsonString)  {
         User u = null;
         try {
@@ -129,7 +132,7 @@ public class BookingsResource {
     @Consumes(MediaType.TEXT_PLAIN)
     @Produces(MediaType.TEXT_PLAIN)
     public String addBooking(String content) {
-        Object obj = convertJsonStringToZone(content);
+        Object obj = convertJsonStringToBooking(content);
         if (obj instanceof ParkedCars) {
             ParkedCars pc = (ParkedCars) obj;
             return ldao.addBooking(pc);
@@ -155,6 +158,33 @@ public class BookingsResource {
             }
             return array.toString();
         }
-
     }
+    
+    @PUT
+    @Consumes(MediaType.TEXT_PLAIN)
+    @Produces(MediaType.TEXT_PLAIN)
+    public String updateBooking(String content) {
+        Object obj = convertJsonStringToBooking(content);
+        if (obj instanceof ParkedCars) {
+            ParkedCars pc = (ParkedCars) obj;
+            return ldao.updateBooking(pc);
+        } else {
+            return (String) obj;
+        }
+    }
+    
+    @POST
+    @Path("deleteBookings/")  
+    @Consumes(MediaType.TEXT_PLAIN)
+    @Produces(MediaType.TEXT_PLAIN)
+    public String deleteBooking(String content) {
+        Object obj = convertJsonStringToBooking(content);
+        if (obj instanceof ParkedCars) {
+            ParkedCars pc = (ParkedCars) obj;
+            return ldao.removeBooking(pc);
+        } else {
+            return (String) obj;
+        }
+    }
+    
 }

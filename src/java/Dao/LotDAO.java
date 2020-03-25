@@ -421,16 +421,20 @@ public class LotDAO implements LotDaoInterface {
             return hsb.ExceptionError();
         }
     }
-    
-    public String removebooking(Lot lot) {
+
+    //missing mocking 
+    @Override
+    public String removeBooking(ParkedCars pc) {
         try {
 
-            sql.setPs(sql.getConn().prepareStatement("DELETE FROM parking_lots WHERE lot_id = ?"));
-            sql.getPs().setInt(1, lot.getLot_id());
+            sql.setPs(sql.getConn().prepareStatement("DELETE FROM parked_cars WHERE car_id = ? AND user_id = ? AND zone_id = ?"));
+            sql.getPs().setInt(1, pc.getCar_id());
+            sql.getPs().setInt(2, pc.getUser_id());
+            sql.getPs().setInt(3, pc.getZone_id());
 
             sql.getPs().executeUpdate();
 
-            return hsb.CreateMessage(1, "Parking Lot Deleted Successfully");
+            return hsb.CreateMessage(1, "Booking Deleted Successfully");
 
         } catch (SQLException se) {
             System.out.println("SQL Exception occurred: " + se.getMessage());
@@ -441,5 +445,30 @@ public class LotDAO implements LotDaoInterface {
             e.printStackTrace();
             return hsb.ExceptionError();
         }
-    } 
+    }
+
+    //missing mocking 
+    @Override
+    public String updateBooking(ParkedCars pc) {
+        try {
+
+            sql.setPs(sql.getConn().prepareStatement("UPDATE parked_cars SET car_id = ? WHERE user_id = ? AND zone_id = ?"));
+            sql.getPs().setInt(1, pc.getCar_id());
+            sql.getPs().setInt(2, pc.getUser_id());
+            sql.getPs().setInt(3, pc.getZone_id());
+
+            sql.getPs().executeUpdate();
+
+            return hsb.CreateMessage(1, "Booking Updated Successfully");
+
+        } catch (SQLException se) {
+            System.out.println("SQL Exception occurred: " + se.getMessage());
+            se.printStackTrace();
+            return hsb.SQlError();
+        } catch (Exception e) {
+            System.out.println("Exception occurred: " + e.getMessage());
+            e.printStackTrace();
+            return hsb.ExceptionError();
+        }
+    }
 }
