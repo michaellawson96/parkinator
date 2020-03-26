@@ -82,6 +82,10 @@ public class ZoneResource {
             z.setLot_id (lotId);
             int maxDisableSpace =  ((Long)obj.get("max_disabled_spaces")).intValue();
             z.setMax_disabled_spaces(maxDisableSpace);
+            double lng = ((Number)obj.get("lng")).doubleValue();
+            z.setLng(lng);
+            double lat = ((Number)obj.get("alt")).doubleValue();
+            z.setLat(lat);            
             
          
 
@@ -98,9 +102,11 @@ public class ZoneResource {
         jObj.put("zone_id", zone.getZone_id());
         jObj.put("zone_name", zone.getZone_name());
         jObj.put("max_spaces", zone.getMax_spaces());
-        jObj.put("is_vip", zone.getIs_vip());
+        jObj.put("is_vip", zone.isIs_vip());
         jObj.put("lot_id", zone.getLot_id());
-        jObj.put("max_disabled_spaces", zone.getMax_disabled_spaces());        
+        jObj.put("max_disabled_spaces", zone.getMax_disabled_spaces());
+        jObj.put("lng", zone.getLng());
+        jObj.put("alt", zone.getLat());          
         return jObj;
     }    
      @GET

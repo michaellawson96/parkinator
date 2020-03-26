@@ -5,6 +5,8 @@
  */
 package Dto;
 
+import java.util.Objects;
+
 /**
  *
  * @author Lukas
@@ -16,17 +18,21 @@ public class Zone {
     private boolean is_vip;
     private int lot_id;
     private int max_disabled_spaces;
+    private double lat;
+    private double lng;
 
-    public Zone(int zone_id, String zone_name, int max_spaces, boolean is_vip, int lot_id, int max_disabled_spaces) {
+    public Zone(int zone_id, String zone_name, int max_spaces, boolean is_vip, int lot_id, int max_disabled_spaces, double lat, double lng) {
         this.zone_id = zone_id;
         this.zone_name = zone_name;
         this.max_spaces = max_spaces;
         this.is_vip = is_vip;
         this.lot_id = lot_id;
         this.max_disabled_spaces = max_disabled_spaces;
+        this.lat = lat;
+        this.lng = lng;
     }
-
-    public Zone() {
+    public Zone(){
+        
     }
 
     public int getZone_id() {
@@ -53,7 +59,7 @@ public class Zone {
         this.max_spaces = max_spaces;
     }
 
-    public boolean getIs_vip() {
+    public boolean isIs_vip() {
         return is_vip;
     }
 
@@ -77,15 +83,33 @@ public class Zone {
         this.max_disabled_spaces = max_disabled_spaces;
     }
 
+    public double getLat() {
+        return lat;
+    }
+
+    public void setLat(double lat) {
+        this.lat = lat;
+    }
+
+    public double getLng() {
+        return lng;
+    }
+
+    public void setLng(double lng) {
+        this.lng = lng;
+    }
+
     @Override
     public int hashCode() {
-        int hash = 5;
-        hash = 71 * hash + this.zone_id;
-        hash = 71 * hash + this.zone_name.hashCode();
-        hash = 71 * hash + this.max_spaces;
-        hash = 71 * hash + (this.is_vip ? 1 : 0);
-        hash = 71 * hash + this.lot_id;
-        hash = 71 * hash + this.max_disabled_spaces;
+        int hash = 3;
+        hash = 37 * hash + this.zone_id;
+        hash = 37 * hash + Objects.hashCode(this.zone_name);
+        hash = 37 * hash + this.max_spaces;
+        hash = 37 * hash + (this.is_vip ? 1 : 0);
+        hash = 37 * hash + this.lot_id;
+        hash = 37 * hash + this.max_disabled_spaces;
+        hash = 37 * hash + (int) (Double.doubleToLongBits(this.lat) ^ (Double.doubleToLongBits(this.lat) >>> 32));
+        hash = 37 * hash + (int) (Double.doubleToLongBits(this.lng) ^ (Double.doubleToLongBits(this.lng) >>> 32));
         return hash;
     }
 
@@ -104,9 +128,6 @@ public class Zone {
         if (this.zone_id != other.zone_id) {
             return false;
         }
-        if (this.zone_name.equals(other.zone_name)) {
-            return false;
-        }
         if (this.max_spaces != other.max_spaces) {
             return false;
         }
@@ -119,13 +140,25 @@ public class Zone {
         if (this.max_disabled_spaces != other.max_disabled_spaces) {
             return false;
         }
+        if (Double.doubleToLongBits(this.lat) != Double.doubleToLongBits(other.lat)) {
+            return false;
+        }
+        if (Double.doubleToLongBits(this.lng) != Double.doubleToLongBits(other.lng)) {
+            return false;
+        }
+        if (!Objects.equals(this.zone_name, other.zone_name)) {
+            return false;
+        }
         return true;
     }
 
     @Override
     public String toString() {
-        return "Zone{" + "zone_id=" + zone_id + ", zone_name=" + zone_name + ", max_spaces=" + max_spaces + ", is_vip=" + is_vip + ", lot_id=" + lot_id + ", max_disabled_spaces=" + max_disabled_spaces + '}';
+        return "Zone{" + "zone_id=" + zone_id + ", zone_name=" + zone_name + ", max_spaces=" + max_spaces + ", is_vip=" + is_vip + ", lot_id=" + lot_id + ", max_disabled_spaces=" + max_disabled_spaces + ", lat=" + lat + ", lng=" + lng + '}';
     }
     
+    
+
+ 
     
 }

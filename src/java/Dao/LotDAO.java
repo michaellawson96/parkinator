@@ -123,7 +123,7 @@ public class LotDAO implements LotDaoInterface {
             rst = sql.getPs().executeQuery();
             ArrayList<Zone> z = new ArrayList<>();
             while (rst.next()) {
-                z.add(new Zone(rst.getInt("zone_id"), rst.getString("zone_name"), rst.getInt("max_spaces"), rst.getBoolean("is_vip"), rst.getInt("lot_id"), rst.getInt("max_disabled_spaces")));
+                z.add(new Zone(rst.getInt("zone_id"), rst.getString("zone_name"), rst.getInt("max_spaces"), rst.getBoolean("is_vip"), rst.getInt("lot_id"), rst.getInt("max_disabled_spaces"), rst.getDouble("altitude"), rst.getDouble("longitude")));
             }
 
             return z;
@@ -148,7 +148,7 @@ public class LotDAO implements LotDaoInterface {
             rst = sql.getPs().executeQuery();
             ArrayList<Zone> z = new ArrayList<>();
             while (rst.next()) {
-                z.add(new Zone(rst.getInt("zone_id"), rst.getString("zone_name"), rst.getInt("max_spaces"), rst.getBoolean("is_vip"), rst.getInt("lot_id"), rst.getInt("max_disabled_spaces")));
+                z.add(new Zone(rst.getInt("zone_id"), rst.getString("zone_name"), rst.getInt("max_spaces"), rst.getBoolean("is_vip"), rst.getInt("lot_id"), rst.getInt("max_disabled_spaces"), rst.getDouble("altitude"), rst.getDouble("longitude")));
             }
 
             return z;
@@ -220,12 +220,14 @@ public class LotDAO implements LotDaoInterface {
         try {
             if (CheckIfzoneExist(zone) instanceof Boolean) {
                 if ((boolean) CheckIfzoneExist(zone) == false) {
-                    sql.setPs(sql.getConn().prepareStatement("INSERT INTO parking_zones(zone_name,max_spaces,is_vip,lot_id,max_disabled_spaces) VALUES (?,?,?,?,?)"));
+                    sql.setPs(sql.getConn().prepareStatement("INSERT INTO parking_zones(zone_name,max_spaces,is_vip,lot_id,max_disabled_spaces,altitude,longitude) VALUES (?,?,?,?,?,?,?)"));
                     sql.getPs().setString(1, zone.getZone_name());
                     sql.getPs().setInt(2, zone.getMax_spaces());
-                    sql.getPs().setBoolean(3, zone.getIs_vip());
+                    sql.getPs().setBoolean(3, zone.isIs_vip());
                     sql.getPs().setInt(4, zone.getLot_id());
                     sql.getPs().setInt(5, zone.getMax_disabled_spaces());
+                    sql.getPs().setDouble(6, zone.getLat());
+                    sql.getPs().setDouble(7, zone.getLng());
 
                     sql.getPs().executeUpdate();
 
