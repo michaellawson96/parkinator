@@ -93,34 +93,6 @@ public class UserResource {
     }
     
     /**
-     * USER DELETE METHOD
-     * @param content JSON String of User
-     * @return boolean
-     */
-    @Path("delete")
-    @POST
-    @Consumes(MediaType.TEXT_PLAIN)
-    @Produces(MediaType.TEXT_PLAIN)
-    public boolean userDelete(String content) {
-        UserDAOInterface uDAO = new UserDao();
-        int uid;
-        try {
-            // create a parser to convert a string to a json object
-            JSONParser parser = new JSONParser();
-            // parser returns an object. You should know or check what to convert to (an JSONObject or JSONArray)
-            JSONObject obj = (JSONObject) parser.parse(content);
-            // create a new Customer and use get method to retrieve values for a key
-            // note that JSONObject has all numbers as longs, and needs to be converted to an int if required.
-            uid = ((Long) obj.get("user_id")).intValue();
-        } // more detailed reporting can be done by catching specific exceptions, such as ParseException
-        catch (ParseException exp) {
-            System.out.println(exp);
-            uid = -1;
-        }
-        return uDAO.deleteUser(uid);
-    }
-    
-    /**
      * --------------------------------------------
      * -----------BASIC CRUD METHODS END-----------
      * --------------------------------------------

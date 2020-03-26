@@ -5,6 +5,7 @@
  */
 package webdriver;
 
+import java.util.ResourceBundle;
 import static org.junit.Assert.*;
 import org.junit.Test;
 import org.openqa.selenium.By;
@@ -17,13 +18,16 @@ import org.openqa.selenium.chrome.ChromeDriver;
  */
 public class TestLogin {
 
+    ResourceBundle config = ResourceBundle.getBundle("webdriver.WDConfig");
+        String driverUrl = config.getString("driverUrl");
+        String testServicesUrl = config.getString("testServicesUrl");
+    
     @Test
     public void Login_Pass() {
-        System.setProperty("webdriver.chrome.driver", "C:\\Users\\Lukas\\Desktop\\chromedriver_win32 (1)\\chromedriver.exe");
+        System.setProperty("webdriver.chrome.driver", driverUrl);
         WebDriver driver = new ChromeDriver();
 
-        String baseUrl = "http://localhost:41919/parkinator/test-resbeans.html";
-        driver.get(baseUrl);
+        driver.get(testServicesUrl);
 
         driver.findElement(By.linkText("Login")).click();
 
@@ -44,12 +48,11 @@ public class TestLogin {
     
     @Test
     public void Login_fail() {
-        System.setProperty("webdriver.chrome.driver", "C:\\Users\\Lukas\\Desktop\\chromedriver_win32 (1)\\chromedriver.exe");
+        System.setProperty("webdriver.chrome.driver", driverUrl);
         WebDriver driver = new ChromeDriver();
 
-        String baseUrl = "http://localhost:41919/parkinator/test-resbeans.html";
-        driver.get(baseUrl);
-
+        driver.get(testServicesUrl);
+        
         driver.findElement(By.linkText("Login")).click();
 
         driver.findElement(By.id("blobParam")).clear();
@@ -63,7 +66,7 @@ public class TestLogin {
         String result = driver.findElement(By.id("rawContent")).getText();
         
         assertEquals(expResult, result);
-
+        
         driver.close();
     }
     

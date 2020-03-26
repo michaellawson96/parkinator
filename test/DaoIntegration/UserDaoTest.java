@@ -3,8 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package Dao;
+package DaoIntegration;
 
+import Dao.*;
 import Dao.UserDao;
 import Dto.User;
 import SqlConnection.SqlConnection;
@@ -404,8 +405,8 @@ public class UserDaoTest {
 
         // Fill mock objects with appropriatel dummy data
         when(sql.getConn()).thenReturn(conn);
-        when(conn.prepareStatement("UPDATE users SET user_fullname=?, user_type=?,question=?,answer_hash=?, has_disabled_badge=? WHERE email = ?")).thenReturn(ps);
-        when(sql.getPs()).thenReturn(ps, ps, ps, ps, ps, ps, ps);
+        when(conn.prepareStatement("UPDATE users SET user_fullname=?,question=?,answer_hash=?, has_disabled_badge=? WHERE email = ?")).thenReturn(ps);
+        when(sql.getPs()).thenReturn(ps, ps, ps, ps, ps, ps);
 
         // Want 3 results in the resultset, so need true to be returned 3 times
         when(rs.next()).thenReturn(true, true);
@@ -734,7 +735,7 @@ public class UserDaoTest {
      * Test of AdminDeletesYser method, of class UserDao.
      */
     @Test
-    public void testAdminDeletesUser() throws SQLException {
+    public void testAdminDeletesYser() throws SQLException {
         User u1 = new User(1, "Testing User1", "testinguser1@gmail.com", "$2a$12$Fodl2oDf233P40qSfkbVLOmX8R9a6kzuugosLS685hiVZr1qp7KWS", "user", "what is your mother's maiden name", "$2a$12$8XW5CMg.1ssMt9dvm5yMdeGjCTP51HfwFB8O5WDtNeFnNyxJmSBY6", false);
         //User u2 = new User(2, "Testing User2", "testinguser2@gmail.com", "$2a$12$jgxPw.sQUTLOG2Yb1xCeFOVHgD5bbH8bkvzNufPIJ9xRnKOghpw9W", "user", "what is your mother's maiden name", "$2a$12$nXti9bKgnGXGHg5.TGTbEOUmYH2lqdduy0RvMIorAgihWVpaEwKKC", true);
         //User u3 = new User(3, "Testing User3", "testinguser3@gmail.com", "$2a$12$b3uCgzPSHx94wQunCwzPiOMyCbgGp1qE6UEhUgtqNMXZL28tk.zOq", "user", "what is your mother's maiden name", "$2a$12$omWIaLeVXOwpGFveppMrluN9EsvXR1ufV4YheHYWXtftgn0HZ67oG", false);
@@ -776,7 +777,7 @@ public class UserDaoTest {
     }
 
     @Test
-    public void testAdminDeletesUser_fail() throws SQLException {
+    public void testAdminDeletesYser_fail() throws SQLException {
         User u1 = new User(1, "Testing User1", "testinguser1@gmail.com", "$2a$12$Fodl2oDf233P40qSfkbVLOmX8R9a6kzuugosLS685hiVZr1qp7KWS", "user", "what is your mother's maiden name", "$2a$12$8XW5CMg.1ssMt9dvm5yMdeGjCTP51HfwFB8O5WDtNeFnNyxJmSBY6", false);
         //User u2 = new User(2, "Testing User2", "testinguser2@gmail.com", "$2a$12$jgxPw.sQUTLOG2Yb1xCeFOVHgD5bbH8bkvzNufPIJ9xRnKOghpw9W", "user", "what is your mother's maiden name", "$2a$12$nXti9bKgnGXGHg5.TGTbEOUmYH2lqdduy0RvMIorAgihWVpaEwKKC", true);
         //User u3 = new User(3, "Testing User3", "testinguser3@gmail.com", "$2a$12$b3uCgzPSHx94wQunCwzPiOMyCbgGp1qE6UEhUgtqNMXZL28tk.zOq", "user", "what is your mother's maiden name", "$2a$12$omWIaLeVXOwpGFveppMrluN9EsvXR1ufV4YheHYWXtftgn0HZ67oG", false);

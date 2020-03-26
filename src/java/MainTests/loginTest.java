@@ -12,7 +12,7 @@ import REST.LoginResourse;
 public class loginTest {
     public static LoginResourse lr = new LoginResourse();
     public static void main(String[] args) {
-        System.out.println(lr.Login("{\"email\":\"michael2@gmail.com\",\"hash\":\"Michael1\"}"));
+        System.out.println(lr.login("{\"email\":\"michael2@gmail.com\",\"hash\":\"Michael1\"}"));
         //{"email":"michael@gmail.com","hash":"Michael1"}
     }
 }

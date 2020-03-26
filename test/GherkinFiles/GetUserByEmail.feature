@@ -1,9 +1,6 @@
-#----------------------------------
-# Example of Cucumber .feature file
-#----------------------------------
-    
+
 @RunWith 
-Feature: Fight or flight
+Feature: A registered user can view their account details
 
    # A very simple scenario
    Scenario: GetUserByEmail

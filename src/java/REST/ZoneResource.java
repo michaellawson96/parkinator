@@ -126,7 +126,7 @@ public class ZoneResource {
         Object obj = convertJsonStringToZone(content);
         if (obj instanceof Zone) {
             Zone zone = (Zone) obj;
-            return ldao.Addzone(zone);
+            return ldao.addzone(zone);
         } else {
             return (String) obj;
         }

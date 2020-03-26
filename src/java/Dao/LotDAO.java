@@ -62,7 +62,7 @@ public class LotDAO implements LotDaoInterface {
     }
 
     @Override
-    public Object selectAllBookigns() {
+    public Object selectAllBookings() {
         try {
             sql.setPs(sql.getConn().prepareStatement("select * from parked_cars"));
             ResultSet rst;
@@ -86,7 +86,7 @@ public class LotDAO implements LotDaoInterface {
     }
 
     @Override
-    public Object selectAllBookignsByUserId(User u) {
+    public Object selectAllBookingsByUserId(User u) {
         try {
             sql.setPs(sql.getConn().prepareStatement("select * from parked_cars WHERE user_id = ?"));
             sql.getPs().setInt(1, u.getUserNo());
@@ -112,6 +112,7 @@ public class LotDAO implements LotDaoInterface {
     }
 
     @Override
+    //missing mocking
     public Object selectAllZoneByLotId(Lot l) {
         try {
             sql.setPs(sql.getConn().prepareStatement("select * from parking_zones WHERE lot_id = ?"));
@@ -163,7 +164,7 @@ public class LotDAO implements LotDaoInterface {
     }
 
     @Override
-    public String AddLot(Lot lot) {
+    public String addLot(Lot lot) {
         try {
 
             if (CheckIfLotExist(lot) instanceof Boolean) {
@@ -193,7 +194,7 @@ public class LotDAO implements LotDaoInterface {
     }
 
     @Override
-    public String RemoveLot(Lot lot) {
+    public String removeLot(Lot lot) {
         try {
 
             sql.setPs(sql.getConn().prepareStatement("DELETE FROM parking_lots WHERE lot_id = ?"));
@@ -215,7 +216,7 @@ public class LotDAO implements LotDaoInterface {
     }
 
     @Override
-    public String Addzone(Zone zone) {
+    public String addzone(Zone zone) {
         try {
             if (CheckIfzoneExist(zone) instanceof Boolean) {
                 if ((boolean) CheckIfzoneExist(zone) == false) {
@@ -253,7 +254,7 @@ public class LotDAO implements LotDaoInterface {
     }
 
     @Override
-    public String AddBooking(ParkedCars pc) {
+    public String addBooking(ParkedCars pc) {
         try {
             if (CheckIfBookingExistUnderThatZone(pc) instanceof Boolean && getBookingDate(pc) instanceof Boolean) {
                 if ((boolean) CheckIfBookingExistUnderThatZone(pc) == false || (boolean) getBookingDate(pc) == false) {
@@ -313,6 +314,7 @@ public class LotDAO implements LotDaoInterface {
 
     }
 
+    //missing mocking
     public Object CheckIfLotExist(Lot lot) {
         try {
             sql.setPs(sql.getConn().prepareStatement("select * from parking_lots WHERE parking_name = ?"));
@@ -339,6 +341,7 @@ public class LotDAO implements LotDaoInterface {
         }
     }
 
+    //missing mocking
     public Object CheckIfzoneExist(Zone zone) {
         try {
             sql.setPs(sql.getConn().prepareStatement("select * from parking_zones WHERE zone_name = ?"));
@@ -365,6 +368,7 @@ public class LotDAO implements LotDaoInterface {
         }
     }
 
+    //missing mocking
     public Object CheckIfBookingExistUnderThatZone(ParkedCars pc) {
         try {
             sql.setPs(sql.getConn().prepareStatement("select * from parked_cars WHERE zone_id = ?"));
@@ -391,6 +395,7 @@ public class LotDAO implements LotDaoInterface {
         }
     }
 
+    //missing mocking
     public Object getBookingDate(ParkedCars pc) {
         try {
             sql.setPs(sql.getConn().prepareStatement("select * from parked_cars WHERE book_from = ?"));
@@ -405,6 +410,56 @@ public class LotDAO implements LotDaoInterface {
             }
             System.out.println("date doesn't Exist");
             return false;
+
+        } catch (SQLException se) {
+            System.out.println("SQL Exception occurred: " + se.getMessage());
+            se.printStackTrace();
+            return hsb.SQlError();
+        } catch (Exception e) {
+            System.out.println("Exception occurred: " + e.getMessage());
+            e.printStackTrace();
+            return hsb.ExceptionError();
+        }
+    }
+
+    //missing mocking 
+    @Override
+    public String removeBooking(ParkedCars pc) {
+        try {
+
+            sql.setPs(sql.getConn().prepareStatement("DELETE FROM parked_cars WHERE car_id = ? AND user_id = ? AND zone_id = ?"));
+            sql.getPs().setInt(1, pc.getCar_id());
+            sql.getPs().setInt(2, pc.getUser_id());
+            sql.getPs().setInt(3, pc.getZone_id());
+
+            sql.getPs().executeUpdate();
+
+            return hsb.CreateMessage(1, "Booking Deleted Successfully");
+
+        } catch (SQLException se) {
+            System.out.println("SQL Exception occurred: " + se.getMessage());
+            se.printStackTrace();
+            return hsb.SQlError();
+        } catch (Exception e) {
+            System.out.println("Exception occurred: " + e.getMessage());
+            e.printStackTrace();
+            return hsb.ExceptionError();
+        }
+    }
+
+    //missing mocking 
+    @Override
+    public String updateBooking(ParkedCars pc) {
+        try {
+
+            sql.setPs(sql.getConn().prepareStatement("UPDATE parked_cars SET car_id = ? WHERE user_id = ? AND zone_id = ?"));
+            sql.getPs().setInt(1, pc.getCar_id());
+            sql.getPs().setInt(2, pc.getUser_id());
+            sql.getPs().setInt(3, pc.getZone_id());
+
+            sql.getPs().executeUpdate();
+
+            return hsb.CreateMessage(1, "Booking Updated Successfully");
 
         } catch (SQLException se) {
             System.out.println("SQL Exception occurred: " + se.getMessage());

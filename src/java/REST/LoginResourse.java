@@ -57,10 +57,10 @@ public class LoginResourse {
     @POST
     @Consumes(MediaType.TEXT_PLAIN)
     @Produces(MediaType.TEXT_PLAIN)
-    public String Login(String content) {
+    public String login(String content) {
         UserDAOInterface uDAO = new UserDao();
         User u = convertJsonStringToUser(content);
-        boolean existenceCheck = uDAO.Login(u.getEmail(), u.getUserHash());
+        boolean existenceCheck = uDAO.login(u.getEmail(), u.getUserHash());
         if (existenceCheck == true) {//this means the customer has been successfully obtained
             return "true";
         } else {

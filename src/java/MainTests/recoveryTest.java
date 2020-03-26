@@ -25,8 +25,8 @@ public class recoveryTest {
         RecoveryResource rr = new RecoveryResource();
         RecoveryPasswordResource rpr = new RecoveryPasswordResource();
        String c = sc.next();
-//        System.out.println(rr.CheckEmail(c));   
-        System.out.println(rpr.CheckQeustionAnswer(c));
+//        System.out.println(rr.checkEmail(c));   
+        System.out.println(rpr.checkQuestionAnswer(c));
        // {"email":"lukas@gmail.com","answer_hash":"asd"}
     }
 }

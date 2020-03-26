@@ -61,17 +61,17 @@ public class RecoveryPasswordResource {
     @POST
     @Consumes(MediaType.TEXT_PLAIN)
     @Produces(MediaType.TEXT_PLAIN)
-    public boolean CheckQeustionAnswer(String content) {
+    public boolean checkQuestionAnswer(String content) {
         UserDao udao = new UserDao();
         User validation = convertJsonStringToUser(content);
         
-        return udao.CheckUserRecoveryAnswer(validation);
+        return udao.checkUserRecoveryAnswer(validation);
         
     }
     @PUT
     @Consumes(MediaType.TEXT_PLAIN)
     @Produces(MediaType.TEXT_PLAIN)
-    public boolean UpdatePassword(String content) {
+    public boolean updatePassword(String content) {
         UserDao udao = new UserDao();
         User validation = convertJsonStringToUser(content);    
         return udao.updateUserPassword(validation);

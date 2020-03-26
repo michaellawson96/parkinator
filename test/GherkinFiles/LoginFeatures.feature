@@ -1,6 +1,6 @@
 
 @RunWith 
-Feature: TestingLogin
+Feature: A registered user can can log into an account
 
    Scenario: Loging In Passing valid information
       Given on "http://localhost:8080/parkinator/test-resbeans.html" page

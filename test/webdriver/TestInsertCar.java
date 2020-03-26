@@ -6,6 +6,7 @@
 package webdriver;
 
 
+import java.util.ResourceBundle;
 import static org.junit.Assert.*;
 import org.junit.Test;
 import org.openqa.selenium.By;
@@ -17,15 +18,18 @@ import org.openqa.selenium.support.ui.Select;
  *
  * @author USER
  */
-public class TestRegisterUsersCar {
+public class TestInsertCar {
+    ResourceBundle config = ResourceBundle.getBundle("webdriver.WDConfig");
+        String driverUrl = config.getString("driverUrl");
+        String testServicesUrl = config.getString("testServicesUrl");
+    
     @Test
-    public void RegisterUsersCar_Pass() {
+    public void InsertCar_CorrectDetails_Pass() {
         
-        System.setProperty("webdriver.chrome.driver", "C:\\Users\\Lukas\\Desktop\\chromedriver_win32 (1)\\chromedriver.exe");
+        System.setProperty("webdriver.chrome.driver", driverUrl);
         WebDriver driver = new ChromeDriver();
 
-        String baseUrl = "http://localhost:41919/parkinator/test-resbeans.html";
-        driver.get(baseUrl);
+        driver.get(testServicesUrl);
 
         driver.findElement(By.linkText("car")).click();
 
@@ -33,11 +37,11 @@ public class TestRegisterUsersCar {
         
         Select dropDown = new Select(dropDownElement);
         
-        dropDown.selectByValue("POST(text/plain)[1]");
+        dropDown.selectByVisibleText("POST(text/plain)");
         
         driver.findElement(By.id("blobParam")).clear();
 
-        driver.findElement(By.id("blobParam")).sendKeys("{\"car_model\":\"dfgdfg\",\"user_id\":22,\"car_reg\":\"dfgd\",\"car_id\":6,\"car_colour\":\"dfdf\",\"car_make\":\"dfgdfg\"}");
+        driver.findElement(By.id("blobParam")).sendKeys("{\"car_model\":\"dfgdfg\",\"user_id\":14,\"car_reg\":\"dfgd\",\"car_id\":6,\"car_colour\":\"dfdf\",\"car_make\":\"dfgdfg\"}");
         
         driver.findElement(By.linkText("Test")).click();
         
@@ -52,13 +56,12 @@ public class TestRegisterUsersCar {
     }
     
     @Test
-    public void RegisterUsersCar_Fail() {
+    public void InsertCar_userDoesNotExist_RegisterFails() {
         
-        System.setProperty("webdriver.chrome.driver", "C:\\Users\\Lukas\\Desktop\\chromedriver_win32 (1)\\chromedriver.exe");
+        System.setProperty("webdriver.chrome.driver", driverUrl);
         WebDriver driver = new ChromeDriver();
 
-        String baseUrl = "http://localhost:41919/parkinator/test-resbeans.html";
-        driver.get(baseUrl);
+        driver.get(testServicesUrl);
 
         driver.findElement(By.linkText("car")).click();
 
@@ -66,7 +69,7 @@ public class TestRegisterUsersCar {
         
         Select dropDown = new Select(dropDownElement);
         
-        dropDown.selectByValue("POST(text/plain)[1]");
+        dropDown.selectByVisibleText("POST(text/plain)");
         
         driver.findElement(By.id("blobParam")).clear();
 
