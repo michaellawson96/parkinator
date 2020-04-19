@@ -6,6 +6,7 @@
 package Dao;
 
 import Dto.User;
+import Dto.UserImage;
 import SaltingString.BCrypt;
 import SqlConnection.SqlConnection;
 import java.sql.Connection;
@@ -22,6 +23,7 @@ import java.util.ArrayList;
 public class UserDao implements UserDAOInterface {
 
     private SqlConnection sql = null;
+    private HttpStatusBase hsb = new HttpStatusBase();
 
     public UserDao(SqlConnection sql) {
         this.sql = sql;
@@ -177,13 +179,13 @@ public class UserDao implements UserDAOInterface {
                 sql.setPs(sql.getConn().prepareStatement("UPDATE users SET user_fullname=?, user_type=?,question=?,answer_hash=?, has_disabled_badge=? WHERE email = ?"));
 
                 sql.getPs().setString(1, user.getUserFullname());
-                
+
                 sql.getPs().setString(2, user.getUserType());
-                
+
                 sql.getPs().setString(3, user.getQuestion());
                 sql.getPs().setString(4, user.getAnswer_hash());
                 sql.getPs().setBoolean(5, user.getHasDisabledBadge());
-                
+
                 sql.getPs().setString(6, user.getEmail());
 
                 sql.getPs().executeUpdate();
@@ -369,6 +371,99 @@ public class UserDao implements UserDAOInterface {
             } else {
                 return false;
             }
+
+        } catch (SQLException se) {
+            System.out.println("SQL Exception occurred: " + se.getMessage());
+            se.printStackTrace();
+            return false;
+        } catch (Exception e) {
+            System.out.println("Exception occurred: " + e.getMessage());
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    @Override
+    public Object imageUpload(UserImage ui) {
+
+        try {
+            if(checkUserExistsByEmailImages(ui.getEmail()) == false){
+            sql.setPs(sql.getConn().prepareStatement("INSERT INTO userimages(Image,ImageName) VALUES (?,?)"));
+            sql.getPs().setString(1, ui.getImage());
+            sql.getPs().setString(2, ui.getEmail());
+
+            sql.getPs().executeUpdate();
+
+            return hsb.CreateMessage(1, "Image has Been Uploaded");
+            }else{
+                sql.setPs(sql.getConn().prepareStatement("UPDATE userimages SET Image=? WHERE ImageName = ?"));
+
+                sql.getPs().setString(1, ui.getImage());
+                sql.getPs().setString(2, ui.getEmail());
+
+                sql.getPs().executeUpdate();    
+                return hsb.CreateMessage(1, "Image has Been Uploaded");
+            }
+
+        } catch (SQLException se) {
+            System.out.println("SQL Exception occurred: " + se.getMessage());
+            se.printStackTrace();
+            return hsb.SQlError();
+        } catch (Exception e) {
+            System.out.println("Exception occurred: " + e.getMessage());
+            e.printStackTrace();
+            return hsb.ExceptionError();
+        }
+        
+
+    }
+    
+    @Override
+    public Object getImage(UserImage ui) {
+
+        try {
+
+            sql.setPs(sql.getConn().prepareStatement("SELECT Image , ImageName FROM userimages WHERE ImageName=?"));
+            sql.getPs().setString(1, ui.getEmail());
+
+            ResultSet rst;
+            // Execute the query
+            rst = sql.getPs().executeQuery();
+            UserImage userImage = null;
+            if (rst.next()) {
+                userImage = new UserImage( rst.getString("ImageName"),rst.getString("Image"));
+            }else{
+                return hsb.CreateMessage(-1, "No Image");
+            }
+
+            return userImage;
+
+        } catch (SQLException se) {
+            System.out.println("SQL Exception occurred: " + se.getMessage());
+            se.printStackTrace();
+            return hsb.SQlError();
+        } catch (Exception e) {
+            System.out.println("Exception occurred: " + e.getMessage());
+            e.printStackTrace();
+            return hsb.ExceptionError();
+        }
+
+    }    
+    
+        public boolean checkUserExistsByEmailImages(String email) {
+        try {
+            sql.setPs(sql.getConn().prepareStatement("select * from userimages WHERE imageName=?"));
+            sql.getPs().setString(1, email);
+
+            ResultSet rst;
+            rst = sql.getPs().executeQuery();
+
+            if (rst.next()) {
+                System.out.println("user exi");
+                return true;
+            }
+            System.out.println("user doesn't exist yet");
+            return false;
 
         } catch (SQLException se) {
             System.out.println("SQL Exception occurred: " + se.getMessage());

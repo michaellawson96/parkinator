@@ -5,9 +5,11 @@
  */
 package REST;
 
+import Dao.HttpStatusBase;
 import Dao.UserDAOInterface;
 import Dao.UserDao;
 import Dto.User;
+import Dto.UserImage;
 import java.util.ArrayList;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
@@ -26,17 +28,19 @@ import org.json.simple.parser.ParseException;
 @Path("user")
 public class UserResource {
 
+    UserDAOInterface uDAO = new UserDao();
+    HttpStatusBase hsb = new HttpStatusBase();
+
     @Context
     private UriInfo context;
 
     /**
-     * --------------------------------------------
-     * BASIC CRUD METHODS FOR USE BY ADMINISTRATORS
-     * --------------------------------------------
+     * -------------------------------------------- BASIC CRUD METHODS FOR USE
+     * BY ADMINISTRATORS --------------------------------------------
      */
-    
     /**
      * USER CREATE METHOD
+     *
      * @return String "true" || String "false"
      */
     @POST
@@ -50,11 +54,12 @@ public class UserResource {
             return "true";
         } else {
             return "false";
-        }        
+        }
     }
-    
+
     /**
      * USER READ METHOD
+     *
      * @return a JSON array of user JSON strings || a string "No results found"
      */
     @GET
@@ -77,9 +82,10 @@ public class UserResource {
             return array.toString();
         }
     }
-    
+
     /**
      * USER UPDATE METHOD
+     *
      * @param content JSON String of User
      * @return boolean
      */
@@ -91,16 +97,11 @@ public class UserResource {
         User u = convertJsonStringToUser(content);
         return uDAO.updateUser(u);
     }
-    
+
     /**
-     * --------------------------------------------
-     * -----------BASIC CRUD METHODS END-----------
-     * --------------------------------------------
+     * -------------------------------------------- -----------BASIC CRUD
+     * METHODS END----------- --------------------------------------------
      */
-    
-    
-    
-    
     private JSONObject convertUserToJson(User user) {
         JSONObject jObj = new JSONObject();
         jObj.put("user_id", user.getUserNo());
@@ -126,7 +127,7 @@ public class UserResource {
             // create a new Customer and use get method to retrieve values for a key
             u = new User();
             // note that JSONObject has all numbers as longs, and needs to be converted to an int if required.
-            
+
             u.setUserFullname((String) obj.get("user_fullname"));
             u.setEmail((String) obj.get("email"));
             u.setUserHash((String) obj.get("hash"));
@@ -140,5 +141,70 @@ public class UserResource {
             u = null;
         }
         return u;
-    } 
+    }
+
+    private Object convertJsonStringToImage(String jsonString) {
+        UserImage ui = null;
+        try {
+            // create a parser to convert a string to a json object
+            JSONParser parser = new JSONParser();
+            // parser returns an object. You should know or check what to convert to (an JSONObject or JSONArray)
+            JSONObject obj = (JSONObject) parser.parse(jsonString);
+
+            // create a new Customer and use get method to retrieve values for a key
+            ui = new UserImage();
+            // note that JSONObject has all numbers as longs, and needs to be converted to an int if required.
+
+            ui.setEmail((String) obj.get("imageName"));
+            ui.setImage((String) obj.get("image"));
+
+        } // more detailed reporting can be done by catching specific exceptions, such as ParseException
+        catch (ParseException exp) {
+            System.out.println(exp);
+            return hsb.ParseError();
+        }
+        return ui;
+    }
+
+    private JSONObject convertImageToJson(UserImage ui) {
+        JSONObject jObj = new JSONObject();
+        jObj.put("imageName", ui.getEmail());
+        jObj.put("image", ui.getImage());
+
+        return jObj;
+    }
+
+    @POST
+    @Path("addImage/")
+    @Consumes(MediaType.TEXT_PLAIN)
+    @Produces(MediaType.TEXT_PLAIN)
+    public Object addImage(String content) {
+        Object obj = convertJsonStringToImage(content);
+        if (obj instanceof UserImage) {
+            UserImage ui = (UserImage) obj;
+            return uDAO.imageUpload(ui);
+        } else {
+            return (String) obj;
+        }
+
+    }
+
+    @POST
+    @Path("GetImage/")
+    @Consumes(MediaType.TEXT_PLAIN)
+    @Produces(MediaType.TEXT_PLAIN)
+    public Object getImage(String content) {
+        Object obj = convertJsonStringToImage(content);
+        if (obj instanceof UserImage) {
+            UserImage ui = (UserImage) obj;
+            if (uDAO.getImage(ui) instanceof UserImage) {
+                return hsb.CreateMessage(1, convertImageToJson((UserImage) uDAO.getImage(ui)).toString());
+            } else {
+                return (String) uDAO.getImage(ui);
+            }
+        } else {
+            return (String) obj;
+        }
+
+    }
 }

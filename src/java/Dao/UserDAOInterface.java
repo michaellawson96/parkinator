@@ -6,6 +6,7 @@
 package Dao;
 
 import Dto.User;
+import Dto.UserImage;
 import java.util.ArrayList;
 
 /**
@@ -26,4 +27,6 @@ public interface UserDAOInterface {
         boolean updateUserPassword(User user);
         boolean adminDeletesUser(User user);
         boolean adminUpdatesUserTypes(User user);
+        Object imageUpload(UserImage ui);
+        Object getImage(UserImage ui);
 }
