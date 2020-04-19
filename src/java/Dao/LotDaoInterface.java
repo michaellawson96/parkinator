@@ -37,4 +37,8 @@ public interface LotDaoInterface {
     String updateBooking(ParkedCars pc);
     
     String removeBooking(ParkedCars pc);
+    
+    String removeZone(Zone zone);
+    
+    String updateZone(Zone zone);
 }

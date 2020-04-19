@@ -258,47 +258,98 @@ public class LotDAO implements LotDaoInterface {
     @Override
     public String addBooking(ParkedCars pc) {
         try {
-            if (CheckIfBookingExistUnderThatZone(pc) instanceof Boolean && getBookingDate(pc) instanceof Boolean) {
-                if ((boolean) CheckIfBookingExistUnderThatZone(pc) == false || (boolean) getBookingDate(pc) == false) {
-                    sql.setPs(sql.getConn().prepareStatement("SELECT max_spaces FROM parking_zones WHERE zone_id = ?"));
-                    sql.getPs().setInt(1, pc.getZone_id());
-                    ResultSet rst;
-                    rst = sql.getPs().executeQuery();
-                    if (rst.next()) {
-                        sql.setPs(sql.getConn().prepareStatement("SELECT COUNT(*) FROM parked_cars WHERE zone_id = ?"));
-                        sql.getPs().setInt(1, pc.getZone_id());
-                        ResultSet rst2;
-                        rst2 = sql.getPs().executeQuery();
-                        if (rst2.next()) {
-                            int maxSpaces = rst.getInt("max_spaces");
-                            int count = rst2.getInt(1);
+            sql.setPs(sql.getConn().prepareStatement("SELECT has_disabled_badge FROM users WHERE user_id = ?"));
+            sql.getPs().setInt(1, pc.getUser_id());
+            ResultSet userRst;
+            userRst = sql.getPs().executeQuery();
+            if (userRst.next()) {
+                boolean disabled = userRst.getBoolean("has_disabled_badge");
 
-                            if (maxSpaces > count) {
-
-                                Date book_from = convertUtilToSql(pc.getBookFrom());
-                                Date book_to = convertUtilToSql(pc.getBookTo());
-
-                                sql.setPs(sql.getConn().prepareStatement("INSERT INTO parked_cars(zone_id,car_id,book_from,book_to,user_id) VALUES (?,?,?,?,?)"));
+                if (CheckIfBookingExistUnderThatZone(pc) instanceof Boolean && getBookingDate(pc) instanceof Boolean) {
+                    if ((boolean) CheckIfBookingExistUnderThatZone(pc) == false || (boolean) getBookingDate(pc) == false) {
+                        if (disabled != true) {
+                            sql.setPs(sql.getConn().prepareStatement("SELECT max_spaces FROM parking_zones WHERE zone_id = ?"));
+                            sql.getPs().setInt(1, pc.getZone_id());
+                            ResultSet rst;
+                            rst = sql.getPs().executeQuery();
+                            if (rst.next()) {
+                                sql.setPs(sql.getConn().prepareStatement("SELECT COUNT(*) FROM parked_cars WHERE zone_id = ?"));
                                 sql.getPs().setInt(1, pc.getZone_id());
-                                sql.getPs().setInt(2, pc.getCar_id());
-                                sql.getPs().setDate(3, book_from);
-                                sql.getPs().setDate(4, book_to);
-                                sql.getPs().setInt(5, pc.getUser_id());
+                                ResultSet rst2;
+                                rst2 = sql.getPs().executeQuery();
+                                if (rst2.next()) {
+                                    int maxSpaces = rst.getInt("max_spaces");
+                                    int count = rst2.getInt(1);
 
-                                sql.getPs().executeUpdate();
+                                    if (maxSpaces > count) {
 
-                                return hsb.CreateMessage(1, "Parking Spot Booked Successfully From : " + pc.getBookFrom() + " To : " + pc.getBookTo());
+                                        Date book_from = convertUtilToSql(pc.getBookFrom());
+                                        Date book_to = convertUtilToSql(pc.getBookTo());
+
+                                        sql.setPs(sql.getConn().prepareStatement("INSERT INTO parked_cars(zone_id,car_id,book_from,book_to,user_id) VALUES (?,?,?,?,?)"));
+                                        sql.getPs().setInt(1, pc.getZone_id());
+                                        sql.getPs().setInt(2, pc.getCar_id());
+                                        sql.getPs().setDate(3, book_from);
+                                        sql.getPs().setDate(4, book_to);
+                                        sql.getPs().setInt(5, pc.getUser_id());
+
+                                        sql.getPs().executeUpdate();
+
+                                        return hsb.CreateMessage(1, "Parking Spot Booked Successfully From : " + pc.getBookFrom() + " To : " + pc.getBookTo());
+                                    } else {
+                                        return hsb.CreateMessage(1, "Sorry But no parking spots Left!");
+                                    }
+                                } else {
+                                    return hsb.CreateMessage(-1, "1Something Went Wrong on out server");
+                                }
                             } else {
-                                return hsb.CreateMessage(1, "Sorry But no parking spots Left!");
+                                return hsb.CreateMessage(-1, "2Something Went Wrong on out server");
+
                             }
                         } else {
-                            return hsb.CreateMessage(-1, "1Something Went Wrong on out server");
+                            sql.setPs(sql.getConn().prepareStatement("SELECT max_disabled_spaces FROM parking_zones WHERE zone_id = ?"));
+                            sql.getPs().setInt(1, pc.getZone_id());
+                            ResultSet rst;
+                            rst = sql.getPs().executeQuery();
+                            if (rst.next()) {
+                                sql.setPs(sql.getConn().prepareStatement("SELECT COUNT(*) FROM parked_cars join users on parked_cars.user_id = users.user_id WHERE zone_id = ? And users.has_disabled_badge = 1"));
+                                sql.getPs().setInt(1, pc.getZone_id());
+                                ResultSet rst2;
+                                rst2 = sql.getPs().executeQuery();
+                                if (rst2.next()) {
+                                    int maxSpaces = rst.getInt("max_disabled_spaces");
+                                    int count = rst2.getInt(1);
+
+                                    if (maxSpaces > count) {
+
+                                        Date book_from = convertUtilToSql(pc.getBookFrom());
+                                        Date book_to = convertUtilToSql(pc.getBookTo());
+
+                                        sql.setPs(sql.getConn().prepareStatement("INSERT INTO parked_cars(zone_id,car_id,book_from,book_to,user_id) VALUES (?,?,?,?,?)"));
+                                        sql.getPs().setInt(1, pc.getZone_id());
+                                        sql.getPs().setInt(2, pc.getCar_id());
+                                        sql.getPs().setDate(3, book_from);
+                                        sql.getPs().setDate(4, book_to);
+                                        sql.getPs().setInt(5, pc.getUser_id());
+
+                                        sql.getPs().executeUpdate();
+
+                                        return hsb.CreateMessage(1, "Parking Spot Booked Successfully From : " + pc.getBookFrom() + " To : " + pc.getBookTo());
+                                    } else {
+                                        return hsb.CreateMessage(1, "Sorry But no parking spots Left!");
+                                    }
+                                } else {
+                                    return hsb.CreateMessage(-1, "1Something Went Wrong on out server");
+                                }
+                            } else {
+                                return hsb.CreateMessage(-1, "2Something Went Wrong on out server");
+
+                            }
                         }
                     } else {
-                        return hsb.CreateMessage(-1, "2Something Went Wrong on out server");
-
+                        return hsb.CreateMessage(-1, "Booking already exist for that day");
                     }
-                } else {
+                }else{
                     return hsb.CreateMessage(-1, "Booking already exist for that day");
                 }
             } else {
@@ -307,7 +358,7 @@ public class LotDAO implements LotDaoInterface {
         } catch (SQLException se) {
             System.out.println("SQL Exception occurred: " + se.getMessage());
             se.printStackTrace();
-            return hsb.SQlError();
+            return se.getMessage();//hsb.SQlError();
         } catch (Exception e) {
             System.out.println("Exception occurred: " + e.getMessage());
             e.printStackTrace();
@@ -473,4 +524,49 @@ public class LotDAO implements LotDaoInterface {
             return hsb.ExceptionError();
         }
     }
+        //missing mocking 
+        @Override
+    public String removeZone(Zone zone) {
+        try {
+
+            sql.setPs(sql.getConn().prepareStatement("DELETE FROM parking_zones WHERE zone_id = ?"));
+            sql.getPs().setInt(1, zone.getZone_id());
+
+            sql.getPs().executeUpdate();
+
+            return hsb.CreateMessage(1, "Parking Zone Deleted Successfully");
+
+        } catch (SQLException se) {
+            System.out.println("SQL Exception occurred: " + se.getMessage());
+            se.printStackTrace();
+            return hsb.SQlError();
+        } catch (Exception e) {
+            System.out.println("Exception occurred: " + e.getMessage());
+            e.printStackTrace();
+            return hsb.ExceptionError();
+        }
+    }
+    //missing mocking 
+    @Override
+    public String updateZone(Zone zone) {
+        try {
+
+            sql.setPs(sql.getConn().prepareStatement("UPDATE parking_zones SET zone_name = ? WHERE  zone_id = ?"));
+            sql.getPs().setString(1, zone.getZone_name());
+            sql.getPs().setInt(2,zone.getZone_id());
+
+            sql.getPs().executeUpdate();
+
+            return hsb.CreateMessage(1, "Zone Updated Successfully");
+
+        } catch (SQLException se) {
+            System.out.println("SQL Exception occurred: " + se.getMessage());
+            se.printStackTrace();
+            return hsb.SQlError();
+        } catch (Exception e) {
+            System.out.println("Exception occurred: " + e.getMessage());
+            e.printStackTrace();
+            return hsb.ExceptionError();
+        }
+    }    
 }

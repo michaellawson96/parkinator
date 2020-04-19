@@ -17,7 +17,7 @@ public class registerTest {
         UserResource ur = new UserResource();
         
         
-        ur.userCreate("{\"user_id\":null,\"user_fullname\":\"Testing User5\",\"email\":\"testinguser5@gmail.com\",\"hash\":\"Testinguser5\",\"user_type\":\"Standard\",\"question\":\"What is your mothers maiden name?\",\"answer_hash\":\"Testinguser5\",\"has_disabled_badge\":false}");
+        ur.userCreate("{\"user_id\":null,\"user_fullname\":\"Mark Manson\",\"email\":\"mark1@gmail.com\",\"hash\":\"Mark123\",\"user_type\":\"regular\",\"question\":\"What is your mothers maiden name?\",\"answer_hash\":\"asd\",\"has_disabled_badge\":true}");
         //{"user_fullname":"asdasd","email":"asdsad@gmail.com","password":"Lukiukas","user_type":"regular","pass_question":"asdasd","pass_answer":"asdasd"}
     }
     

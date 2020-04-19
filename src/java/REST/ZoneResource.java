@@ -18,6 +18,7 @@ import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.Produces;
 import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.core.MediaType;
 import org.json.simple.JSONArray;
@@ -32,7 +33,8 @@ import org.json.simple.parser.ParseException;
  */
 @Path("zone")
 public class ZoneResource {
- HttpStatusBase hsb = new HttpStatusBase();
+
+    HttpStatusBase hsb = new HttpStatusBase();
     LotDAO ldao = new LotDAO();
     @Context
     private UriInfo context;
@@ -40,7 +42,7 @@ public class ZoneResource {
     /**
      * Creates a new instance of ParkingZonesResource
      */
-   private Object convertJsonStringToLot(String jsonString)  {
+    private Object convertJsonStringToLot(String jsonString) {
         Lot l = null;
         try {
             // create a parser to convert a string to a json object
@@ -60,7 +62,8 @@ public class ZoneResource {
             return hsb.ParseError();
         }
         return l;
-    } 
+    }
+
     private Object convertJsonStringToZone(String jsonString) {
         Zone z = null;
         try {
@@ -72,22 +75,20 @@ public class ZoneResource {
             // create a new Customer and use get method to retrieve values for a key
             z = new Zone();
             // note that JSONObject has all numbers as longs, and needs to be converted to an int if required.
-            int zoneId =  ((Long)obj.get("zone_id")).intValue();
+            int zoneId = ((Long) obj.get("zone_id")).intValue();
             z.setZone_id(zoneId);
             z.setZone_name((String) obj.get("zone_name"));
-            int maxSpace =  ((Long)obj.get("max_spaces")).intValue();
+            int maxSpace = ((Long) obj.get("max_spaces")).intValue();
             z.setMax_spaces(maxSpace);
             z.setIs_vip((boolean) obj.get("is_vip"));
-            int lotId =  ((Long)obj.get("lot_id")).intValue();
-            z.setLot_id (lotId);
-            int maxDisableSpace =  ((Long)obj.get("max_disabled_spaces")).intValue();
+            int lotId = ((Long) obj.get("lot_id")).intValue();
+            z.setLot_id(lotId);
+            int maxDisableSpace = ((Long) obj.get("max_disabled_spaces")).intValue();
             z.setMax_disabled_spaces(maxDisableSpace);
-            double lng = ((Number)obj.get("lng")).doubleValue();
+            double lng = ((Number) obj.get("lng")).doubleValue();
             z.setLng(lng);
-            double lat = ((Number)obj.get("alt")).doubleValue();
-            z.setLat(lat);            
-            
-         
+            double lat = ((Number) obj.get("alt")).doubleValue();
+            z.setLat(lat);
 
         } // more detailed reporting can be done by catching specific exceptions, such as ParseException
         catch (ParseException exp) {
@@ -97,6 +98,7 @@ public class ZoneResource {
         }
         return z;
     }
+
     private JSONObject convertZoneToJson(Zone zone) {
         JSONObject jObj = new JSONObject();
         jObj.put("zone_id", zone.getZone_id());
@@ -106,15 +108,16 @@ public class ZoneResource {
         jObj.put("lot_id", zone.getLot_id());
         jObj.put("max_disabled_spaces", zone.getMax_disabled_spaces());
         jObj.put("lng", zone.getLng());
-        jObj.put("alt", zone.getLat());          
+        jObj.put("alt", zone.getLat());
         return jObj;
-    }    
-     @GET
+    }
+
+    @GET
     //@Path("getLots/")
     @Produces(MediaType.TEXT_PLAIN)
     @Consumes(MediaType.TEXT_PLAIN)
     public String getLots() {
-        ArrayList<Zone> zone = (ArrayList<Zone>)ldao.selectAllZones();
+        ArrayList<Zone> zone = (ArrayList<Zone>) ldao.selectAllZones();
         if (zone == null || zone.isEmpty()) {
             return hsb.CreateMessage(-1, "No Lots Found");
         } else {
@@ -124,7 +127,8 @@ public class ZoneResource {
             }
             return array.toString();
         }
-    }   
+    }
+
     @POST
     @Consumes(MediaType.TEXT_PLAIN)
     @Produces(MediaType.TEXT_PLAIN)
@@ -136,8 +140,9 @@ public class ZoneResource {
         } else {
             return (String) obj;
         }
-        
+
     }
+
     @POST
     @Consumes(MediaType.TEXT_PLAIN)
     @Produces(MediaType.TEXT_PLAIN)
@@ -145,7 +150,7 @@ public class ZoneResource {
     public Object getZoneByLotId(String content) {
         Object obj = convertJsonStringToLot(content);
         Lot l = (Lot) obj;
-        ArrayList<Zone> z = (ArrayList<Zone>)ldao.selectAllZoneByLotId(l);
+        ArrayList<Zone> z = (ArrayList<Zone>) ldao.selectAllZoneByLotId(l);
         if (z == null || z.isEmpty()) {
             return hsb.CreateMessage(-1, "No Zone Has Been Added");
         } else {
@@ -155,7 +160,37 @@ public class ZoneResource {
             }
             return array.toString();
         }
-        
-    }    
-    
+
+    }
+
+    @POST
+    @Path("removeZone/")
+    @Consumes(MediaType.TEXT_PLAIN)
+    @Produces(MediaType.TEXT_PLAIN)
+    public String removeZone(String content) {
+        Object obj = convertJsonStringToZone(content);
+        if (obj instanceof Zone) {
+            Zone z = (Zone) obj;
+            return ldao.removeZone(z);
+        } else {
+            return (String) obj;
+        }
+
+    }
+
+    @PUT
+    @Consumes(MediaType.TEXT_PLAIN)
+    @Produces(MediaType.TEXT_PLAIN)
+    public Object updateZone(String content) {
+
+
+        //this will take the action from the json string and determine which action should be taken
+       Object obj = convertJsonStringToZone(content);
+        if (obj instanceof Zone) {
+            Zone z = (Zone) obj;
+            return ldao.updateZone(z);
+        } else {
+            return (String) obj;
+        }
+    }
 }

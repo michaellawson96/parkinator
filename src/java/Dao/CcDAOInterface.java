@@ -1,6 +1,7 @@
 package Dao;
 
 import Dto.Cc;
+import Dto.ParkedCars;
 import java.util.ArrayList;
 
 /*
@@ -18,4 +19,6 @@ public interface CcDAOInterface {
         ArrayList<Cc> selectAllCcs();
         boolean deleteCc(int uid);
         boolean insertCc(String cc_name); 
+        Object getAllregPlatesUnderAZone(ParkedCars pc);
+        Object getAllregPlatesUnderAllZone();
 }

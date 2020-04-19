@@ -30,6 +30,10 @@ public class Car {
         this.carModel = carModel;
         this.userNo = userNo;
     }
+    public Car(int carNo, String carReg) {
+        this.carNo = carNo;
+        this.carReg = carReg;
+    }    
 
     public int getCarNo() {
         return carNo;
