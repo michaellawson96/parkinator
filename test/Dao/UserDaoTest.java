@@ -7,6 +7,7 @@ package Dao;
 
 import Dao.UserDao;
 import Dto.User;
+import Dto.UserImage;
 import SqlConnection.SqlConnection;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -18,6 +19,7 @@ import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import static org.junit.Assert.*;
+import org.junit.Test;
 import org.junit.Test;
 import static org.mockito.Mockito.*;
 
@@ -103,7 +105,7 @@ public class UserDaoTest {
     }
 
     /**
-     * Ignore of login method, of class UserDao.
+     * Test of login method, of class UserDao.
      */
     @Test
     public void testLogin() throws SQLException {
@@ -888,6 +890,182 @@ public class UserDaoTest {
 
         UserDao userDao = new UserDao(sql);
         boolean result = userDao.adminUpdatesUserTypes(u1);
+
+        assertEquals(expResult, result);
+    }
+
+    @Test
+    public void testImageUpload() throws SQLException {
+        UserImage uI1 = new UserImage("base64CodeNotUsedDueToLong", "testinguser1@gmail.com");
+
+        Object expResult = "{\"status_code\":1,\"message\":\"Image has Been Uploaded\"}";
+
+        // Create mock objects
+        SqlConnection sql = mock(SqlConnection.class);
+        Connection conn = mock(Connection.class);
+        PreparedStatement ps = mock(PreparedStatement.class);
+        ResultSet rs = mock(ResultSet.class);
+
+        //checking if the image already exists for this user
+        when(sql.getConn()).thenReturn(conn);
+        when(conn.prepareStatement("select * from userimages WHERE imageName=?")).thenReturn(ps);
+        when(sql.getPs()).thenReturn(ps, ps);
+        when(ps.executeQuery()).thenReturn(rs);
+
+        // Want 3 results in the resultset, so need true to be returned 3 times
+        when(rs.next()).thenReturn(false);
+
+        //Uploading picture
+        when(sql.getConn()).thenReturn(conn);
+        when(conn.prepareStatement("INSERT INTO userimages(Image,ImageName) VALUES (?,?)")).thenReturn(ps);
+        when(sql.getPs()).thenReturn(ps, ps, ps);
+
+        UserDao userDao = new UserDao(sql);
+        Object result = userDao.imageUpload(uI1);
+
+        assertEquals(expResult, result);
+    }
+
+    @Test
+    public void testImageUpload1_withAnExistingImage() throws SQLException {
+        UserImage uI1 = new UserImage("base64CodeNotUsedDueToLong", "testinguser1@gmail.com");
+
+        Object expResult = "{\"status_code\":1,\"message\":\"Image has Been Uploaded\"}";
+
+        // Create mock objects
+        SqlConnection sql = mock(SqlConnection.class);
+        Connection conn = mock(Connection.class);
+        PreparedStatement ps = mock(PreparedStatement.class);
+        ResultSet rs = mock(ResultSet.class);
+
+        //checking if the image already exists for this user
+        when(sql.getConn()).thenReturn(conn);
+        when(conn.prepareStatement("select * from userimages WHERE imageName=?")).thenReturn(ps);
+        when(sql.getPs()).thenReturn(ps, ps);
+        when(ps.executeQuery()).thenReturn(rs);
+
+        // Want 3 results in the resultset, so need true to be returned 3 times
+        when(rs.next()).thenReturn(true);
+        when(rs.getString("ImageName")).thenReturn(uI1.getEmail());
+        when(rs.getString("Image")).thenReturn(uI1.getImage());
+
+        //Uploading picture
+        when(sql.getConn()).thenReturn(conn);
+        when(conn.prepareStatement("INSERT INTO userimages(Image,ImageName) VALUES (?,?)")).thenReturn(ps);
+        when(sql.getPs()).thenReturn(ps, ps, ps);
+
+        UserDao userDao = new UserDao(sql);
+        Object result = userDao.imageUpload(uI1);
+
+        assertEquals(expResult, result);
+    }
+    
+    @Test
+    public void testgetImage() throws SQLException {
+        UserImage uI1 = new UserImage("base64CodeNotUsedDueToLong", "testinguser1@gmail.com");
+
+        Object expResult = uI1;
+
+        // Create mock objects
+        SqlConnection sql = mock(SqlConnection.class);
+        Connection conn = mock(Connection.class);
+        PreparedStatement ps = mock(PreparedStatement.class);
+        ResultSet rs = mock(ResultSet.class);
+
+        when(sql.getConn()).thenReturn(conn);
+        when(conn.prepareStatement("SELECT Image, ImageName FROM userimages WHERE ImageName=?")).thenReturn(ps);
+        when(sql.getPs()).thenReturn(ps, ps);
+        when(ps.executeQuery()).thenReturn(rs);
+
+        // Fill in the resultset
+        when(rs.getString("ImageName")).thenReturn(uI1.getEmail());
+        when(rs.getString("Image")).thenReturn(uI1.getImage());
+
+        when(rs.next()).thenReturn(true);
+        
+        UserDao userDao = new UserDao(sql);
+        Object result = userDao.getImage(uI1);
+
+        assertEquals(expResult, result);
+    }
+    
+    @Test
+    public void testgetImage_fail() throws SQLException {
+        UserImage uI1 = new UserImage("base64CodeNotUsedDueToLong", "testinguser1@gmail.com");
+
+        Object expResult = "{\"status_code\":-1,\"message\":\"No Image\"}";
+
+        // Create mock objects
+        SqlConnection sql = mock(SqlConnection.class);
+        Connection conn = mock(Connection.class);
+        PreparedStatement ps = mock(PreparedStatement.class);
+        ResultSet rs = mock(ResultSet.class);
+
+        when(sql.getConn()).thenReturn(conn);
+        when(conn.prepareStatement("SELECT Image, ImageName FROM userimages WHERE ImageName=?")).thenReturn(ps);
+        when(sql.getPs()).thenReturn(ps, ps);
+        when(ps.executeQuery()).thenReturn(rs);
+
+        when(rs.next()).thenReturn(false);
+        
+        UserDao userDao = new UserDao(sql);
+        Object result = userDao.getImage(uI1);
+
+        assertEquals(expResult, result);
+    }
+    
+    @Test
+    public void testCheckUserExistsByEmailImages() throws SQLException {
+        UserImage uI1 = new UserImage("base64CodeNotUsedDueToLong", "testinguser1@gmail.com");
+
+        boolean expResult = true;
+
+        // Create mock objects
+        SqlConnection sql = mock(SqlConnection.class);
+        Connection conn = mock(Connection.class);
+        PreparedStatement ps = mock(PreparedStatement.class);
+        ResultSet rs = mock(ResultSet.class);
+
+        when(sql.getConn()).thenReturn(conn);
+        when(conn.prepareStatement("select * from userimages WHERE imageName=?")).thenReturn(ps);
+        when(sql.getPs()).thenReturn(ps, ps);
+        when(ps.executeQuery()).thenReturn(rs);
+
+        // Want 3 results in the resultset, so need true to be returned 3 times
+        when(rs.next()).thenReturn(true);
+
+        // Fill in the resultset
+        when(rs.getString("ImageName")).thenReturn(uI1.getEmail());
+        when(rs.getString("Image")).thenReturn(uI1.getImage());
+
+        UserDao userDao = new UserDao(sql);
+        boolean result = userDao.checkUserExistsByEmailImages(uI1.getEmail());
+
+        assertEquals(expResult, result);
+    }
+
+    @Test
+    public void testCheckUserExistsByEmailImages_fail() throws SQLException {
+        UserImage uI1 = new UserImage("base64CodeNotUsedDueToLong", "testinguser1@gmail.com");
+
+        boolean expResult = false;
+
+        // Create mock objects
+        SqlConnection sql = mock(SqlConnection.class);
+        Connection conn = mock(Connection.class);
+        PreparedStatement ps = mock(PreparedStatement.class);
+        ResultSet rs = mock(ResultSet.class);
+
+        when(sql.getConn()).thenReturn(conn);
+        when(conn.prepareStatement("select * from userimages WHERE imageName=?")).thenReturn(ps);
+        when(sql.getPs()).thenReturn(ps, ps);
+        when(ps.executeQuery()).thenReturn(rs);
+
+        // Want 3 results in the resultset, so need true to be returned 3 times
+        when(rs.next()).thenReturn(false);
+
+        UserDao userDao = new UserDao(sql);
+        boolean result = userDao.checkUserExistsByEmailImages(uI1.getEmail());
 
         assertEquals(expResult, result);
     }

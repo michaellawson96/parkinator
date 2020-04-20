@@ -122,7 +122,6 @@ public class CcDAO implements CcDAOInterface {
         }
     }
     
-    //Need To be Tested
     @Override
     public Object getAllregPlatesUnderAZone(ParkedCars pc) {
         try {
@@ -161,7 +160,6 @@ public class CcDAO implements CcDAOInterface {
             while (rst.next()) {
                 bd.add(new BookingDetailsCC(rst.getString("car_reg"), rst.getString("zone_name"),rst.getString("parking_name"),rst.getString("fullname")));
             }
-
             return bd;
         } catch (SQLException se) {
             System.out.println("SQL Exception occurred: " + se.getMessage());

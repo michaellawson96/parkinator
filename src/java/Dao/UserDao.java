@@ -423,7 +423,7 @@ public class UserDao implements UserDAOInterface {
 
         try {
 
-            sql.setPs(sql.getConn().prepareStatement("SELECT Image , ImageName FROM userimages WHERE ImageName=?"));
+            sql.setPs(sql.getConn().prepareStatement("SELECT Image, ImageName FROM userimages WHERE ImageName=?"));
             sql.getPs().setString(1, ui.getEmail());
 
             ResultSet rst;

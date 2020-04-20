@@ -5,10 +5,16 @@
  */
 package Dao;
 
+import Dto.BookingDetailsCC;
 import Dto.Car;
 import Dto.Cc;
+import Dto.Lot;
+import Dto.ParkedCars;
+import Dto.User;
+import Dto.Zone;
 import SqlConnection.SqlConnection;
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -19,6 +25,7 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
+import org.junit.Ignore;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -138,7 +145,7 @@ public class CcDAOTest {
         when(sql.getConn()).thenReturn(conn);
         when(conn.prepareStatement("UPDATE clamping_companies SET cc_name=? WHERE cc_id = ?")).thenReturn(ps);
         when(sql.getPs()).thenReturn(ps, ps, ps);
-        
+
         CcDAO ccDao = new CcDAO(sql);
         boolean result = ccDao.updateCc(c1);
 
@@ -163,11 +170,176 @@ public class CcDAOTest {
         when(sql.getConn()).thenReturn(conn);
         when(conn.prepareStatement("DELETE from clamping_companies WHERE cc_id = ?")).thenReturn(ps);
         when(sql.getPs()).thenReturn(ps, ps);
-        
+
         CcDAO ccDao = new CcDAO(sql);
         boolean result = ccDao.deleteCc(c1.getCcNo());
 
         assertEquals(expResult, result);
     }
 
+    @Test
+    public void getAllregPlatesUnderAZone() throws SQLException {
+        Cc cc1 = new Cc("Testing1", 1);
+        ParkedCars p1 = new ParkedCars(1, 1, new Date(11 / 11 / 11), new Date(11 / 11 / 11), 1);
+        ParkedCars p2 = new ParkedCars(1, 2, new Date(22 / 11 / 22), new Date(22 / 11 / 22), 1);
+        ParkedCars p3 = new ParkedCars(1, 3, new Date(33 / 11 / 33), new Date(33 / 11 / 33), 1);
+
+        Car c1 = new Car(1, "01 ca 00001", "testColour", "testMake", "testMode1", 1);
+        Car c2 = new Car(2, "02 ca 00002", "testColour2", "testMake2", "testMode2", 1);
+        Car c3 = new Car(3, "03 ca 00003", "testColour3", "testMake3", "testMode3", 1);
+
+        ArrayList<Car> expResult = new ArrayList<>();
+
+        expResult.add(new Car(c1.getCarNo(), c1.getCarReg()));
+        expResult.add(new Car(c2.getCarNo(), c2.getCarReg()));
+        expResult.add(new Car(c3.getCarNo(), c3.getCarReg()));
+
+        // Create mock objects
+        SqlConnection sql = mock(SqlConnection.class);
+        Connection conn = mock(Connection.class);
+        PreparedStatement ps = mock(PreparedStatement.class);
+        ResultSet rs = mock(ResultSet.class);
+
+        when(sql.getConn()).thenReturn(conn);
+        when(conn.prepareStatement("select cars.car_id, cars.car_reg from parked_cars JOIN cars on parked_cars.car_id = cars.car_id WHERE zone_id = ?")).thenReturn(ps);
+        when(sql.getPs()).thenReturn(ps);
+        when(ps.executeQuery()).thenReturn(rs);
+
+        when(rs.next()).thenReturn(true, true, true, false);
+
+        when(rs.getInt("car_id")).thenReturn(c1.getCarNo(), c2.getCarNo(), c3.getCarNo());
+        when(rs.getString("car_reg")).thenReturn(c1.getCarReg(), c2.getCarReg(), c3.getCarReg());
+
+        CcDAO ccDao = new CcDAO(sql);
+        Object result = ccDao.getAllregPlatesUnderAZone(p1);
+
+        assertEquals(expResult, result);
+    }
+
+    @Test
+    public void getAllregPlatesUnderAZone_fail() throws SQLException {
+        Cc cc1 = new Cc("Testing1", 1);
+        ParkedCars p1 = new ParkedCars(1, 1, new Date(11 / 11 / 11), new Date(11 / 11 / 11), 1);
+        ParkedCars p2 = new ParkedCars(1, 2, new Date(22 / 11 / 22), new Date(22 / 11 / 22), 1);
+        ParkedCars p3 = new ParkedCars(1, 3, new Date(33 / 11 / 33), new Date(33 / 11 / 33), 1);
+
+        Car c1 = new Car(1, "01 ca 00001", "testColour", "testMake", "testMode1", 1);
+        Car c2 = new Car(2, "02 ca 00002", "testColour2", "testMake2", "testMode2", 1);
+        Car c3 = new Car(3, "03 ca 00003", "testColour3", "testMake3", "testMode3", 1);
+
+        ArrayList<Car> expResult = new ArrayList<>();
+        
+        // Create mock objects
+        SqlConnection sql = mock(SqlConnection.class);
+        Connection conn = mock(Connection.class);
+        PreparedStatement ps = mock(PreparedStatement.class);
+        ResultSet rs = mock(ResultSet.class);
+
+        when(sql.getConn()).thenReturn(conn);
+        when(conn.prepareStatement("select cars.car_id, cars.car_reg from parked_cars JOIN cars on parked_cars.car_id = cars.car_id WHERE zone_id = ?")).thenReturn(ps);
+        when(sql.getPs()).thenReturn(ps);
+        when(ps.executeQuery()).thenReturn(rs);
+
+        when(rs.next()).thenReturn(false);
+
+        CcDAO ccDao = new CcDAO(sql);
+        Object result = ccDao.getAllregPlatesUnderAZone(p1);
+
+        assertEquals(expResult, result);
+    }
+    
+    @Test
+    public void getAllregPlatesUnderAllZone() throws SQLException {
+        Cc cc1 = new Cc("Testing1", 1);
+        
+        User u1 = new User(1, "Testing User1", "testinguser1@gmail.com", "$2a$12$Fodl2oDf233P40qSfkbVLOmX8R9a6kzuugosLS685hiVZr1qp7KWS", "user", "what is your mother's maiden name", "$2a$12$8XW5CMg.1ssMt9dvm5yMdeGjCTP51HfwFB8O5WDtNeFnNyxJmSBY6", false);
+        User u2 = new User(2, "Testing User2", "testinguser2@gmail.com", "$2a$12$jgxPw.sQUTLOG2Yb1xCeFOVHgD5bbH8bkvzNufPIJ9xRnKOghpw9W", "user", "what is your mother's maiden name", "$2a$12$nXti9bKgnGXGHg5.TGTbEOUmYH2lqdduy0RvMIorAgihWVpaEwKKC", true);
+        User u3 = new User(3, "Testing User3", "testinguser3@gmail.com", "$2a$12$b3uCgzPSHx94wQunCwzPiOMyCbgGp1qE6UEhUgtqNMXZL28tk.zOq", "user", "what is your mother's maiden name", "$2a$12$omWIaLeVXOwpGFveppMrluN9EsvXR1ufV4YheHYWXtftgn0HZ67oG", false);
+
+        ParkedCars p1 = new ParkedCars(1, 1, new Date(11 / 11 / 11), new Date(11 / 11 / 11), 1);
+        ParkedCars p2 = new ParkedCars(1, 2, new Date(22 / 11 / 22), new Date(22 / 11 / 22), 1);
+        ParkedCars p3 = new ParkedCars(1, 3, new Date(33 / 11 / 33), new Date(33 / 11 / 33), 1);
+
+        Car c1 = new Car(1, "01 ca 00001", "testColour", "testMake", "testMode1", 1);
+        Car c2 = new Car(2, "02 ca 00002", "testColour2", "testMake2", "testMode2", 1);
+        Car c3 = new Car(3, "03 ca 00003", "testColour3", "testMake3", "testMode3", 1);
+        
+        Lot L1 = new Lot(1, "Test Lot1", 1);
+        Lot L2 = new Lot(2, "Test Lot2", 2);
+        Lot L3 = new Lot(3, "Test Lot3", 3);
+        
+        Zone z1 = new Zone(1, "TestingZone1", 99, false, 1, 1, 0.0, 0.0);        
+
+        ArrayList<BookingDetailsCC> expResult = new ArrayList<>();
+
+        expResult.add(new BookingDetailsCC(c1.getCarReg(), z1.getZone_name(), L1.getParking_name(), u1.getUserFullname()));
+        expResult.add(new BookingDetailsCC(c2.getCarReg(), z1.getZone_name(), L1.getParking_name(), u2.getUserFullname()));
+        expResult.add(new BookingDetailsCC(c3.getCarReg(), z1.getZone_name(), L1.getParking_name(), u3.getUserFullname()));
+
+        // Create mock objects
+        SqlConnection sql = mock(SqlConnection.class);
+        Connection conn = mock(Connection.class);
+        PreparedStatement ps = mock(PreparedStatement.class);
+        ResultSet rs = mock(ResultSet.class);
+
+        when(sql.getConn()).thenReturn(conn);
+        when(conn.prepareStatement("select cars.car_reg , parking_zones.zone_name , parking_lots.parking_name,(SELECT users.user_fullname FROM parked_cars JOIN users on parked_cars.user_id = users.user_id where parked_cars.user_id = pc.user_id GROUP BY users.user_fullname) as fullname from cars join parked_cars pc on cars.car_id = pc.car_id join parking_zones on parking_zones.zone_id = pc.zone_id JOIN parking_lots on parking_zones.lot_id = parking_lots.lot_id")).thenReturn(ps);
+        when(sql.getPs()).thenReturn(ps);
+        when(ps.executeQuery()).thenReturn(rs);
+
+        when(rs.next()).thenReturn(true, true, true, false);
+
+        when(rs.getString("car_reg")).thenReturn(c1.getCarReg(), c2.getCarReg(), c3.getCarReg());
+        when(rs.getString("zone_name")).thenReturn(z1.getZone_name(), z1.getZone_name(), z1.getZone_name());
+        when(rs.getString("parking_name")).thenReturn(L1.getParking_name(), L1.getParking_name(), L1.getParking_name());
+        when(rs.getString("fullname")).thenReturn(u1.getUserFullname(), u2.getUserFullname(), u3.getUserFullname());
+
+        CcDAO ccDao = new CcDAO(sql);
+        Object result = ccDao.getAllregPlatesUnderAllZone();
+
+        assertEquals(expResult, result);
+    }
+    
+    @Test
+    public void getAllregPlatesUnderAllZone_fail() throws SQLException {
+        Cc cc1 = new Cc("Testing1", 1);
+        
+        User u1 = new User(1, "Testing User1", "testinguser1@gmail.com", "$2a$12$Fodl2oDf233P40qSfkbVLOmX8R9a6kzuugosLS685hiVZr1qp7KWS", "user", "what is your mother's maiden name", "$2a$12$8XW5CMg.1ssMt9dvm5yMdeGjCTP51HfwFB8O5WDtNeFnNyxJmSBY6", false);
+        User u2 = new User(2, "Testing User2", "testinguser2@gmail.com", "$2a$12$jgxPw.sQUTLOG2Yb1xCeFOVHgD5bbH8bkvzNufPIJ9xRnKOghpw9W", "user", "what is your mother's maiden name", "$2a$12$nXti9bKgnGXGHg5.TGTbEOUmYH2lqdduy0RvMIorAgihWVpaEwKKC", true);
+        User u3 = new User(3, "Testing User3", "testinguser3@gmail.com", "$2a$12$b3uCgzPSHx94wQunCwzPiOMyCbgGp1qE6UEhUgtqNMXZL28tk.zOq", "user", "what is your mother's maiden name", "$2a$12$omWIaLeVXOwpGFveppMrluN9EsvXR1ufV4YheHYWXtftgn0HZ67oG", false);
+
+        ParkedCars p1 = new ParkedCars(1, 1, new Date(11 / 11 / 11), new Date(11 / 11 / 11), 1);
+        ParkedCars p2 = new ParkedCars(1, 2, new Date(22 / 11 / 22), new Date(22 / 11 / 22), 1);
+        ParkedCars p3 = new ParkedCars(1, 3, new Date(33 / 11 / 33), new Date(33 / 11 / 33), 1);
+
+        Car c1 = new Car(1, "01 ca 00001", "testColour", "testMake", "testMode1", 1);
+        Car c2 = new Car(2, "02 ca 00002", "testColour2", "testMake2", "testMode2", 1);
+        Car c3 = new Car(3, "03 ca 00003", "testColour3", "testMake3", "testMode3", 1);
+        
+        Lot L1 = new Lot(1, "Test Lot1", 1);
+        Lot L2 = new Lot(2, "Test Lot2", 2);
+        Lot L3 = new Lot(3, "Test Lot3", 3);
+        
+        Zone z1 = new Zone(1, "TestingZone1", 99, false, 1, 1, 0.0, 0.0);        
+
+        ArrayList<BookingDetailsCC> expResult = new ArrayList<>();
+
+        // Create mock objects
+        SqlConnection sql = mock(SqlConnection.class);
+        Connection conn = mock(Connection.class);
+        PreparedStatement ps = mock(PreparedStatement.class);
+        ResultSet rs = mock(ResultSet.class);
+
+        when(sql.getConn()).thenReturn(conn);
+        when(conn.prepareStatement("select cars.car_reg , parking_zones.zone_name , parking_lots.parking_name,(SELECT users.user_fullname FROM parked_cars JOIN users on parked_cars.user_id = users.user_id where parked_cars.user_id = pc.user_id GROUP BY users.user_fullname) as fullname from cars join parked_cars pc on cars.car_id = pc.car_id join parking_zones on parking_zones.zone_id = pc.zone_id JOIN parking_lots on parking_zones.lot_id = parking_lots.lot_id")).thenReturn(ps);
+        when(sql.getPs()).thenReturn(ps);
+        when(ps.executeQuery()).thenReturn(rs);
+
+        when(rs.next()).thenReturn(false);
+
+        CcDAO ccDao = new CcDAO(sql);
+        Object result = ccDao.getAllregPlatesUnderAllZone();
+
+        assertEquals(expResult, result);
+    }
 }
