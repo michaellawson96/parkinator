@@ -124,7 +124,7 @@ public class BookingsResource {
             for (ParkedCars pcs : pc) {
                 array.add(convertBookingToJson(pcs));
             }
-            return array.toString();
+            return  hsb.CreateMessage(1, array.toString());
         }
     }
     @POST
