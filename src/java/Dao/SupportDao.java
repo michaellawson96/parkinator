@@ -20,11 +20,17 @@ import java.util.ArrayList;
  */
 public class SupportDao implements SupportDAOInterface{
     
-    
-    private SqlConnection sql = new SqlConnection();
+    private SqlConnection sql;
     private HttpStatusBase hsb = new HttpStatusBase();
+    
+    public SupportDao(SqlConnection sql) {
+        this.sql = sql;
+    }
 
-
+    public SupportDao() {
+        this.sql = new SqlConnection();
+    }
+    
     public static java.sql.Date convertUtilToSql(java.util.Date uDate) {
         java.sql.Date sDate = new java.sql.Date(uDate.getTime());
         return sDate;
