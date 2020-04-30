@@ -77,13 +77,41 @@ public class SupportResource {
         }
         return s;
     }
+    private Object convertJsonStringToSupportRemove(String jsonString) {
+        Support s = null;
+        try {
+            // create a parser to convert a string to a json object
+            JSONParser parser = new JSONParser();
+            // parser returns an object. You should know or check what to convert to (an JSONObject or JSONArray)
+            JSONObject obj = (JSONObject) parser.parse(jsonString);
 
+            // create a new Customer and use get method to retrieve values for a key
+            s = new Support();
+            // note that JSONObject has all numbers as longs, and needs to be converted to an int if required.
+            DateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+            int messageId = ((Long) obj.get("message_id")).intValue();
+            s.setMessage_id(messageId);
+            s.setTitle((String) obj.get("title"));
+            s.setMessage((String) obj.get("message"));
+            
+            int user_id = ((Long) obj.get("user_id")).intValue();
+            s.setUser_id(user_id);            
+
+        } // more detailed reporting can be done by catching specific exceptions, such as ParseException
+        catch (ParseException exp) {
+            System.out.println(exp);
+            s = null;
+            return hsb.ParseError();
+        }
+        return s;
+    }
     private JSONObject convertSupportToJson(Support sup) {
         JSONObject jObj = new JSONObject();
         jObj.put("message_id", sup.getMessage_id());
         jObj.put("title", sup.getTitle());
         jObj.put("message", sup.getMessage());
-        jObj.put("date", sup.getDate());
+        jObj.put("date", sup.getDate().toString());
+         jObj.put("user_id", sup.getUser_id());
         return jObj;
     }
 
@@ -131,7 +159,7 @@ public class SupportResource {
     @Consumes(MediaType.TEXT_PLAIN)
     @Produces(MediaType.TEXT_PLAIN)
     public String removeMessage(String content) {
-        Object obj = convertJsonStringToSupport(content);
+        Object obj = convertJsonStringToSupportRemove(content);
         if (obj instanceof Support) {
             Support sup = (Support) obj;
             return sdao.removeMessage(sup);
