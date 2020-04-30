@@ -61,7 +61,7 @@ public class SupportResource {
             s.setMessage_id(messageId);
             s.setTitle((String) obj.get("title"));
             s.setMessage((String) obj.get("message"));
-            Date date = simpleDateFormat.parse(obj.get("date_sent").toString());
+            Date date = simpleDateFormat.parse(obj.get("date").toString());
             s.setDate(date);
             
             int user_id = ((Long) obj.get("user_id")).intValue();
