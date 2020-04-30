@@ -112,7 +112,6 @@ public class LotDAO implements LotDaoInterface {
     }
 
     @Override
-    //missing mocking
     public Object selectAllZoneByLotId(Lot l) {
         try {
             sql.setPs(sql.getConn().prepareStatement("select * from parking_zones WHERE lot_id = ?"));
@@ -367,7 +366,6 @@ public class LotDAO implements LotDaoInterface {
 
     }
 
-    //missing mocking
     public Object CheckIfLotExist(Lot lot) {
         try {
             sql.setPs(sql.getConn().prepareStatement("select * from parking_lots WHERE parking_name = ?"));
@@ -394,7 +392,6 @@ public class LotDAO implements LotDaoInterface {
         }
     }
 
-    //missing mocking
     public Object CheckIfzoneExist(Zone zone) {
         try {
             sql.setPs(sql.getConn().prepareStatement("select * from parking_zones WHERE zone_name = ?"));
@@ -421,7 +418,6 @@ public class LotDAO implements LotDaoInterface {
         }
     }
 
-    //missing mocking
     public Object CheckIfBookingExistUnderThatZone(ParkedCars pc) {
         try {
             sql.setPs(sql.getConn().prepareStatement("select * from parked_cars WHERE zone_id = ?"));
@@ -448,7 +444,6 @@ public class LotDAO implements LotDaoInterface {
         }
     }
 
-    //missing mocking
     public Object getBookingDate(ParkedCars pc) {
         try {
             sql.setPs(sql.getConn().prepareStatement("select * from parked_cars WHERE book_from = ?"));
@@ -475,7 +470,6 @@ public class LotDAO implements LotDaoInterface {
         }
     }
 
-    //missing mocking 
     @Override
     public String removeBooking(ParkedCars pc) {
         try {
@@ -500,7 +494,6 @@ public class LotDAO implements LotDaoInterface {
         }
     }
 
-    //missing mocking 
     @Override
     public String updateBooking(ParkedCars pc) {
         try {
@@ -524,8 +517,8 @@ public class LotDAO implements LotDaoInterface {
             return hsb.ExceptionError();
         }
     }
-        //missing mocking 
-        @Override
+    
+    @Override
     public String removeZone(Zone zone) {
         try {
 
@@ -546,11 +539,10 @@ public class LotDAO implements LotDaoInterface {
             return hsb.ExceptionError();
         }
     }
-    //missing mocking 
+    
     @Override
     public String updateZone(Zone zone) {
         try {
-
             sql.setPs(sql.getConn().prepareStatement("UPDATE parking_zones SET zone_name = ? WHERE  zone_id = ?"));
             sql.getPs().setString(1, zone.getZone_name());
             sql.getPs().setInt(2,zone.getZone_id());
