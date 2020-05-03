@@ -38,6 +38,7 @@ public class ApplicationConfig extends Application {
         resources.add(REST.NewCrossOriginResourceSharingFilter.class);
         resources.add(REST.RecoveryPasswordResource.class);
         resources.add(REST.RecoveryResource.class);
+        resources.add(REST.SupportResource.class);
         resources.add(REST.UserCarResource.class);
         resources.add(REST.UserDetailsResource.class);
         resources.add(REST.UserResource.class);
