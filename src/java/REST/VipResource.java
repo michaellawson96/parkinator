@@ -6,6 +6,8 @@
 package REST;
 
 import Dao.HttpStatusBase;
+import Dao.LotDAO;
+import Dao.LotDaoInterface;
 import Dao.UserDAOInterface;
 import Dao.UserDao;
 import Dao.VipDAO;
@@ -49,6 +51,7 @@ public class VipResource {
     HttpStatusBase hsb = new HttpStatusBase();
     VipDAOInterface vDAO = new VipDAO();
     UserDAOInterface uDAO = new UserDao();
+    LotDaoInterface lDAO = new LotDAO();
     
     /**
      * Retrieves representation of an instance of REST.VipResource
@@ -89,29 +92,29 @@ public class VipResource {
     }
     
     @POST
-    @Path("getByUser/")
+    @Path("getVipByUser/")
     @Produces(MediaType.TEXT_PLAIN)
     @Consumes(MediaType.TEXT_PLAIN)
     public String vipReadUserSpecified(String content) {
         //the json string inputted into the post method is converted from json to an integer (this may produce a hsb string)
-        Object obj = convertJsonStringToZoneID(content);
+        Object obj = convertJsonStringToUserID(content);
         //if the object is a zoneID (not a hsb string, continue down that stream)
         if (obj instanceof Integer) {
             //the zone id will be casted to an int and placed in a new variable
-            int zoneId = (int)obj;
+            int userId = (int)obj;
             //that zone id will be used to select all vip records relevant to that zone
-            ArrayList<Object> objs = vDAO.selectAllZoneVips(zoneId);
+            ArrayList<Object> objs = vDAO.selectAllUserVips(userId);
             //
             JSONArray users = new JSONArray();
             
             for(Object eachobj : objs){
                 if(eachobj instanceof Vip){
-                    Object uobj = uDAO.selectUserById(((Vip) eachobj).getUserId());
-                    if(uobj instanceof User){
-                        users.add(convertUserToJson((User)uobj));
+                    Object zobj = lDAO.selectZoneById(((Vip) eachobj).getZoneId());
+                    if(zobj instanceof Zone){
+                        users.add(convertZoneToJson((Zone)zobj));
                     }
                     else{
-                        return (String)uobj;
+                        return (String)zobj;
                     }
                 }
                 else 
@@ -119,7 +122,7 @@ public class VipResource {
             }
             return users.toJSONString();
         }
-        return hsb.createMessage(72, "Invalid Zone");
+        return hsb.createMessage(73, "Invalid User");
     }
     
 
@@ -161,6 +164,19 @@ public class VipResource {
           else {
             return (String) objV;
         }
+    }
+    
+    private JSONObject convertZoneToJson(Zone zone) {
+        JSONObject jObj = new JSONObject();
+        jObj.put("zone_id", zone.getZone_id());
+        jObj.put("zone_name", zone.getZone_name());
+        jObj.put("max_spaces", zone.getMax_spaces());
+        jObj.put("is_vip", zone.isIs_vip());
+        jObj.put("lot_id", zone.getLot_id());
+        jObj.put("max_disabled_spaces", zone.getMax_disabled_spaces());
+        jObj.put("lng", zone.getLng());
+        jObj.put("alt", zone.getLat());
+        return jObj;
     }
     
     private Object convertJsonStringToVip(String jsonString) {
@@ -214,6 +230,25 @@ public class VipResource {
             return hsb.parseError();
         }
         return zoneId;
+    }
+    private Object convertJsonStringToUserID(String jsonString) {
+        int userId =-1;
+        try {
+            // create a parser to convert a string to a json object
+            JSONParser parser = new JSONParser();
+            // parser returns an object. You should know or check what to convert to (an JSONObject or JSONArray)
+            JSONObject obj = (JSONObject) parser.parse(jsonString);
+
+            // note that JSONObject has all numbers as longs, and needs to be converted to an int if required.
+            userId = ((Long) obj.get("user_id")).intValue();
+
+            
+        } // more detailed reporting can be done by catching specific exceptions, such as ParseException
+        catch (ParseException exp) {
+            System.out.println(exp);
+            return hsb.parseError();
+        }
+        return userId;
     }
     
     

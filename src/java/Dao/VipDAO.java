@@ -48,6 +48,34 @@ public class VipDAO implements VipDAOInterface{
             return objs;
         }
     }
+    
+    @Override
+    public ArrayList<Object> selectAllUserVips(int userId) {
+        ArrayList<Object> objs = new ArrayList<>();
+        try {
+            sql.setPs(sql.getConn().prepareStatement("select * from vips where user_id = ?"));
+            sql.getPs().setInt(1, userId);
+            ResultSet rst;
+            // Execute the query
+            rst = sql.getPs().executeQuery();
+            while (rst.next()) {
+                objs.add(new Vip(rst.getInt("zone_id"),rst.getInt("user_id")));
+            }
+            System.out.println("Vips have been obtained.");
+
+            return objs;
+        } catch (SQLException se) {
+            System.out.println("SQL Exception occurred: " + se.getMessage());
+            se.printStackTrace();
+            objs.add(hsb.SQlError());
+            return objs;
+        } catch (Exception e) {
+            System.out.println("Exception occurred: " + e.getMessage());
+            e.printStackTrace();
+            objs.add(hsb.exceptionError());
+            return objs;
+        }
+    }
 
     
 
@@ -136,36 +164,6 @@ public class VipDAO implements VipDAOInterface{
     @Override
     public ArrayList<Object> selectAllVips() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public ArrayList<Object> selectAllUserVips(int userId) {
-        ArrayList<Object> objs = new ArrayList<>();
-        try {
-            sql.setPs(sql.getConn().prepareStatement("select * from vips where user_id = ?"));
-            sql.getPs().setInt(1, userId);
-            ResultSet rst;
-            // Execute the query
-            rst = sql.getPs().executeQuery();
-            while (rst.next()) {
-                objs.add(new User(rst.getInt("user_id"), rst.getString("user_fullname"), rst.getString("email"),
-                        rst.getString("hash"), rst.getString("user_type"), rst.getString("question"),
-                        rst.getString("answer_hash"), rst.getBoolean("has_disabled_badge")));
-            }
-            System.out.println("User has been added.");
-
-            return objs;
-        } catch (SQLException se) {
-            System.out.println("SQL Exception occurred: " + se.getMessage());
-            se.printStackTrace();
-            objs.add(hsb.SQlError());
-            return objs;
-        } catch (Exception e) {
-            System.out.println("Exception occurred: " + e.getMessage());
-            e.printStackTrace();
-            objs.add(hsb.exceptionError());
-            return objs;
-        }
     }
     
 }

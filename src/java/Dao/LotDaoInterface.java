@@ -27,6 +27,8 @@ public interface LotDaoInterface {
     Object selectAllLots();
 
     Object selectAllZones();
+    
+    Object selectZoneById(int zoneId);
 
     Object selectAllBookings();
 

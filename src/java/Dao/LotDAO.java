@@ -161,6 +161,31 @@ public class LotDAO implements LotDaoInterface {
             return hsb.exceptionError();
         }
     }
+    
+    @Override
+    public Object selectZoneById(int zoneId) {
+        try {
+            sql.setPs(sql.getConn().prepareStatement("select * from parking_zones where zone_id = ?"));
+            sql.getPs().setInt(1, zoneId);
+            ResultSet rst;
+            // Execute the query
+            rst = sql.getPs().executeQuery();
+            Zone z = new Zone();
+            while (rst.next()) {
+                z = (new Zone(rst.getInt("zone_id"), rst.getString("zone_name"), rst.getInt("max_spaces"), rst.getBoolean("is_vip"), rst.getInt("lot_id"), rst.getInt("max_disabled_spaces"), rst.getDouble("altitude"), rst.getDouble("longitude")));
+            }
+
+            return z;
+        } catch (SQLException se) {
+            System.out.println("SQL Exception occurred: " + se.getMessage());
+            se.printStackTrace();
+            return hsb.SQlError();
+        } catch (Exception e) {
+            System.out.println("Exception occurred: " + e.getMessage());
+            e.printStackTrace();
+            return hsb.exceptionError();
+        }
+    }
 
     @Override
     public String addLot(Lot lot) {
