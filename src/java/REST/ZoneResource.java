@@ -147,7 +147,7 @@ public class ZoneResource {
     @Consumes(MediaType.TEXT_PLAIN)
     @Produces(MediaType.TEXT_PLAIN)
     @Path("getZones/")
-    public Object getZoneByLotId(String content) {
+    public Object getZoneByZoneId(String content) {
         Object obj = convertJsonStringToLot(content);
         Lot l = (Lot) obj;
         ArrayList<Zone> z = (ArrayList<Zone>) ldao.selectAllZoneByLotId(l);

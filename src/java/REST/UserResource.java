@@ -227,6 +227,7 @@ public class UserResource {
     
     
     @GET
+    @Path("GetUserById/")
     @Produces(MediaType.TEXT_PLAIN)
     public String userReadById(String content) {
         UserDAOInterface uDAO = new UserDao();
