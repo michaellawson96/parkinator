@@ -123,7 +123,7 @@ public class CarDAO implements CarDAOInterface {
         } catch (Exception e) {
             System.out.println("Exception occurred: " + e.getMessage());
             e.printStackTrace();
-            objs.add(hsb.ExceptionError());
+            objs.add(hsb.exceptionError());
             return objs;
         }
     }
@@ -151,7 +151,7 @@ public class CarDAO implements CarDAOInterface {
         } catch (Exception e) {
             System.out.println("Exception occurred: " + e.getMessage());
             e.printStackTrace();
-            objs.add(hsb.ExceptionError());
+            objs.add(hsb.exceptionError());
             return objs;
         }
     }

@@ -57,7 +57,7 @@ public class LotDAO implements LotDaoInterface {
         } catch (Exception e) {
             System.out.println("Exception occurred: " + e.getMessage());
             e.printStackTrace();
-            return hsb.ExceptionError();
+            return hsb.exceptionError();
         }
     }
 
@@ -81,7 +81,7 @@ public class LotDAO implements LotDaoInterface {
         } catch (Exception e) {
             System.out.println("Exception occurred: " + e.getMessage());
             e.printStackTrace();
-            return hsb.ExceptionError();
+            return hsb.exceptionError();
         }
     }
 
@@ -107,7 +107,7 @@ public class LotDAO implements LotDaoInterface {
         } catch (Exception e) {
             System.out.println("Exception occurred: " + e.getMessage());
             e.printStackTrace();
-            return hsb.ExceptionError();
+            return hsb.exceptionError();
         }
     }
 
@@ -133,7 +133,7 @@ public class LotDAO implements LotDaoInterface {
         } catch (Exception e) {
             System.out.println("Exception occurred: " + e.getMessage());
             e.printStackTrace();
-            return hsb.ExceptionError();
+            return hsb.exceptionError();
         }
     }
 
@@ -158,7 +158,7 @@ public class LotDAO implements LotDaoInterface {
         } catch (Exception e) {
             System.out.println("Exception occurred: " + e.getMessage());
             e.printStackTrace();
-            return hsb.ExceptionError();
+            return hsb.exceptionError();
         }
     }
 
@@ -174,9 +174,9 @@ public class LotDAO implements LotDaoInterface {
 
                     sql.getPs().executeUpdate();
 
-                    return hsb.CreateMessage(1, "Parking Lot added Successfully");
+                    return hsb.createMessage(1, "Parking Lot added Successfully");
                 } else {
-                    return hsb.CreateMessage(-1, "Parking Lot Name Already Exist");
+                    return hsb.createMessage(-1, "Parking Lot Name Already Exist");
                 }
             } else {
                 return CheckIfLotExist(lot).toString();
@@ -188,7 +188,7 @@ public class LotDAO implements LotDaoInterface {
         } catch (Exception e) {
             System.out.println("Exception occurred: " + e.getMessage());
             e.printStackTrace();
-            return hsb.ExceptionError();
+            return hsb.exceptionError();
         }
     }
 
@@ -201,7 +201,7 @@ public class LotDAO implements LotDaoInterface {
 
             sql.getPs().executeUpdate();
 
-            return hsb.CreateMessage(1, "Parking Lot Deleted Successfully");
+            return hsb.createMessage(1, "Parking Lot Deleted Successfully");
 
         } catch (SQLException se) {
             System.out.println("SQL Exception occurred: " + se.getMessage());
@@ -210,7 +210,7 @@ public class LotDAO implements LotDaoInterface {
         } catch (Exception e) {
             System.out.println("Exception occurred: " + e.getMessage());
             e.printStackTrace();
-            return hsb.ExceptionError();
+            return hsb.exceptionError();
         }
     }
 
@@ -230,9 +230,9 @@ public class LotDAO implements LotDaoInterface {
 
                     sql.getPs().executeUpdate();
 
-                    return hsb.CreateMessage(1, "Parking Zone added Successfully");
+                    return hsb.createMessage(1, "Parking Zone added Successfully");
                 } else {
-                    return hsb.CreateMessage(-1, "Parking Zone Already Exist");
+                    return hsb.createMessage(-1, "Parking Zone Already Exist");
                 }
             } else {
                 return CheckIfzoneExist(zone).toString();
@@ -245,7 +245,7 @@ public class LotDAO implements LotDaoInterface {
         } catch (Exception e) {
             System.out.println("Exception occurred: " + e.getMessage());
             e.printStackTrace();
-            return hsb.ExceptionError();
+            return hsb.exceptionError();
         }
     }
 
@@ -294,15 +294,15 @@ public class LotDAO implements LotDaoInterface {
 
                                         sql.getPs().executeUpdate();
 
-                                        return hsb.CreateMessage(1, "Parking Spot Booked Successfully From : " + pc.getBookFrom() + " To : " + pc.getBookTo());
+                                        return hsb.createMessage(1, "Parking Spot Booked Successfully From : " + pc.getBookFrom() + " To : " + pc.getBookTo());
                                     } else {
-                                        return hsb.CreateMessage(1, "Sorry But no parking spots Left!");
+                                        return hsb.createMessage(1, "Sorry But no parking spots Left!");
                                     }
                                 } else {
-                                    return hsb.CreateMessage(-1, "1Something Went Wrong on out server");
+                                    return hsb.createMessage(-1, "1Something Went Wrong on out server");
                                 }
                             } else {
-                                return hsb.CreateMessage(-1, "2Something Went Wrong on out server");
+                                return hsb.createMessage(-1, "2Something Went Wrong on out server");
 
                             }
                         } else {
@@ -333,23 +333,23 @@ public class LotDAO implements LotDaoInterface {
 
                                         sql.getPs().executeUpdate();
 
-                                        return hsb.CreateMessage(1, "Parking Spot Booked Successfully From : " + pc.getBookFrom() + " To : " + pc.getBookTo());
+                                        return hsb.createMessage(1, "Parking Spot Booked Successfully From : " + pc.getBookFrom() + " To : " + pc.getBookTo());
                                     } else {
-                                        return hsb.CreateMessage(1, "Sorry But no parking spots Left!");
+                                        return hsb.createMessage(1, "Sorry But no parking spots Left!");
                                     }
                                 } else {
-                                    return hsb.CreateMessage(-1, "1Something Went Wrong on out server");
+                                    return hsb.createMessage(-1, "1Something Went Wrong on out server");
                                 }
                             } else {
-                                return hsb.CreateMessage(-1, "2Something Went Wrong on out server");
+                                return hsb.createMessage(-1, "2Something Went Wrong on out server");
 
                             }
                         }
                     } else {
-                        return hsb.CreateMessage(-1, "Booking already exist for that day");
+                        return hsb.createMessage(-1, "Booking already exist for that day");
                     }
                 }else{
-                    return hsb.CreateMessage(-1, "Booking already exist for that day");
+                    return hsb.createMessage(-1, "Booking already exist for that day");
                 }
             } else {
                 return CheckIfBookingExistUnderThatZone(pc).toString();
@@ -361,7 +361,7 @@ public class LotDAO implements LotDaoInterface {
         } catch (Exception e) {
             System.out.println("Exception occurred: " + e.getMessage());
             e.printStackTrace();
-            return hsb.ExceptionError();
+            return hsb.exceptionError();
         }
 
     }
@@ -388,7 +388,7 @@ public class LotDAO implements LotDaoInterface {
         } catch (Exception e) {
             System.out.println("Exception occurred: " + e.getMessage());
             e.printStackTrace();
-            return hsb.ExceptionError();
+            return hsb.exceptionError();
         }
     }
 
@@ -414,7 +414,7 @@ public class LotDAO implements LotDaoInterface {
         } catch (Exception e) {
             System.out.println("Exception occurred: " + e.getMessage());
             e.printStackTrace();
-            return hsb.ExceptionError();
+            return hsb.exceptionError();
         }
     }
 
@@ -440,7 +440,7 @@ public class LotDAO implements LotDaoInterface {
         } catch (Exception e) {
             System.out.println("Exception occurred: " + e.getMessage());
             e.printStackTrace();
-            return hsb.ExceptionError();
+            return hsb.exceptionError();
         }
     }
 
@@ -466,7 +466,7 @@ public class LotDAO implements LotDaoInterface {
         } catch (Exception e) {
             System.out.println("Exception occurred: " + e.getMessage());
             e.printStackTrace();
-            return hsb.ExceptionError();
+            return hsb.exceptionError();
         }
     }
 
@@ -481,7 +481,7 @@ public class LotDAO implements LotDaoInterface {
 
             sql.getPs().executeUpdate();
 
-            return hsb.CreateMessage(1, "Booking Deleted Successfully");
+            return hsb.createMessage(1, "Booking Deleted Successfully");
 
         } catch (SQLException se) {
             System.out.println("SQL Exception occurred: " + se.getMessage());
@@ -490,7 +490,7 @@ public class LotDAO implements LotDaoInterface {
         } catch (Exception e) {
             System.out.println("Exception occurred: " + e.getMessage());
             e.printStackTrace();
-            return hsb.ExceptionError();
+            return hsb.exceptionError();
         }
     }
 
@@ -505,7 +505,7 @@ public class LotDAO implements LotDaoInterface {
 
             sql.getPs().executeUpdate();
 
-            return hsb.CreateMessage(1, "Booking Updated Successfully");
+            return hsb.createMessage(1, "Booking Updated Successfully");
 
         } catch (SQLException se) {
             System.out.println("SQL Exception occurred: " + se.getMessage());
@@ -514,7 +514,7 @@ public class LotDAO implements LotDaoInterface {
         } catch (Exception e) {
             System.out.println("Exception occurred: " + e.getMessage());
             e.printStackTrace();
-            return hsb.ExceptionError();
+            return hsb.exceptionError();
         }
     }
     
@@ -527,7 +527,7 @@ public class LotDAO implements LotDaoInterface {
 
             sql.getPs().executeUpdate();
 
-            return hsb.CreateMessage(1, "Parking Zone Deleted Successfully");
+            return hsb.createMessage(1, "Parking Zone Deleted Successfully");
 
         } catch (SQLException se) {
             System.out.println("SQL Exception occurred: " + se.getMessage());
@@ -536,7 +536,7 @@ public class LotDAO implements LotDaoInterface {
         } catch (Exception e) {
             System.out.println("Exception occurred: " + e.getMessage());
             e.printStackTrace();
-            return hsb.ExceptionError();
+            return hsb.exceptionError();
         }
     }
     
@@ -549,7 +549,7 @@ public class LotDAO implements LotDaoInterface {
 
             sql.getPs().executeUpdate();
 
-            return hsb.CreateMessage(1, "Zone Updated Successfully");
+            return hsb.createMessage(1, "Zone Updated Successfully");
 
         } catch (SQLException se) {
             System.out.println("SQL Exception occurred: " + se.getMessage());
@@ -558,7 +558,7 @@ public class LotDAO implements LotDaoInterface {
         } catch (Exception e) {
             System.out.println("Exception occurred: " + e.getMessage());
             e.printStackTrace();
-            return hsb.ExceptionError();
+            return hsb.exceptionError();
         }
     }    
 }

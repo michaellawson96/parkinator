@@ -71,7 +71,7 @@ public class SupportResource {
         catch (ParseException exp) {
             System.out.println(exp);
             s = null;
-            return hsb.ParseError();
+            return hsb.parseError();
         }catch (java.text.ParseException jtp){
             return jtp.getMessage();
         }
@@ -101,7 +101,7 @@ public class SupportResource {
         catch (ParseException exp) {
             System.out.println(exp);
             s = null;
-            return hsb.ParseError();
+            return hsb.parseError();
         }
         return s;
     }
@@ -126,7 +126,7 @@ public class SupportResource {
     public String getMessages() {
         ArrayList<Support> sup = (ArrayList<Support>) sdao.selectAllMessage();
         if (sup == null || sup.isEmpty()) {
-            return hsb.CreateMessage(-1, "No Messages Found");
+            return hsb.createMessage(-1, "No Messages Found");
         } else {
             JSONArray array = new JSONArray();
             for (Support s : sup) {

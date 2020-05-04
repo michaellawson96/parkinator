@@ -15,7 +15,11 @@ import java.util.ArrayList;
  * @author USER
  */
 public interface VipDAOInterface {
+    ArrayList<Object> selectAllVips();
     ArrayList<Object> selectAllZoneVips(int zoneId);
-    boolean addVip(Vip v);
-    boolean removeVip(Vip v);
+    ArrayList<Object> selectAllUserVips(int userId);
+    String addVip(Vip v);
+    String removeVip(Vip v);
+    
+    public boolean vipExists(Vip v);
 }

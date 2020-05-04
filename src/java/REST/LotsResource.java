@@ -73,7 +73,7 @@ public class LotsResource {
         catch (ParseException exp) {
             System.out.println(exp);
             u = null;
-            return hsb.ParseError();
+            return hsb.parseError();
         }
         return u;
     }
@@ -93,7 +93,7 @@ public class LotsResource {
     public String getLots() {
         ArrayList<Lot> lots = (ArrayList<Lot>)ldao.selectAllLots();
         if (lots == null || lots.isEmpty()) {
-            return hsb.CreateMessage(-1, "No Lots Found");
+            return hsb.createMessage(-1, "No Lots Found");
         } else {
             JSONArray array = new JSONArray();
             for (Lot lot : lots) {

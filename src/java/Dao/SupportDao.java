@@ -48,7 +48,7 @@ public class SupportDao implements SupportDAOInterface{
 
                 sql.getPs().executeUpdate();
                 
-                return hsb.CreateMessage(1, "Your post has been Sent");
+                return hsb.createMessage(1, "Your post has been Sent");
         } catch (SQLException se) {
             System.out.println("SQL Exception occurred: " + se.getMessage());
             se.printStackTrace();
@@ -56,7 +56,7 @@ public class SupportDao implements SupportDAOInterface{
         } catch (Exception e) {
             System.out.println("Exception occurred: " + e.getMessage());
             e.printStackTrace();
-            return hsb.ExceptionError();
+            return hsb.exceptionError();
         }
     }
     
@@ -80,7 +80,7 @@ public class SupportDao implements SupportDAOInterface{
         } catch (Exception e) {
             System.out.println("Exception occurred: " + e.getMessage());
             e.printStackTrace();
-            return hsb.ExceptionError();
+            return hsb.exceptionError();
         }
     }    
     
@@ -93,7 +93,7 @@ public class SupportDao implements SupportDAOInterface{
 
             sql.getPs().executeUpdate();
 
-            return hsb.CreateMessage(1, "Message Removed");
+            return hsb.createMessage(1, "Message Removed");
 
         } catch (SQLException se) {
             System.out.println("SQL Exception occurred: " + se.getMessage());
@@ -102,7 +102,7 @@ public class SupportDao implements SupportDAOInterface{
         } catch (Exception e) {
             System.out.println("Exception occurred: " + e.getMessage());
             e.printStackTrace();
-            return hsb.ExceptionError();
+            return hsb.exceptionError();
         }
     }    
 }

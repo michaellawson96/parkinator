@@ -6,6 +6,8 @@
 package REST;
 
 import Dao.HttpStatusBase;
+import Dao.UserDAOInterface;
+import Dao.UserDao;
 import Dao.VipDAO;
 import Dao.VipDAOInterface;
 import Dto.HttpStatus;
@@ -46,35 +48,80 @@ public class VipResource {
 
     HttpStatusBase hsb = new HttpStatusBase();
     VipDAOInterface vDAO = new VipDAO();
+    UserDAOInterface uDAO = new UserDao();
     
     /**
      * Retrieves representation of an instance of REST.VipResource
      * @return an instance of java.lang.String
      */
     @POST
+    //default post is get by zone
     @Produces(MediaType.TEXT_PLAIN)
     @Consumes(MediaType.TEXT_PLAIN)
-    public String vipReadSpecified(String content) {
-        //we first need to figure out which zone's vips we are displaying. this is in the content String
-        //we'll only need the id
+    public String vipReadZoneSpecified(String content) {
+        //the json string inputted into the post method is converted from json to an integer (this may produce a hsb string)
         Object obj = convertJsonStringToZoneID(content);
+        //if the object is a zoneID (not a hsb string, continue down that stream)
         if (obj instanceof Integer) {
+            //the zone id will be casted to an int and placed in a new variable
             int zoneId = (int)obj;
+            //that zone id will be used to select all vip records relevant to that zone
             ArrayList<Object> objs = vDAO.selectAllZoneVips(zoneId);
+            //
+            JSONArray users = new JSONArray();
             
-            JSONArray array = new JSONArray();
-            for (Object eachobj : objs) {
-                if(eachobj instanceof HttpStatus)
-                    array.add(eachobj);
-                else
-                array.add(convertUserToJson((User)eachobj));
+            for(Object eachobj : objs){
+                if(eachobj instanceof Vip){
+                    Object uobj = uDAO.selectUserById(((Vip) eachobj).getUserId());
+                    if(uobj instanceof User){
+                        users.add(convertUserToJson((User)uobj));
+                    }
+                    else{
+                        return (String)uobj;
+                    }
+                }
+                else 
+                    return (String)obj.toString();
             }
-            return array.toString();
-            
-        } else {
-            return (String) obj;
+            return users.toJSONString();
         }
+        return hsb.createMessage(72, "Invalid Zone");
     }
+    
+    @POST
+    @Path("getByUser/")
+    @Produces(MediaType.TEXT_PLAIN)
+    @Consumes(MediaType.TEXT_PLAIN)
+    public String vipReadUserSpecified(String content) {
+        //the json string inputted into the post method is converted from json to an integer (this may produce a hsb string)
+        Object obj = convertJsonStringToZoneID(content);
+        //if the object is a zoneID (not a hsb string, continue down that stream)
+        if (obj instanceof Integer) {
+            //the zone id will be casted to an int and placed in a new variable
+            int zoneId = (int)obj;
+            //that zone id will be used to select all vip records relevant to that zone
+            ArrayList<Object> objs = vDAO.selectAllZoneVips(zoneId);
+            //
+            JSONArray users = new JSONArray();
+            
+            for(Object eachobj : objs){
+                if(eachobj instanceof Vip){
+                    Object uobj = uDAO.selectUserById(((Vip) eachobj).getUserId());
+                    if(uobj instanceof User){
+                        users.add(convertUserToJson((User)uobj));
+                    }
+                    else{
+                        return (String)uobj;
+                    }
+                }
+                else 
+                    return (String)obj.toString();
+            }
+            return users.toJSONString();
+        }
+        return hsb.createMessage(72, "Invalid Zone");
+    }
+    
 
     @POST
     @Path("addVip/")
@@ -86,17 +133,32 @@ public class VipResource {
         Object objV = convertJsonStringToVip(content);
         if (objV instanceof Vip) {
             Vip vip = (Vip)objV;
-            Object obj = vDAO.addVip(vip);
+            String obj = vDAO.addVip(vip);
             
-            JSONString string = new JSONString();
 
-                if(obj instanceof Boolean){
-                    return "\"success\":true";
+                return obj;
                 }
-                else{
-                return "\"success\":false";
+          else {
+            return (String) objV;
+        }
+    }
+    
+    @POST
+    @Path("deleteVip/")
+    @Produces(MediaType.TEXT_PLAIN)
+    @Consumes(MediaType.TEXT_PLAIN)
+    public String deleteVip(String content) {
+        //we first need to figure out which zone's vips we are displaying. this is in the content String
+        //we'll only need the id
+        Object objV = convertJsonStringToVip(content);
+        if (objV instanceof Vip) {
+            Vip vip = (Vip)objV;
+            String obj = vDAO.removeVip(vip);
+            
+
+                return obj;
                 }
-        } else {
+          else {
             return (String) objV;
         }
     }
@@ -115,14 +177,14 @@ public class VipResource {
             int zoneId = ((Long) obj.get("zone_id")).intValue();
             v.setZoneId(zoneId);
             int userId = ((Long) obj.get("user_id")).intValue();
-            v.setUserId(zoneId);
+            v.setUserId(userId);
             
 
         } // more detailed reporting can be done by catching specific exceptions, such as ParseException
         catch (ParseException exp) {
             System.out.println(exp);
             v = null;
-            return hsb.ParseError();
+            return hsb.parseError();
         }
         return v;
     }
@@ -149,10 +211,12 @@ public class VipResource {
         } // more detailed reporting can be done by catching specific exceptions, such as ParseException
         catch (ParseException exp) {
             System.out.println(exp);
-            return hsb.ParseError();
+            return hsb.parseError();
         }
         return zoneId;
     }
+    
+    
     
     private JSONObject convertUserToJson(User user) {
         JSONObject jObj = new JSONObject();
@@ -161,6 +225,15 @@ public class VipResource {
         jObj.put("email", user.getEmail());
         jObj.put("user_type", user.getUserType());
         jObj.put("has_disabled_badge", user.getHasDisabledBadge());
+
+        return jObj;
+    }
+    
+    private JSONObject convertVipToJson(Vip vip) {
+        JSONObject jObj = new JSONObject();
+        jObj.put("user_id", vip.getUserId());
+        jObj.put("zone_id", vip.getZoneId());
+
 
         return jObj;
     }

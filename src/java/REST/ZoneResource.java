@@ -59,7 +59,7 @@ public class ZoneResource {
         } catch (ParseException exp) {
             System.out.println(exp);
             l = null;
-            return hsb.ParseError();
+            return hsb.parseError();
         }
         return l;
     }
@@ -94,7 +94,7 @@ public class ZoneResource {
         catch (ParseException exp) {
             System.out.println(exp);
             z = null;
-            return hsb.ParseError();
+            return hsb.parseError();
         }
         return z;
     }
@@ -119,7 +119,7 @@ public class ZoneResource {
     public String getLots() {
         ArrayList<Zone> zone = (ArrayList<Zone>) ldao.selectAllZones();
         if (zone == null || zone.isEmpty()) {
-            return hsb.CreateMessage(-1, "No Lots Found");
+            return hsb.createMessage(-1, "No Lots Found");
         } else {
             JSONArray array = new JSONArray();
             for (Zone zones : zone) {
@@ -152,7 +152,7 @@ public class ZoneResource {
         Lot l = (Lot) obj;
         ArrayList<Zone> z = (ArrayList<Zone>) ldao.selectAllZoneByLotId(l);
         if (z == null || z.isEmpty()) {
-            return hsb.CreateMessage(-1, "No Zone Has Been Added");
+            return hsb.createMessage(-1, "No Zone Has Been Added");
         } else {
             JSONArray array = new JSONArray();
             for (Zone zs : z) {
