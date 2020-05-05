@@ -25,6 +25,8 @@ public interface LotDaoInterface {
     String addBooking(ParkedCars pc);
 
     Object selectAllLots();
+    
+    Object selectLotsByUserId(int userId);
 
     Object selectAllZones();
     
