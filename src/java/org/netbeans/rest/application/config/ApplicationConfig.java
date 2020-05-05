@@ -42,6 +42,7 @@ public class ApplicationConfig extends Application {
         resources.add(REST.UserCarResource.class);
         resources.add(REST.UserDetailsResource.class);
         resources.add(REST.UserResource.class);
+        resources.add(REST.VipResource.class);
         resources.add(REST.ZoneResource.class);
     }
     

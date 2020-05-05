@@ -16,6 +16,7 @@ import java.util.ArrayList;
 public interface UserDAOInterface {
         boolean updateUser(User user);
         ArrayList<User> selectAllUsers();
+        Object selectUserById(int userId);
         boolean checkUserExistsByEmail(String email);
         boolean login(String email, String hash); 
         boolean register(String fullname, String email, String hash, String user_Type, 

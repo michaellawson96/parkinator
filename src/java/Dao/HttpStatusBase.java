@@ -24,16 +24,20 @@ public class HttpStatusBase {
         HttpStatus hs = new HttpStatus(2003,"Problem connecting to server");
         return convertStatusToJson(hs).toJSONString();
     }
-    public String CreateMessage(int status_code,String message){
+    public String createMessage(int status_code,String message){
         HttpStatus hs = new HttpStatus(status_code,message);
         return convertStatusToJson(hs).toJSONString();
     }
-    public String ExceptionError(){
+    public String exceptionError(){
         HttpStatus hs = new HttpStatus(408,"Problem With the Server Side");
         return convertStatusToJson(hs).toJSONString();
     }    
-    public String ParseError(){
+    public String parseError(){
         HttpStatus hs = new HttpStatus(523,"Error has been reached unexpectedly while parsing.");
+        return convertStatusToJson(hs).toJSONString();
+    }      
+    public String success(){
+        HttpStatus hs = new HttpStatus(200,"Success");
         return convertStatusToJson(hs).toJSONString();
     }      
 }

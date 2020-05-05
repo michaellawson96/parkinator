@@ -75,7 +75,7 @@ public class BookingsResource {
         } catch (ParseException exp) {
             System.out.println(exp);
             pc = null;
-            return exp.getMessage();//hsb.ParseError();
+            return exp.getMessage();//hsb.parseError();
         } catch (java.text.ParseException jtp){
             return jtp.getMessage();
         }
@@ -99,7 +99,7 @@ public class BookingsResource {
         } catch (ParseException exp) {
             System.out.println(exp);
             u = null;
-            return hsb.ParseError();
+            return hsb.parseError();
         }
         return u;
     }    
@@ -118,13 +118,13 @@ public class BookingsResource {
     public String getBookings() {
         ArrayList<ParkedCars> pc = (ArrayList<ParkedCars>)ldao.selectAllBookings();
         if (pc == null || pc.isEmpty()) {
-            return hsb.CreateMessage(-1, "No bookings found Found");
+            return hsb.createMessage(-1, "No bookings found Found");
         } else {
             JSONArray array = new JSONArray();
             for (ParkedCars pcs : pc) {
                 array.add(convertBookingToJson(pcs));
             }
-            return  hsb.CreateMessage(1, array.toString());
+            return  hsb.createMessage(1, array.toString());
         }
     }
     @POST
@@ -150,7 +150,7 @@ public class BookingsResource {
         User u = (User) obj;
         ArrayList<ParkedCars> pc = (ArrayList<ParkedCars>)ldao.selectAllBookingsByUserId(u);
         if (pc == null || pc.isEmpty()) {
-            return hsb.CreateMessage(-1, "No bookings found Found");
+            return hsb.createMessage(-1, "No bookings found Found");
         } else {
             JSONArray array = new JSONArray();
             for (ParkedCars pcs : pc) {

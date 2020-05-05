@@ -191,7 +191,7 @@ HttpStatusBase hsb = new HttpStatusBase();
         } catch (ParseException exp) {
             System.out.println(exp);
             pc = null;
-            return hsb.ParseError();
+            return hsb.parseError();
         } 
         return pc;
     }    
@@ -218,13 +218,13 @@ HttpStatusBase hsb = new HttpStatusBase();
         ParkedCars pc = (ParkedCars) obj;
         ArrayList<Car> car = (ArrayList<Car>)uDAO.getAllregPlatesUnderAZone(pc);
         if (car == null || car.isEmpty()) {
-            return hsb.CreateMessage(-1, "No Cars In This Zone");
+            return hsb.createMessage(-1, "No Cars In This Zone");
         } else {
             JSONArray array = new JSONArray();
             for (Car c : car) {
                 array.add(convertCarToJson(c));
             }
-            return hsb.CreateMessage(1, array.toString());
+            return hsb.createMessage(1, array.toString());
         }
     }    
      private JSONObject convertBookingDetailsCCToJson(BookingDetailsCC bd) {
@@ -246,13 +246,13 @@ HttpStatusBase hsb = new HttpStatusBase();
                 CcDAOInterface uDAO = new CcDAO();
         ArrayList<BookingDetailsCC> bd = (ArrayList<BookingDetailsCC>)uDAO.getAllregPlatesUnderAllZone();
         if (bd == null || bd.isEmpty()) {
-            return hsb.CreateMessage(-1, "No Cars Found");
+            return hsb.createMessage(-1, "No Cars Found");
         } else {
             JSONArray array = new JSONArray();
             for (BookingDetailsCC c : bd) {
                 array.add(convertBookingDetailsCCToJson(c));
             }
-            return hsb.CreateMessage(1, array.toString());
+            return hsb.createMessage(1, array.toString());
         }
     }      
 }

@@ -18,7 +18,7 @@
                     <path-in-war>WEB-INF/lib</path-in-war>
                 </library>
                 <library dirs="200">
-                    <file>${file.reference.json-simple-1.1.1.jar}</file>
+                    <file>${file.reference.json-simple-1.1.1.jar-1}</file>
                     <path-in-war>WEB-INF/lib</path-in-war>
                 </library>
                 <library dirs="200">

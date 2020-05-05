@@ -144,7 +144,7 @@ public class CcDAO implements CcDAOInterface {
         } catch (Exception e) {
             System.out.println("Exception occurred: " + e.getMessage());
             e.printStackTrace();
-            return hsb.ExceptionError();
+            return hsb.exceptionError();
         }
     }
      //Need To be Tested
@@ -168,7 +168,7 @@ public class CcDAO implements CcDAOInterface {
         } catch (Exception e) {
             System.out.println("Exception occurred: " + e.getMessage());
             e.printStackTrace();
-            return hsb.ExceptionError();
+            return hsb.exceptionError();
         }
     }    
 }

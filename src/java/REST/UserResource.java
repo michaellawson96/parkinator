@@ -142,6 +142,23 @@ public class UserResource {
         }
         return u;
     }
+    
+    private int convertJsonStringToUserId(String jsonString) {
+        int uid;
+        try {
+            // create a parser to convert a string to a json object
+            JSONParser parser = new JSONParser();
+            // parser returns an object. You should know or check what to convert to (an JSONObject or JSONArray)
+            JSONObject obj = (JSONObject) parser.parse(jsonString);
+
+            uid = ((Long) obj.get("user_id")).intValue();
+        } // more detailed reporting can be done by catching specific exceptions, such as ParseException
+        catch (ParseException exp) {
+            System.out.println(exp);
+            uid = -1;
+        }
+        return uid;
+    }
 
     private Object convertJsonStringToImage(String jsonString) {
         UserImage ui = null;
@@ -161,7 +178,7 @@ public class UserResource {
         } // more detailed reporting can be done by catching specific exceptions, such as ParseException
         catch (ParseException exp) {
             System.out.println(exp);
-            return hsb.ParseError();
+            return hsb.parseError();
         }
         return ui;
     }
@@ -198,7 +215,7 @@ public class UserResource {
         if (obj instanceof UserImage) {
             UserImage ui = (UserImage) obj;
             if (uDAO.getImage(ui) instanceof UserImage) {
-                return hsb.CreateMessage(1, convertImageToJson((UserImage) uDAO.getImage(ui)).toString());
+                return hsb.createMessage(1, convertImageToJson((UserImage) uDAO.getImage(ui)).toString());
             } else {
                 return (String) uDAO.getImage(ui);
             }
@@ -206,5 +223,28 @@ public class UserResource {
             return (String) obj;
         }
 
+    }
+    
+    
+    @GET
+    @Path("GetUserById/")
+    @Produces(MediaType.TEXT_PLAIN)
+    public String userReadById(String content) {
+        UserDAOInterface uDAO = new UserDao();
+        int userId = convertJsonStringToUserId(content);
+        Object obj = uDAO.selectUserById(userId);
+        ArrayList<User> users = new ArrayList();
+        if (users.isEmpty()) {
+            return hsb.createMessage(71, "No result found");
+        }
+        else{
+            if (obj instanceof User){
+                JSONObject string = convertUserToJson((User)obj);
+                return string.toJSONString();
+            }
+            else
+                return (String)obj;
+        }
+        
     }
 }

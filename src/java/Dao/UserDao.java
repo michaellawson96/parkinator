@@ -394,7 +394,7 @@ public class UserDao implements UserDAOInterface {
 
             sql.getPs().executeUpdate();
 
-            return hsb.CreateMessage(1, "Image has Been Uploaded");
+            return hsb.createMessage(1, "Image has Been Uploaded");
             }else{
                 sql.setPs(sql.getConn().prepareStatement("UPDATE userimages SET Image=? WHERE ImageName = ?"));
 
@@ -402,7 +402,7 @@ public class UserDao implements UserDAOInterface {
                 sql.getPs().setString(2, ui.getEmail());
 
                 sql.getPs().executeUpdate();    
-                return hsb.CreateMessage(1, "Image has Been Uploaded");
+                return hsb.createMessage(1, "Image has Been Uploaded");
             }
 
         } catch (SQLException se) {
@@ -412,7 +412,7 @@ public class UserDao implements UserDAOInterface {
         } catch (Exception e) {
             System.out.println("Exception occurred: " + e.getMessage());
             e.printStackTrace();
-            return hsb.ExceptionError();
+            return hsb.exceptionError();
         }
         
 
@@ -433,7 +433,7 @@ public class UserDao implements UserDAOInterface {
             if (rst.next()) {
                 userImage = new UserImage( rst.getString("ImageName"),rst.getString("Image"));
             }else{
-                return hsb.CreateMessage(-1, "No Image");
+                return hsb.createMessage(-1, "No Image");
             }
 
             return userImage;
@@ -445,7 +445,7 @@ public class UserDao implements UserDAOInterface {
         } catch (Exception e) {
             System.out.println("Exception occurred: " + e.getMessage());
             e.printStackTrace();
-            return hsb.ExceptionError();
+            return hsb.exceptionError();
         }
 
     }    
@@ -473,6 +473,34 @@ public class UserDao implements UserDAOInterface {
             System.out.println("Exception occurred: " + e.getMessage());
             e.printStackTrace();
             return false;
+        }
+    }
+
+    @Override
+    public Object selectUserById(int userId) {
+        try {
+            sql.setPs(sql.getConn().prepareStatement("select * from users where user_id = ?"));
+            sql.getPs().setInt(1, userId);
+            ResultSet rst;
+            // Execute the query
+            rst = sql.getPs().executeQuery();
+            User user = new User();
+            while (rst.next()) {
+                user = new User(rst.getInt("user_id"), rst.getString("user_fullname"), rst.getString("email"),
+                        rst.getString("hash"), rst.getString("user_type"), rst.getString("question"),
+                        rst.getString("answer_hash"), rst.getBoolean("has_disabled_badge"));
+            }
+            System.out.println("User has been added.");
+
+            return user;
+        } catch (SQLException se) {
+            System.out.println("SQL Exception occurred: " + se.getMessage());
+            se.printStackTrace();
+            return hsb.SQlError();
+        } catch (Exception e) {
+            System.out.println("Exception occurred: " + e.getMessage());
+            e.printStackTrace();
+            return hsb.exceptionError();
         }
     }
 }

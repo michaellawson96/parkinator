@@ -73,10 +73,32 @@ public class LotsResource {
         catch (ParseException exp) {
             System.out.println(exp);
             u = null;
-            return hsb.ParseError();
+            return hsb.parseError();
         }
         return u;
     }
+    
+    
+    private Object convertJsonStringToUserID(String jsonString) {
+        int userId =-1;
+        try {
+            // create a parser to convert a string to a json object
+            JSONParser parser = new JSONParser();
+            // parser returns an object. You should know or check what to convert to (an JSONObject or JSONArray)
+            JSONObject obj = (JSONObject) parser.parse(jsonString);
+
+            // note that JSONObject has all numbers as longs, and needs to be converted to an int if required.
+            userId = ((Long) obj.get("user_id")).intValue();
+
+            
+        } // more detailed reporting can be done by catching specific exceptions, such as ParseException
+        catch (ParseException exp) {
+            System.out.println(exp);
+            return hsb.parseError();
+        }
+        return userId;
+    }
+    
 
     private JSONObject convertLotToJson(Lot lot) {
         JSONObject jObj = new JSONObject();
@@ -93,13 +115,37 @@ public class LotsResource {
     public String getLots() {
         ArrayList<Lot> lots = (ArrayList<Lot>)ldao.selectAllLots();
         if (lots == null || lots.isEmpty()) {
-            return hsb.CreateMessage(-1, "No Lots Found");
+            return hsb.createMessage(-1, "No Lots Found");
         } else {
             JSONArray array = new JSONArray();
             for (Lot lot : lots) {
                 array.add(convertLotToJson(lot));
             }
             return array.toString();
+        }
+    }
+    
+    //used to obtain a list of lots that contain zones where the logged in user is a vip of
+    @POST
+    @Path("getLotsByUser/")
+    @Produces(MediaType.TEXT_PLAIN)
+    @Consumes(MediaType.TEXT_PLAIN)
+    public String getLotsByUserId(String content) {
+        Object potentialId = convertJsonStringToUserID(content);
+        if(potentialId instanceof Integer){
+            ArrayList<Lot> lots = (ArrayList<Lot>)ldao.selectLotsByUserId((int)potentialId);
+            if (lots == null || lots.isEmpty()) {
+                return hsb.createMessage(-1, "No Lots Found");
+            } else {
+                JSONArray array = new JSONArray();
+                for (Lot lot : lots) {
+                    array.add(convertLotToJson(lot));
+                }
+                return array.toString();
+            }
+        }
+        else{
+            return (String)potentialId;
         }
     }
 
