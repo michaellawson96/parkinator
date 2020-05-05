@@ -20,9 +20,12 @@ public class SupportTest {
         String c = sc.next();
         // System.out.println(ar.DeletesUser(c));
         // {"user_id":16}       
-       System.out.println(sr.InsertMessage(c));
-        //{"message_id":1"title":"help","message":"a","date_sent":"2018-12-2","user_id":18}         {"message_id": 0, "title": "a"," message": "a"," date": "2020-04-30", "user_id": 17}
+     //  System.out.println(sr.InsertMessage(c));
+        //{"message_id":1"title":"help","message":"a","date":"2018-12-2","user_id":18,"status":"Sent"}         
+        //{"message_id":0,"title":"a","message":"a","date":"2020-04-30", user_id": 17,"status":"Sent"}
        // System.out.println(sr.getMessages());
        // System.out.println(sr.removeMessage(c));
+        System.out.println(sr.getMessagesById(c));
+        
     }
 }

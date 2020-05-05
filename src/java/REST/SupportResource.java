@@ -63,20 +63,21 @@ public class SupportResource {
             s.setMessage((String) obj.get("message"));
             Date date = simpleDateFormat.parse(obj.get("date").toString());
             s.setDate(date);
-            
-            int user_id = ((Long) obj.get("user_id")).intValue();
-            s.setUser_id(user_id);            
 
+            int user_id = ((Long) obj.get("user_id")).intValue();
+            s.setUser_id(user_id);
+            s.setStatus((String) obj.get("status"));
         } // more detailed reporting can be done by catching specific exceptions, such as ParseException
         catch (ParseException exp) {
             System.out.println(exp);
             s = null;
             return hsb.ParseError();
-        }catch (java.text.ParseException jtp){
+        } catch (java.text.ParseException jtp) {
             return jtp.getMessage();
         }
         return s;
     }
+
     private Object convertJsonStringToSupportRemove(String jsonString) {
         Support s = null;
         try {
@@ -93,9 +94,10 @@ public class SupportResource {
             s.setMessage_id(messageId);
             s.setTitle((String) obj.get("title"));
             s.setMessage((String) obj.get("message"));
-            
+
             int user_id = ((Long) obj.get("user_id")).intValue();
-            s.setUser_id(user_id);            
+            s.setUser_id(user_id);
+            s.setStatus((String) obj.get("status"));
 
         } // more detailed reporting can be done by catching specific exceptions, such as ParseException
         catch (ParseException exp) {
@@ -105,13 +107,15 @@ public class SupportResource {
         }
         return s;
     }
+
     private JSONObject convertSupportToJson(Support sup) {
         JSONObject jObj = new JSONObject();
         jObj.put("message_id", sup.getMessage_id());
         jObj.put("title", sup.getTitle());
         jObj.put("message", sup.getMessage());
         jObj.put("date", sup.getDate().toString());
-         jObj.put("user_id", sup.getUser_id());
+        jObj.put("user_id", sup.getUser_id());
+        jObj.put("status", sup.getStatus());
         return jObj;
     }
 
@@ -136,6 +140,30 @@ public class SupportResource {
         }
     }
 
+    @POST
+    @Path("getMessagesById/")
+    @Produces(MediaType.TEXT_PLAIN)
+    @Consumes(MediaType.TEXT_PLAIN)
+    public String getMessagesById(String content) {
+        Object obj = convertJsonStringToSupport(content);
+        if (obj instanceof Support) {
+            Support support = (Support) obj;
+            ArrayList<Support> sup = (ArrayList<Support>) sdao.selectAllMessageByUserId(support);
+            if (sup == null || sup.isEmpty()) {
+                return hsb.CreateMessage(-1, "No Messages Found");
+            } else {
+                JSONArray array = new JSONArray();
+                for (Support s : sup) {
+                    array.add(convertSupportToJson(s));
+                }
+                return hsb.CreateMessage(1, array.toString());
+            }
+        }else{
+            return (String) obj;
+        }
+       
+    }
+
     /**
      * PUT method for updating or creating an instance of SupportResource
      *
@@ -153,7 +181,18 @@ public class SupportResource {
             return (String) obj;
         }
     }
-
+    @PUT
+    @Produces(MediaType.TEXT_PLAIN)
+    @Consumes(MediaType.TEXT_PLAIN)
+    public Object updateStatus(String content) {
+        Object obj = convertJsonStringToSupport(content);
+        if (obj instanceof Support) {
+            Support sup = (Support) obj;
+            return sdao.statusUpdate(sup);
+        } else {
+            return (String) obj;
+        }
+    }
     @POST
     @Path("removeSupport/")
     @Consumes(MediaType.TEXT_PLAIN)

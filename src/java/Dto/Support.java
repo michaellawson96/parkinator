@@ -18,18 +18,19 @@ public class Support {
     private String message;
     private Date date;
     private int user_id;
-    
+    private String status;
     
     public Support(){
         
     }
 
-    public Support(int message_id, String title, String message, Date date, int user_id) {
+    public Support(int message_id, String title, String message, Date date, int user_id, String status) {
         this.message_id = message_id;
         this.title = title;
         this.message = message;
         this.date = date;
         this.user_id = user_id;
+        this.status = status;
     }
 
     public int getMessage_id() {
@@ -72,14 +73,23 @@ public class Support {
         this.user_id = user_id;
     }
 
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
     @Override
     public int hashCode() {
-        int hash = 3;
-        hash = 89 * hash + this.message_id;
-        hash = 89 * hash + Objects.hashCode(this.title);
-        hash = 89 * hash + Objects.hashCode(this.message);
-        hash = 89 * hash + Objects.hashCode(this.date);
-        hash = 89 * hash + Objects.hashCode(this.user_id);
+        int hash = 7;
+        hash = 29 * hash + this.message_id;
+        hash = 29 * hash + Objects.hashCode(this.title);
+        hash = 29 * hash + Objects.hashCode(this.message);
+        hash = 29 * hash + Objects.hashCode(this.date);
+        hash = 29 * hash + this.user_id;
+        hash = 29 * hash + Objects.hashCode(this.status);
         return hash;
     }
 
@@ -98,16 +108,19 @@ public class Support {
         if (this.message_id != other.message_id) {
             return false;
         }
+        if (this.user_id != other.user_id) {
+            return false;
+        }
         if (!Objects.equals(this.title, other.title)) {
             return false;
         }
         if (!Objects.equals(this.message, other.message)) {
             return false;
         }
-        if (!Objects.equals(this.date, other.date)) {
+        if (!Objects.equals(this.status, other.status)) {
             return false;
         }
-        if (!Objects.equals(this.user_id, other.user_id)) {
+        if (!Objects.equals(this.date, other.date)) {
             return false;
         }
         return true;
@@ -115,8 +128,9 @@ public class Support {
 
     @Override
     public String toString() {
-        return "Support{" + "message_id=" + message_id + ", title=" + title + ", message=" + message + ", date=" + date + ", user_id=" + user_id + '}';
+        return "Support{" + "message_id=" + message_id + ", title=" + title + ", message=" + message + ", date=" + date + ", user_id=" + user_id + ", status=" + status + '}';
     }
+
     
     
 

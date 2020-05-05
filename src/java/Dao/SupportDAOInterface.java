@@ -15,5 +15,7 @@ public interface SupportDAOInterface {
     String insertMessage(Support sup);
     Object selectAllMessage();
     String removeMessage(Support sup);
+    Object selectAllMessageByUserId(Support support);
+    Object statusUpdate(Support support) ;
     
 }

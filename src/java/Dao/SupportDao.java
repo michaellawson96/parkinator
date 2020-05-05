@@ -18,11 +18,11 @@ import java.util.ArrayList;
  *
  * @author SeppQ
  */
-public class SupportDao implements SupportDAOInterface{
-    
+public class SupportDao implements SupportDAOInterface {
+
     private SqlConnection sql;
     private HttpStatusBase hsb = new HttpStatusBase();
-    
+
     public SupportDao(SqlConnection sql) {
         this.sql = sql;
     }
@@ -30,25 +30,26 @@ public class SupportDao implements SupportDAOInterface{
     public SupportDao() {
         this.sql = new SqlConnection();
     }
-    
+
     public static java.sql.Date convertUtilToSql(java.util.Date uDate) {
         java.sql.Date sDate = new java.sql.Date(uDate.getTime());
         return sDate;
     }
-    
+
     @Override
     public String insertMessage(Support sup) {
         try {
-                sql.setPs(sql.getConn().prepareStatement("INSERT INTO support(title,message,date,user_id) VALUES (?,?,?,?)"));
+            sql.setPs(sql.getConn().prepareStatement("INSERT INTO support(title,message,date,user_id,status) VALUES (?,?,?,?,?)"));
 
-                sql.getPs().setString(1, sup.getTitle());
-                sql.getPs().setString(2, sup.getMessage());
-                sql.getPs().setDate(3, convertUtilToSql(sup.getDate()));
-                sql.getPs().setInt(4, sup.getUser_id());
+            sql.getPs().setString(1, sup.getTitle());
+            sql.getPs().setString(2, sup.getMessage());
+            sql.getPs().setDate(3, convertUtilToSql(sup.getDate()));
+            sql.getPs().setInt(4, sup.getUser_id());
+            sql.getPs().setString(5, sup.getStatus());
 
-                sql.getPs().executeUpdate();
-                
-                return hsb.CreateMessage(1, "Your post has been Sent");
+            sql.getPs().executeUpdate();
+
+            return hsb.CreateMessage(1, "Your post has been Sent");
         } catch (SQLException se) {
             System.out.println("SQL Exception occurred: " + se.getMessage());
             se.printStackTrace();
@@ -59,7 +60,7 @@ public class SupportDao implements SupportDAOInterface{
             return hsb.ExceptionError();
         }
     }
-    
+
     @Override
     public Object selectAllMessage() {
         try {
@@ -69,7 +70,7 @@ public class SupportDao implements SupportDAOInterface{
             rst = sql.getPs().executeQuery();
             ArrayList<Support> sup = new ArrayList<>();
             while (rst.next()) {
-                sup.add(new Support(rst.getInt("message_id"), rst.getString("title"), rst.getString("message"), rst.getDate("date"), rst.getInt("user_id")));
+                sup.add(new Support(rst.getInt("message_id"), rst.getString("title"), rst.getString("message"), rst.getDate("date"), rst.getInt("user_id"), rst.getString("status")));
             }
 
             return sup;
@@ -82,8 +83,56 @@ public class SupportDao implements SupportDAOInterface{
             e.printStackTrace();
             return hsb.ExceptionError();
         }
-    }    
-    
+    }
+//need to be tested
+
+    @Override
+    public Object selectAllMessageByUserId(Support support) {
+        try {
+            sql.setPs(sql.getConn().prepareStatement("select * from support where user_id = ?"));
+            sql.getPs().setInt(1, support.getUser_id());
+            ResultSet rst;
+            // Execute the query
+            rst = sql.getPs().executeQuery();
+            ArrayList<Support> sup = new ArrayList<>();
+            while (rst.next()) {
+                sup.add(new Support(rst.getInt("message_id"), rst.getString("title"), rst.getString("message"), rst.getDate("date"), rst.getInt("user_id"), rst.getString("status")));
+            }
+
+            return sup;
+        } catch (SQLException se) {
+            System.out.println("SQL Exception occurred: " + se.getMessage());
+            se.printStackTrace();
+            return hsb.SQlError();
+        } catch (Exception e) {
+            System.out.println("Exception occurred: " + e.getMessage());
+            e.printStackTrace();
+            return hsb.ExceptionError();
+        }
+    }
+
+    //need to be tested
+    @Override
+    public Object statusUpdate(Support support) {
+        try {
+            sql.setPs(sql.getConn().prepareStatement("UPDATE support SET status = ? where message_id = ?"));
+            sql.getPs().setString(1, support.getStatus());
+            sql.getPs().setInt(2, support.getMessage_id());
+
+            sql.getPs().executeUpdate();
+
+            return hsb.CreateMessage(1, "Status has been changed to" + support.getMessage());
+        } catch (SQLException se) {
+            System.out.println("SQL Exception occurred: " + se.getMessage());
+            se.printStackTrace();
+            return hsb.SQlError();
+        } catch (Exception e) {
+            System.out.println("Exception occurred: " + e.getMessage());
+            e.printStackTrace();
+            return hsb.ExceptionError();
+        }
+    }
+
     @Override
     public String removeMessage(Support sup) {
         try {
@@ -104,5 +153,5 @@ public class SupportDao implements SupportDAOInterface{
             e.printStackTrace();
             return hsb.ExceptionError();
         }
-    }    
+    }
 }
