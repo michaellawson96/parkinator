@@ -36,6 +36,7 @@ public class ApplicationConfig extends Application {
         resources.add(REST.LoginResourse.class);
         resources.add(REST.LotsResource.class);
         resources.add(REST.NewCrossOriginResourceSharingFilter.class);
+        resources.add(REST.PaymentLogsResource.class);
         resources.add(REST.RecoveryPasswordResource.class);
         resources.add(REST.RecoveryResource.class);
         resources.add(REST.SupportResource.class);
