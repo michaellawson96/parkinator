@@ -45,4 +45,8 @@ public interface LotDaoInterface {
     String removeZone(Zone zone);
     
     String updateZone(Zone zone);
+    
+    Object selectLotsByCounty(Lot l);
+    
+    Object checkBooking(ParkedCars pc);
 }

@@ -89,6 +89,9 @@ public class ZoneResource {
             z.setLng(lng);
             double lat = ((Number) obj.get("alt")).doubleValue();
             z.setLat(lat);
+            double price = ((Number) obj.get("price")).doubleValue();
+            z.setPrice(price);            
+            
 
         } // more detailed reporting can be done by catching specific exceptions, such as ParseException
         catch (ParseException exp) {
@@ -109,6 +112,7 @@ public class ZoneResource {
         jObj.put("max_disabled_spaces", zone.getMax_disabled_spaces());
         jObj.put("lng", zone.getLng());
         jObj.put("alt", zone.getLat());
+        jObj.put("price", zone.getPrice());
         return jObj;
     }
 
@@ -116,16 +120,16 @@ public class ZoneResource {
     //@Path("getLots/")
     @Produces(MediaType.TEXT_PLAIN)
     @Consumes(MediaType.TEXT_PLAIN)
-    public String getLots() {
+    public String getZones() {
         ArrayList<Zone> zone = (ArrayList<Zone>) ldao.selectAllZones();
         if (zone == null || zone.isEmpty()) {
-            return hsb.createMessage(-1, "No Lots Found");
+            return hsb.createMessage(-1, "No Zones Found");
         } else {
             JSONArray array = new JSONArray();
             for (Zone zones : zone) {
                 array.add(convertZoneToJson(zones));
             }
-            return array.toString();
+            return hsb.createMessage(1, array.toString());
         }
     }
 
@@ -158,7 +162,7 @@ public class ZoneResource {
             for (Zone zs : z) {
                 array.add(convertZoneToJson(zs));
             }
-            return array.toString();
+            return hsb.createMessage(1,array.toString());
         }
 
     }

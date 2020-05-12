@@ -61,12 +61,14 @@ public class LotsResource {
             int lotId =  ((Long)obj.get("lot_id")).intValue();
             u.setLot_id(lotId);
             u.setParking_name((String) obj.get("parking_name"));
+             u.setCounty((String) obj.get("County"));
             if(((Long)obj.get("cc_id")) != null){
             int ccId =  ((Long)obj.get("cc_id")).intValue();
              u.setCc_id(ccId);
             }else{
                 u.setCc_id(1);
             }
+           
            
 
         } // more detailed reporting can be done by catching specific exceptions, such as ParseException
@@ -105,6 +107,7 @@ public class LotsResource {
         jObj.put("lot_id", lot.getLot_id());
         jObj.put("parking_name", lot.getParking_name());
         jObj.put("cc_id", lot.getCc_id());
+        jObj.put("County", lot.getCounty());
         return jObj;
     }
 
@@ -121,7 +124,7 @@ public class LotsResource {
             for (Lot lot : lots) {
                 array.add(convertLotToJson(lot));
             }
-            return array.toString();
+            return hsb.createMessage(1, array.toString());
         }
     }
     
@@ -178,4 +181,28 @@ public class LotsResource {
         }
 
     }
+    
+    @POST
+    @Path("getLotsByCounty/")
+    @Produces(MediaType.TEXT_PLAIN)
+    @Consumes(MediaType.TEXT_PLAIN)
+    public String getLotsByCounty(String content) {
+        Object lotsByCounty = convertJsonStringToLots(content);
+        if(lotsByCounty instanceof Lot){
+            Lot lot = (Lot) lotsByCounty;
+            ArrayList<Lot> lots = (ArrayList<Lot>)ldao.selectLotsByCounty(lot);
+            if (lots == null || lots.isEmpty()) {
+                return hsb.createMessage(-1, "No Lots Found");
+            } else {
+                JSONArray array = new JSONArray();
+                for (Lot l : lots) {
+                    array.add(convertLotToJson(l));
+                }
+                return hsb.createMessage(1, array.toString());
+            }
+        }
+        else{
+            return hsb.createMessage(-1, (String)lotsByCounty);
+        }
+    }    
 }

@@ -57,7 +57,7 @@ public class PaymentLogDAO implements PaymentLogDAOInterface {
         @Override
     public Object selectPaymentLogs() {
         try {
-            sql.setPs(sql.getConn().prepareStatement("select * from paymentlogs"));
+            sql.setPs(sql.getConn().prepareStatement("select * from paymentlogs ORDER BY create_time DESC"));
             ResultSet rst;
             // Execute the query
             rst = sql.getPs().executeQuery();

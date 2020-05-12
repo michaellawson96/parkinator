@@ -20,8 +20,12 @@ public class Zone {
     private int max_disabled_spaces;
     private double lat;
     private double lng;
+    private double price;
 
-    public Zone(int zone_id, String zone_name, int max_spaces, boolean is_vip, int lot_id, int max_disabled_spaces, double lat, double lng) {
+    public Zone() {
+    }
+
+    public Zone(int zone_id, String zone_name, int max_spaces, boolean is_vip, int lot_id, int max_disabled_spaces, double lat, double lng, double price) {
         this.zone_id = zone_id;
         this.zone_name = zone_name;
         this.max_spaces = max_spaces;
@@ -30,9 +34,7 @@ public class Zone {
         this.max_disabled_spaces = max_disabled_spaces;
         this.lat = lat;
         this.lng = lng;
-    }
-    public Zone(){
-        
+        this.price = price;
     }
 
     public int getZone_id() {
@@ -99,17 +101,26 @@ public class Zone {
         this.lng = lng;
     }
 
+    public double getPrice() {
+        return price;
+    }
+
+    public void setPrice(double price) {
+        this.price = price;
+    }
+
     @Override
     public int hashCode() {
         int hash = 3;
-        hash = 37 * hash + this.zone_id;
-        hash = 37 * hash + Objects.hashCode(this.zone_name);
-        hash = 37 * hash + this.max_spaces;
-        hash = 37 * hash + (this.is_vip ? 1 : 0);
-        hash = 37 * hash + this.lot_id;
-        hash = 37 * hash + this.max_disabled_spaces;
-        hash = 37 * hash + (int) (Double.doubleToLongBits(this.lat) ^ (Double.doubleToLongBits(this.lat) >>> 32));
-        hash = 37 * hash + (int) (Double.doubleToLongBits(this.lng) ^ (Double.doubleToLongBits(this.lng) >>> 32));
+        hash = 53 * hash + this.zone_id;
+        hash = 53 * hash + Objects.hashCode(this.zone_name);
+        hash = 53 * hash + this.max_spaces;
+        hash = 53 * hash + (this.is_vip ? 1 : 0);
+        hash = 53 * hash + this.lot_id;
+        hash = 53 * hash + this.max_disabled_spaces;
+        hash = 53 * hash + (int) (Double.doubleToLongBits(this.lat) ^ (Double.doubleToLongBits(this.lat) >>> 32));
+        hash = 53 * hash + (int) (Double.doubleToLongBits(this.lng) ^ (Double.doubleToLongBits(this.lng) >>> 32));
+        hash = 53 * hash + (int) (Double.doubleToLongBits(this.price) ^ (Double.doubleToLongBits(this.price) >>> 32));
         return hash;
     }
 
@@ -146,6 +157,9 @@ public class Zone {
         if (Double.doubleToLongBits(this.lng) != Double.doubleToLongBits(other.lng)) {
             return false;
         }
+        if (Double.doubleToLongBits(this.price) != Double.doubleToLongBits(other.price)) {
+            return false;
+        }
         if (!Objects.equals(this.zone_name, other.zone_name)) {
             return false;
         }
@@ -154,8 +168,10 @@ public class Zone {
 
     @Override
     public String toString() {
-        return "Zone{" + "zone_id=" + zone_id + ", zone_name=" + zone_name + ", max_spaces=" + max_spaces + ", is_vip=" + is_vip + ", lot_id=" + lot_id + ", max_disabled_spaces=" + max_disabled_spaces + ", lat=" + lat + ", lng=" + lng + '}';
+        return "Zone{" + "zone_id=" + zone_id + ", zone_name=" + zone_name + ", max_spaces=" + max_spaces + ", is_vip=" + is_vip + ", lot_id=" + lot_id + ", max_disabled_spaces=" + max_disabled_spaces + ", lat=" + lat + ", lng=" + lng + ", price=" + price + '}';
     }
+
+   
     
     
 

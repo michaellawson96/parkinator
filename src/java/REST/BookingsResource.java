@@ -187,4 +187,19 @@ public class BookingsResource {
         }
     }
     
+    //need tested
+    @POST
+    @Path("checkBooking/")
+    @Consumes(MediaType.TEXT_PLAIN)
+    @Produces(MediaType.TEXT_PLAIN)
+    public Object checkBooking(String content) {
+        Object obj = convertJsonStringToBooking(content);
+        if (obj instanceof ParkedCars) {
+            ParkedCars pc = (ParkedCars) obj;
+            return ldao.checkBooking(pc);
+        } else {
+            return (String) obj;
+        }
+
+    }
 }
