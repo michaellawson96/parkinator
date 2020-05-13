@@ -106,7 +106,7 @@ public class CcDAOIT {
         ParkedCars pc = new ParkedCars(29,18, new Date(2020 / 05 / 22), new Date(2020 / 05 / 22),18);
         CcDAO instance = new CcDAO();
         String expResult = "[Car{carNo=18, alias=null, carReg=asasdasd, carColour=null, carMake=null, carModel=null, userNo=0}]";
-        Object result = instance.getAllregPlatesUnderAZone(pc);
+        String result = instance.getAllregPlatesUnderAZone(pc).toString();
         assertEquals(expResult, result);
     }
 
@@ -117,8 +117,8 @@ public class CcDAOIT {
     public void F_testGetAllregPlatesUnderAllZone() {
         System.out.println("getAllregPlatesUnderAllZone");
         CcDAO instance = new CcDAO();
-        Object expResult = "[BookingDetailsCC{car_reg=asasdasd, zone_name=Dundalk - Woodies, parking_name=Woodies, fullname=Peter Pollis}]";
-        Object result = instance.getAllregPlatesUnderAllZone();
+        String expResult = "[BookingDetailsCC{car_reg=asasdasd, zone_name=Dundalk - Woodies, parking_name=Woodies, fullname=Peter Pollis}]";
+        String result = instance.getAllregPlatesUnderAllZone().toString();
         assertEquals(expResult, result);
     }
     
