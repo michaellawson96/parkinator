@@ -28,22 +28,22 @@ import org.junit.Ignore;
  * @author snake
  */
 public class SupportDaoTest {
-    
+
     public SupportDaoTest() {
     }
-    
+
     @BeforeClass
     public static void setUpClass() {
     }
-    
+
     @AfterClass
     public static void tearDownClass() {
     }
-    
+
     @Before
     public void setUp() {
     }
-    
+
     @After
     public void tearDown() {
     }
@@ -53,9 +53,9 @@ public class SupportDaoTest {
      */
     @Test
     public void testInsertMessage() throws SQLException {
-        Support s1 = new Support(1, "testing1", "testing message1", new Date(11 / 11 / 11), 1);
-        Support s2 = new Support(2, "testing2", "testing message2", new Date(22 / 11 / 11), 2);
-        Support s3 = new Support(3, "testing3", "testing message3", new Date(23 / 11 / 11), 3);
+        Support s1 = new Support(1, "testing1", "testing message1", new Date(11 / 11 / 11), 1, "sent");
+        Support s2 = new Support(2, "testing2", "testing message2", new Date(22 / 11 / 11), 2, "done");
+        Support s3 = new Support(3, "testing3", "testing message3", new Date(23 / 11 / 11), 3, "sent");
 
         String expectedResults = "{\"status_code\":1,\"message\":\"Your post has been Sent\"}";
 
@@ -67,8 +67,8 @@ public class SupportDaoTest {
 
         // Fill mock objects with appropriatel dummy data
         when(sql.getConn()).thenReturn(conn);
-        when(conn.prepareStatement("INSERT INTO support(title,message,date,user_id) VALUES (?,?,?,?)")).thenReturn(ps);
-        when(sql.getPs()).thenReturn(ps, ps, ps, ps, ps);
+        when(conn.prepareStatement("INSERT INTO support(title,message,date,user_id, status) VALUES (?,?,?,?,?)")).thenReturn(ps);
+        when(sql.getPs()).thenReturn(ps, ps, ps, ps, ps, ps);
 
         SupportDao supportDao = new SupportDao(sql);
         Object result = supportDao.insertMessage(s3);
@@ -81,10 +81,9 @@ public class SupportDaoTest {
      */
     @Test
     public void testSelectAllMessage() throws SQLException {
-        Support s1 = new Support(1, "testing1", "testing message1", new Date(11 / 11 / 11), 1);
-        Support s2 = new Support(2, "testing2", "testing message2", new Date(22 / 11 / 11), 2);
-        Support s3 = new Support(3, "testing3", "testing message3", new Date(23 / 11 / 11), 3);
-
+        Support s1 = new Support(1, "testing1", "testing message1", new Date(11 / 11 / 11), 1, "Sent");
+        Support s2 = new Support(2, "testing2", "testing message2", new Date(22 / 11 / 11), 2, "Done");
+        Support s3 = new Support(3, "testing3", "testing message3", new Date(23 / 11 / 11), 3, "Sent");
 
         ArrayList<Support> expectedResults = new ArrayList();
 
@@ -113,6 +112,7 @@ public class SupportDaoTest {
         when(rs.getString("message")).thenReturn(s1.getMessage(), s2.getMessage(), s3.getMessage());
         when(rs.getDate("date")).thenReturn(SupportDao.convertUtilToSql(s1.getDate()), SupportDao.convertUtilToSql(s1.getDate()), SupportDao.convertUtilToSql(s1.getDate()));
         when(rs.getInt("user_id")).thenReturn(s1.getUser_id(), s2.getUser_id(), s3.getUser_id());
+        when(rs.getString("status")).thenReturn(s1.getStatus(), s2.getStatus(), s3.getStatus());
 
         int numUsersInTable = 3;
         SupportDao supportDao = new SupportDao(sql);
@@ -126,9 +126,9 @@ public class SupportDaoTest {
      */
     @Test
     public void testRemoveMessage() throws SQLException {
-        Support s1 = new Support(1, "testing1", "testing message1", new Date(11 / 11 / 11), 1);
-        Support s2 = new Support(2, "testing2", "testing message2", new Date(22 / 11 / 11), 2);
-        Support s3 = new Support(3, "testing3", "testing message3", new Date(23 / 11 / 11), 3);
+        Support s1 = new Support(1, "testing1", "testing message1", new Date(11 / 11 / 11), 1, "sent");
+        Support s2 = new Support(2, "testing2", "testing message2", new Date(22 / 11 / 11), 2, "done");
+        Support s3 = new Support(3, "testing3", "testing message3", new Date(23 / 11 / 11), 3, "sent");
 
         String expectedResults = "{\"status_code\":1,\"message\":\"Message Removed\"}";
 
@@ -141,12 +141,12 @@ public class SupportDaoTest {
         // Fill mock objects with appropriatel dummy data
         when(sql.getConn()).thenReturn(conn);
         when(conn.prepareStatement("DELETE FROM support WHERE message_id = ?")).thenReturn(ps);
-        when(sql.getPs()).thenReturn(ps,ps);
+        when(sql.getPs()).thenReturn(ps, ps);
 
         SupportDao supportDao = new SupportDao(sql);
         Object result = supportDao.removeMessage(s3);
 
         assertEquals(expectedResults, result);
     }
-    
+
 }

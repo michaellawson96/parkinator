@@ -445,19 +445,19 @@ public class LotDAO implements LotDaoInterface {
 
     @Override
     public Object checkBooking(ParkedCars pc) {
-        if (CheckIfBookingExistUnderThatZone(pc) instanceof Boolean ) {
-            if(getBookingDate(pc) instanceof Boolean){
-            if ((boolean) CheckIfBookingExistUnderThatZone(pc) == false || (boolean) getBookingDate(pc) == false) {
-                return hsb.createMessage(1, "You Can Book Your Car Spot");
-            } else {
-                return hsb.createMessage(-1, "You Already have A Booking For This Day");
+        if (CheckIfBookingExistUnderThatZone(pc) instanceof Boolean) {
+            if (getBookingDate(pc) instanceof Boolean) {
+                if ((boolean) CheckIfBookingExistUnderThatZone(pc) == false || (boolean) getBookingDate(pc) == false) {
+                    return hsb.createMessage(1, "You Can Book Your Car Spot");
+                } else {
+                    return hsb.createMessage(-1, "You Already have A Booking For This Day");
 
-            }
-            }else{
-                return hsb.createMessage(1, (String)getBookingDate(pc));
+                }
+            } else {
+                return hsb.createMessage(3, (String) getBookingDate(pc));
             }
         } else {
-            return hsb.createMessage(1, (String)CheckIfBookingExistUnderThatZone(pc));
+            return hsb.createMessage(6, (String) CheckIfBookingExistUnderThatZone(pc));
         }
     }
 

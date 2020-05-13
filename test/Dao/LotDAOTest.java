@@ -57,9 +57,9 @@ public class LotDAOTest {
      */
     @Test
     public void testSelectAllLots() throws SQLException {
-        Lot L1 = new Lot(1, "Test Lot1", 1);
-        Lot L2 = new Lot(2, "Test Lot2", 2);
-        Lot L3 = new Lot(3, "Test Lot3", 3);
+        Lot L1 = new Lot(1, "Test Lot1", 1, "Meath");
+        Lot L2 = new Lot(2, "Test Lot2", 2, "Louth");
+        Lot L3 = new Lot(3, "Test Lot3", 3, "Doublin");
 
         ArrayList<Lot> expectedResults = new ArrayList();
 
@@ -86,6 +86,7 @@ public class LotDAOTest {
         when(rs.getInt("lot_id")).thenReturn(L1.getLot_id(), L2.getLot_id(), L3.getLot_id());
         when(rs.getString("parking_name")).thenReturn(L1.getParking_name(), L2.getParking_name(), L3.getParking_name());
         when(rs.getInt("cc_id")).thenReturn(L1.getCc_id(), L2.getCc_id(), L3.getCc_id());
+        when(rs.getString("County")).thenReturn(L1.getCounty(), L2.getCounty(), L3.getCounty());
 
         int numUsersInTable = 3;
         LotDAO lotDao = new LotDAO(sql);
@@ -189,9 +190,9 @@ public class LotDAOTest {
      */
     @Ignore
     public void testSelectAllZones() throws SQLException {
-        Zone z1 = new Zone(1, "TestingZone1", 99, true, 1, 1, 0.0, 0.0);
-        Zone z2 = new Zone(2, "TestingZone2", 99, true, 2, 2, 0.0, 0.0);
-        Zone z3 = new Zone(3, "TestingZone3", 99, false, 3, 3, 0.0, 0.0);
+        Zone z1 = new Zone(1, "TestingZone1", 99, true, 1, 1, 0.0, 0.0, 23);
+        Zone z2 = new Zone(2, "TestingZone2", 99, true, 2, 2, 0.0, 0.0, 12);
+        Zone z3 = new Zone(3, "TestingZone3", 99, false, 3, 3, 0.0, 0.0, 11);
 
         ArrayList<Zone> expectedResults = new ArrayList();
 
@@ -225,6 +226,7 @@ public class LotDAOTest {
         when(rs.getInt("max_disabled_spaces")).thenReturn(z1.getMax_disabled_spaces(), z2.getMax_disabled_spaces(), z3.getMax_disabled_spaces());
         when(rs.getDouble("altitude")).thenReturn(z1.getLat(), z2.getLat(), z3.getLat());
         when(rs.getDouble("longitude")).thenReturn(z1.getLng(), z2.getLng(), z3.getLng());
+        when(rs.getDouble("price")).thenReturn(z1.getPrice(), z2.getPrice(), z3.getPrice());
 
         Object result = lotDao.selectAllZones();
 
@@ -233,11 +235,11 @@ public class LotDAOTest {
 
     @Test
     public void testSelectAllZoneByLotId() throws SQLException {
-        Zone z1 = new Zone(1, "TestingZone1", 99, true, 1, 1, 0.0, 0.0);
-        Zone z2 = new Zone(2, "TestingZone2", 99, true, 1, 2, 0.0, 0.0);
-        Zone z3 = new Zone(3, "TestingZone3", 99, false, 1, 3, 0.0, 0.0);
+        Zone z1 = new Zone(1, "TestingZone1", 99, true, 1, 1, 0.0, 0.0, 12);
+        Zone z2 = new Zone(2, "TestingZone2", 99, true, 1, 2, 0.0, 0.0, 32);
+        Zone z3 = new Zone(3, "TestingZone3", 99, false, 1, 3, 0.0, 0.0, 12);
 
-        Lot L1 = new Lot(1, "Test Lot1", 1);
+        Lot L1 = new Lot(1, "Test Lot1", 1, "Meath");
 
         ArrayList<Zone> expectedResults = new ArrayList();
 
@@ -271,6 +273,7 @@ public class LotDAOTest {
         when(rs.getInt("max_disabled_spaces")).thenReturn(z1.getMax_disabled_spaces(), z2.getMax_disabled_spaces(), z3.getMax_disabled_spaces());
         when(rs.getDouble("altitude")).thenReturn(z1.getLat(), z2.getLat(), z3.getLat());
         when(rs.getDouble("longitude")).thenReturn(z1.getLng(), z2.getLng(), z3.getLng());
+        when(rs.getDouble("price")).thenReturn(z1.getPrice(), z2.getPrice(), z3.getPrice());
 
         Object result = lotDao.selectAllZoneByLotId(L1);
 
@@ -279,11 +282,11 @@ public class LotDAOTest {
 
     @Test
     public void testSelectAllZoneByLotId_fail() throws SQLException {
-        Zone z1 = new Zone(1, "TestingZone1", 99, true, 1, 1, 0.0, 0.0);
-        Zone z2 = new Zone(2, "TestingZone2", 99, true, 1, 2, 0.0, 0.0);
-        Zone z3 = new Zone(3, "TestingZone3", 99, false, 1, 3, 0.0, 0.0);
+        Zone z1 = new Zone(1, "TestingZone1", 99, true, 1, 1, 0.0, 0.0, 11);
+        Zone z2 = new Zone(2, "TestingZone2", 99, true, 1, 2, 0.0, 0.0, 12);
+        Zone z3 = new Zone(3, "TestingZone3", 99, false, 1, 3, 0.0, 0.0, 13);
 
-        Lot L1 = new Lot(1, "Test Lot1", 1);
+        Lot L1 = new Lot(1, "Test Lot1", 1, "Louth");
 
         ArrayList<Zone> expectedResults = new ArrayList();
 
@@ -314,9 +317,9 @@ public class LotDAOTest {
      */
     @Test
     public void testAddLot() throws SQLException {
-        Lot L1 = new Lot(1, "Test Lot1", 1);
-        Lot L2 = new Lot(2, "Test Lot2", 2);
-        Lot L3 = new Lot(3, "Test Lot3", 3);
+        Lot L1 = new Lot(1, "Test Lot1", 1, "Meath");
+        Lot L2 = new Lot(2, "Test Lot2", 2, "Louth");
+        Lot L3 = new Lot(3, "Test Lot3", 3, "Dublin");
 
         String expectedResults = "{\"status_code\":1,\"message\":\"Parking Lot added Successfully\"}";
 
@@ -325,7 +328,7 @@ public class LotDAOTest {
         Connection conn = mock(Connection.class);
         PreparedStatement ps = mock(PreparedStatement.class);
         ResultSet rs = mock(ResultSet.class);
-        
+
         when(sql.getConn()).thenReturn(conn);
         when(conn.prepareStatement("select * from parking_lots WHERE parking_name = ?")).thenReturn(ps);
         when(sql.getPs()).thenReturn(ps, ps);
@@ -333,7 +336,7 @@ public class LotDAOTest {
 
         // Want 3 results in the resultset, so need true to be returned 3 times
         when(rs.next()).thenReturn(false);
-        
+
         when(sql.getConn()).thenReturn(conn);
         when(conn.prepareStatement("select * from parking_lots WHERE parking_name = ?")).thenReturn(ps);
         when(sql.getPs()).thenReturn(ps, ps);
@@ -359,9 +362,9 @@ public class LotDAOTest {
      */
     @Test
     public void testRemoveLot() throws SQLException {
-        Lot L1 = new Lot(1, "Test Lot1", 1);
-        Lot L2 = new Lot(2, "Test Lot2", 2);
-        Lot L3 = new Lot(3, "Test Lot3", 3);
+        Lot L1 = new Lot(1, "Test Lot1", 1, "Meath");
+        Lot L2 = new Lot(2, "Test Lot2", 2, "Louth");
+        Lot L3 = new Lot(3, "Test Lot3", 3, "Dublin");
 
         String expectedResults = "{\"status_code\":1,\"message\":\"Parking Lot Deleted Successfully\"}";
 
@@ -387,9 +390,9 @@ public class LotDAOTest {
      */
     @Test
     public void testAddzone() throws SQLException {
-        Zone z1 = new Zone(1, "TestingZone1", 99, true, 1, 1, 0.0, 0.0);
-        Zone z2 = new Zone(2, "TestingZone2", 99, true, 2, 2, 0.0, 0.0);
-        Zone z3 = new Zone(3, "TestingZone3", 99, false, 3, 3, 0.0, 0.0);
+        Zone z1 = new Zone(1, "TestingZone1", 99, true, 1, 1, 0.0, 0.0, 12);
+        Zone z2 = new Zone(2, "TestingZone2", 99, true, 2, 2, 0.0, 0.0, 23);
+        Zone z3 = new Zone(3, "TestingZone3", 99, false, 3, 3, 0.0, 0.0, 32);
 
         String expectedResults = "{\"status_code\":1,\"message\":\"Parking Zone added Successfully\"}";
 
@@ -398,7 +401,7 @@ public class LotDAOTest {
         Connection conn = mock(Connection.class);
         PreparedStatement ps = mock(PreparedStatement.class);
         ResultSet rs = mock(ResultSet.class);
-        
+
         when(sql.getConn()).thenReturn(conn);
         when(conn.prepareStatement("select * from parking_zones WHERE zone_name = ?")).thenReturn(ps);
         when(sql.getPs()).thenReturn(ps, ps);
@@ -406,7 +409,7 @@ public class LotDAOTest {
 
         // Want 3 results in the resultset, so need true to be returned 3 times
         when(rs.next()).thenReturn(false);
-        
+
         when(sql.getConn()).thenReturn(conn);
         when(conn.prepareStatement("select * from parking_zones WHERE zone_name = ?")).thenReturn(ps);
         when(sql.getPs()).thenReturn(ps, ps);
@@ -431,9 +434,9 @@ public class LotDAOTest {
      */
     @Ignore
     public void testAddBooking() throws SQLException {
-        Zone z1 = new Zone(1, "TestingZone1", 99, true, 1, 1, 0.0, 0.0);
-        Zone z2 = new Zone(2, "TestingZone2", 99, true, 2, 2, 0.0, 0.0);
-        Zone z3 = new Zone(3, "TestingZone3", 99, false, 3, 3, 0.0, 0.0);
+        Zone z1 = new Zone(1, "TestingZone1", 99, true, 1, 1, 0.0, 0.0, 23);
+        Zone z2 = new Zone(2, "TestingZone2", 99, true, 2, 2, 0.0, 0.0, 31);
+        Zone z3 = new Zone(3, "TestingZone3", 99, false, 3, 3, 0.0, 0.0, 12);
 
         String expectedResults = "";
 
@@ -470,9 +473,9 @@ public class LotDAOTest {
 
     @Test
     public void CheckIfzoneExist() throws SQLException {
-        Zone z1 = new Zone(1, "TestingZone1", 99, true, 1, 1, 0.0, 0.0);
-        Zone z2 = new Zone(2, "TestingZone2", 99, true, 1, 2, 0.0, 0.0);
-        Zone z3 = new Zone(3, "TestingZone3", 99, false, 1, 3, 0.0, 0.0);
+        Zone z1 = new Zone(1, "TestingZone1", 99, true, 1, 1, 0.0, 0.0, 12);
+        Zone z2 = new Zone(2, "TestingZone2", 99, true, 1, 2, 0.0, 0.0, 32);
+        Zone z3 = new Zone(3, "TestingZone3", 99, false, 1, 3, 0.0, 0.0, 12);
 
         boolean expectedResults = true;
 
@@ -500,9 +503,9 @@ public class LotDAOTest {
 
     @Test
     public void CheckIfzoneExist_fail() throws SQLException {
-        Zone z1 = new Zone(1, "TestingZone1", 99, true, 1, 1, 0.0, 0.0);
-        Zone z2 = new Zone(2, "TestingZone2", 99, true, 1, 2, 0.0, 0.0);
-        Zone z3 = new Zone(3, "TestingZone3", 99, false, 1, 3, 0.0, 0.0);
+        Zone z1 = new Zone(1, "TestingZone1", 99, true, 1, 1, 0.0, 0.0, 31);
+        Zone z2 = new Zone(2, "TestingZone2", 99, true, 1, 2, 0.0, 0.0, 12);
+        Zone z3 = new Zone(3, "TestingZone3", 99, false, 1, 3, 0.0, 0.0, 1);
 
         boolean expectedResults = false;
 
@@ -530,9 +533,9 @@ public class LotDAOTest {
 
     @Test
     public void CheckIfLotExist() throws SQLException {
-        Lot L1 = new Lot(1, "Test Lot1", 1);
-        Lot L2 = new Lot(2, "Test Lot2", 2);
-        Lot L3 = new Lot(3, "Test Lot3", 3);
+        Lot L1 = new Lot(1, "Test Lot1", 1, "Meath");
+        Lot L2 = new Lot(2, "Test Lot2", 2, "Louth");
+        Lot L3 = new Lot(3, "Test Lot3", 3, "Dublin");
 
         boolean expectedResults = true;
 
@@ -560,9 +563,9 @@ public class LotDAOTest {
 
     @Test
     public void CheckIfLotExist_fail() throws SQLException {
-        Lot L1 = new Lot(1, "Test Lot1", 1);
-        Lot L2 = new Lot(2, "Test Lot2", 2);
-        Lot L3 = new Lot(3, "Test Lot3", 3);
+        Lot L1 = new Lot(1, "Test Lot1", 1, "Meath");
+        Lot L2 = new Lot(2, "Test Lot2", 2, "Louth");
+        Lot L3 = new Lot(3, "Test Lot3", 3, "Dublin");
 
         boolean expectedResults = false;
 
@@ -618,7 +621,7 @@ public class LotDAOTest {
 
         assertEquals(expectedResults, result);
     }
-    
+
     @Test
     public void testCheckIfBookingExistUnderThatZone_fail() throws SQLException {
 
@@ -649,7 +652,7 @@ public class LotDAOTest {
 
         assertEquals(expectedResults, result);
     }
-    
+
     @Test
     public void testGetBookingDate() throws SQLException {
 
@@ -680,7 +683,7 @@ public class LotDAOTest {
 
         assertEquals(expectedResults, result);
     }
-    
+
     @Test
     public void testGetBookingDate_fail() throws SQLException {
 
@@ -711,7 +714,7 @@ public class LotDAOTest {
 
         assertEquals(expectedResults, result);
     }
-    
+
     @Test
     public void testRemoveBooking() throws SQLException {
         ParkedCars p1 = new ParkedCars(1, 1, new Date(11 / 11 / 11), new Date(11 / 11 / 11), 1);
@@ -736,7 +739,7 @@ public class LotDAOTest {
 
         assertEquals(expectedResults, result);
     }
-    
+
     @Test
     public void testUpdateBooking() throws SQLException {
         ParkedCars p1 = new ParkedCars(1, 1, new Date(11 / 11 / 11), new Date(11 / 11 / 11), 1);
@@ -761,10 +764,10 @@ public class LotDAOTest {
 
         assertEquals(expectedResults, result);
     }
-    
+
     @Test
     public void testRemoveZone() throws SQLException {
-        Zone z1 = new Zone(1, "TestingZone1", 99, true, 1, 1, 0.0, 0.0);
+        Zone z1 = new Zone(1, "TestingZone1", 99, true, 1, 1, 0.0, 0.0, 23);
 
         String expectedResults = "{\"status_code\":1,\"message\":\"Parking Zone Deleted Successfully\"}";
 
@@ -784,10 +787,10 @@ public class LotDAOTest {
 
         assertEquals(expectedResults, result);
     }
-    
+
     @Test
     public void testUpdateZone() throws SQLException {
-        Zone z1 = new Zone(1, "TestingZone1", 99, true, 1, 1, 0.0, 0.0);
+        Zone z1 = new Zone(1, "TestingZone1", 99, true, 1, 1, 0.0, 0.0, 23);
 
         String expectedResults = "{\"status_code\":1,\"message\":\"Zone Updated Successfully\"}";
 
@@ -807,4 +810,51 @@ public class LotDAOTest {
 
         assertEquals(expectedResults, result);
     }
+
+    @Test
+    public void testCheckBooking() throws SQLException {
+        ParkedCars p1 = new ParkedCars(1, 1, new Date(11 / 11 / 11), new Date(11 / 11 / 11), 1);
+
+        String expectedResults = "{\"status_code\":1,\"message\":\"You Can Book Your Car Spot\"}";
+
+        // Create mock objects
+        SqlConnection sql = mock(SqlConnection.class);
+        Connection conn = mock(Connection.class);
+        PreparedStatement ps = mock(PreparedStatement.class);
+        ResultSet rs = mock(ResultSet.class);
+
+        // Fill mock objects with appropriatel dummy data 
+        //Mocking for CheckIfBookingExistUnderThatZone
+        when(sql.getConn()).thenReturn(conn);
+        when(conn.prepareStatement("select * from parked_cars WHERE zone_id = ?")).thenReturn(ps);
+        when(sql.getPs()).thenReturn(ps, ps);
+        when(ps.executeQuery()).thenReturn(rs);
+
+        // Mocking get booking by date
+        when(sql.getConn()).thenReturn(conn);
+        when(conn.prepareStatement("select * from parked_cars WHERE book_from = ?")).thenReturn(ps);
+        when(sql.getPs()).thenReturn(ps, ps);
+        when(ps.executeQuery()).thenReturn(rs);
+
+        when(rs.next()).thenReturn(false, false);
+        
+        when(sql.getConn()).thenReturn(conn);
+        when(conn.prepareStatement("select * from parked_cars WHERE zone_id = ?")).thenReturn(ps);
+        when(sql.getPs()).thenReturn(ps, ps);
+        when(ps.executeQuery()).thenReturn(rs);
+
+        // Mocking get booking by date
+        when(sql.getConn()).thenReturn(conn);
+        when(conn.prepareStatement("select * from parked_cars WHERE book_from = ?")).thenReturn(ps);
+        when(sql.getPs()).thenReturn(ps, ps);
+        when(ps.executeQuery()).thenReturn(rs);
+
+        when(rs.next()).thenReturn(false, false);        
+
+        LotDAO lotDao = new LotDAO(sql);
+        Object result = lotDao.checkBooking(p1);
+
+        assertEquals(expectedResults, result);
+    }
+
 }

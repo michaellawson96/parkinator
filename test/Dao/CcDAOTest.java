@@ -184,9 +184,9 @@ public class CcDAOTest {
         ParkedCars p2 = new ParkedCars(1, 2, new Date(22 / 11 / 22), new Date(22 / 11 / 22), 1);
         ParkedCars p3 = new ParkedCars(1, 3, new Date(33 / 11 / 33), new Date(33 / 11 / 33), 1);
 
-        Car c1 = new Car(1, "01 ca 00001", "testColour", "testMake", "testMode1", 1);
-        Car c2 = new Car(2, "02 ca 00002", "testColour2", "testMake2", "testMode2", 1);
-        Car c3 = new Car(3, "03 ca 00003", "testColour3", "testMake3", "testMode3", 1);
+        Car c1 = new Car(1,"home1", "01 ca 00001", "testColour", "testMake", "testMode1", 1);
+        Car c2 = new Car(2,"home2", "02 ca 00002", "testColour2", "testMake2", "testMode2", 1);
+        Car c3 = new Car(3,"home3", "03 ca 00003", "testColour3", "testMake3", "testMode3", 1);
 
         ArrayList<Car> expResult = new ArrayList<>();
 
@@ -223,9 +223,9 @@ public class CcDAOTest {
         ParkedCars p2 = new ParkedCars(1, 2, new Date(22 / 11 / 22), new Date(22 / 11 / 22), 1);
         ParkedCars p3 = new ParkedCars(1, 3, new Date(33 / 11 / 33), new Date(33 / 11 / 33), 1);
 
-        Car c1 = new Car(1, "01 ca 00001", "testColour", "testMake", "testMode1", 1);
-        Car c2 = new Car(2, "02 ca 00002", "testColour2", "testMake2", "testMode2", 1);
-        Car c3 = new Car(3, "03 ca 00003", "testColour3", "testMake3", "testMode3", 1);
+        Car c1 = new Car(1,"home1", "01 ca 00001", "testColour", "testMake", "testMode1", 1);
+        Car c2 = new Car(2,"home2", "02 ca 00002", "testColour2", "testMake2", "testMode2", 1);
+        Car c3 = new Car(3,"home3", "03 ca 00003", "testColour3", "testMake3", "testMode3", 1);
 
         ArrayList<Car> expResult = new ArrayList<>();
         
@@ -260,15 +260,15 @@ public class CcDAOTest {
         ParkedCars p2 = new ParkedCars(1, 2, new Date(22 / 11 / 22), new Date(22 / 11 / 22), 1);
         ParkedCars p3 = new ParkedCars(1, 3, new Date(33 / 11 / 33), new Date(33 / 11 / 33), 1);
 
-        Car c1 = new Car(1, "01 ca 00001", "testColour", "testMake", "testMode1", 1);
-        Car c2 = new Car(2, "02 ca 00002", "testColour2", "testMake2", "testMode2", 1);
-        Car c3 = new Car(3, "03 ca 00003", "testColour3", "testMake3", "testMode3", 1);
+        Car c1 = new Car(1,"home1", "01 ca 00001", "testColour", "testMake", "testMode1", 1);
+        Car c2 = new Car(2,"home2", "02 ca 00002", "testColour2", "testMake2", "testMode2", 1);
+        Car c3 = new Car(3,"home3", "03 ca 00003", "testColour3", "testMake3", "testMode3", 1);
         
-        Lot L1 = new Lot(1, "Test Lot1", 1);
-        Lot L2 = new Lot(2, "Test Lot2", 2);
-        Lot L3 = new Lot(3, "Test Lot3", 3);
+        Lot L1 = new Lot(1, "Test Lot1", 1,"MEath");
+        Lot L2 = new Lot(2, "Test Lot2", 2,"Louth");
+        Lot L3 = new Lot(3, "Test Lot3", 3,"Dublin");
         
-        Zone z1 = new Zone(1, "TestingZone1", 99, false, 1, 1, 0.0, 0.0);        
+        Zone z1 = new Zone(1, "TestingZone1", 99, false, 1, 1, 0.0, 0.0,21);        
 
         ArrayList<BookingDetailsCC> expResult = new ArrayList<>();
 
@@ -312,15 +312,15 @@ public class CcDAOTest {
         ParkedCars p2 = new ParkedCars(1, 2, new Date(22 / 11 / 22), new Date(22 / 11 / 22), 1);
         ParkedCars p3 = new ParkedCars(1, 3, new Date(33 / 11 / 33), new Date(33 / 11 / 33), 1);
 
-        Car c1 = new Car(1, "01 ca 00001", "testColour", "testMake", "testMode1", 1);
-        Car c2 = new Car(2, "02 ca 00002", "testColour2", "testMake2", "testMode2", 1);
-        Car c3 = new Car(3, "03 ca 00003", "testColour3", "testMake3", "testMode3", 1);
+        Car c1 = new Car(1,"home1", "01 ca 00001", "testColour", "testMake", "testMode1", 1);
+        Car c2 = new Car(2,"home2", "02 ca 00002", "testColour2", "testMake2", "testMode2", 1);
+        Car c3 = new Car(3,"home3", "03 ca 00003", "testColour3", "testMake3", "testMode3", 1);
         
-        Lot L1 = new Lot(1, "Test Lot1", 1);
-        Lot L2 = new Lot(2, "Test Lot2", 2);
-        Lot L3 = new Lot(3, "Test Lot3", 3);
+        Lot L1 = new Lot(1, "Test Lot1", 1,"Meath");
+        Lot L2 = new Lot(2, "Test Lot2", 2,"Louth");
+        Lot L3 = new Lot(3, "Test Lot3", 3,"Dublin");
         
-        Zone z1 = new Zone(1, "TestingZone1", 99, false, 1, 1, 0.0, 0.0);        
+        Zone z1 = new Zone(1, "TestingZone1", 99, false, 1, 1, 0.0, 0.0,23);        
 
         ArrayList<BookingDetailsCC> expResult = new ArrayList<>();
 

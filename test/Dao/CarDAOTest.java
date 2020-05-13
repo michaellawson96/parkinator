@@ -27,22 +27,22 @@ import static org.mockito.Mockito.when;
  * @author snake
  */
 public class CarDAOTest {
-    
+
     public CarDAOTest() {
     }
-    
+
     @BeforeClass
     public static void setUpClass() {
     }
-    
+
     @AfterClass
     public static void tearDownClass() {
     }
-    
+
     @Before
     public void setUp() {
     }
-    
+
     @After
     public void tearDown() {
     }
@@ -52,7 +52,7 @@ public class CarDAOTest {
      */
     @Test
     public void testInsertCar() throws SQLException {
-        Car c1 = new Car(1, "01 ca 00001","testColour", "testMake", "testModel", 1);
+        Car c1 = new Car(1, "home", "01 ca 00001", "testColour", "testMake", "testModel", 1);
         boolean expResults = true;
         // Create mock objects
         SqlConnection sql = mock(SqlConnection.class);
@@ -62,8 +62,8 @@ public class CarDAOTest {
 
         // Fill mock objects with appropriatel dummy data
         when(sql.getConn()).thenReturn(conn);
-        when(conn.prepareStatement("INSERT INTO cars(car_reg, car_colour, car_make, car_model, user_id) VALUES (?,?,?,?,?)")).thenReturn(ps);
-        when(sql.getPs()).thenReturn(ps, ps, ps, ps, ps, ps);
+        when(conn.prepareStatement("INSERT INTO cars(car_reg, car_colour, car_make, car_model, user_id,alias) VALUES (?,?,?,?,?,?)")).thenReturn(ps);
+        when(sql.getPs()).thenReturn(ps, ps, ps, ps, ps, ps, ps);
 
         CarDAO carDao = new CarDAO(sql);
         boolean result = carDao.insertCar(c1);
@@ -76,7 +76,7 @@ public class CarDAOTest {
      */
     @Test
     public void testUpdateCar() throws SQLException {
-        Car c1 = new Car(1, "01 ca 00001","testColour", "testMake", "testModel", 1);
+        Car c1 = new Car(1, "home", "01 ca 00001", "testColour", "testMake", "testModel", 1);
 
         boolean expResult = true;
 
@@ -87,9 +87,9 @@ public class CarDAOTest {
         ResultSet rs = mock(ResultSet.class);
 
         when(sql.getConn()).thenReturn(conn);
-        when(conn.prepareStatement("UPDATE cars SET car_reg =?, car_colour=?, car_make=?, car_model=?, user_id=? WHERE car_id=?")).thenReturn(ps);
-        when(sql.getPs()).thenReturn(ps, ps, ps, ps, ps, ps, ps);
-        
+        when(conn.prepareStatement("UPDATE cars SET car_reg =?, car_colour=?, car_make=?, car_model=?, user_id=? , alias = ? WHERE car_id=?")).thenReturn(ps);
+        when(sql.getPs()).thenReturn(ps, ps, ps, ps, ps, ps, ps, ps);
+
         CarDAO carDao = new CarDAO(sql);
         boolean result = carDao.insertCar(c1);
 
@@ -101,7 +101,7 @@ public class CarDAOTest {
      */
     @Test
     public void testDeleteCar() throws SQLException {
-        Car c1 = new Car(1, "01 ca 00001","testColour", "testMake", "testModel", 1);
+        Car c1 = new Car(1, "home", "01 ca 00001", "testColour", "testMake", "testModel", 1);
 
         boolean expResult = true;
 
@@ -114,7 +114,7 @@ public class CarDAOTest {
         when(sql.getConn()).thenReturn(conn);
         when(conn.prepareStatement("DELETE FROM cars WHERE car_id=?")).thenReturn(ps);
         when(sql.getPs()).thenReturn(ps, ps);
-        
+
         CarDAO carDao = new CarDAO(sql);
         boolean result = carDao.insertCar(c1);
 
@@ -126,9 +126,9 @@ public class CarDAOTest {
      */
     @Test
     public void testGetAllUserCars() throws SQLException {
-        Car c1 = new Car(1, "01 ca 00001","testColour1", "testMake1", "testModel1", 1);
-        Car c2 = new Car(2, "02 ca 00002","testColour2", "testMake2", "testModel2", 1);
-        Car c3 = new Car(3, "03 ca 00003","testColour3", "testMake3", "testModel3", 2);
+        Car c1 = new Car(1, "home1", "01 ca 00001", "testColour1", "testMake1", "testModel1", 1);
+        Car c2 = new Car(2, "home2", "02 ca 00002", "testColour2", "testMake2", "testModel2", 1);
+        Car c3 = new Car(3, "home3", "03 ca 00003", "testColour3", "testMake3", "testModel3", 2);
 
         ArrayList<Object> expectedResults = new ArrayList();
 
@@ -157,6 +157,7 @@ public class CarDAOTest {
         when(rs.getString("car_make")).thenReturn(c1.getCarMake(), c2.getCarMake());
         when(rs.getString("car_model")).thenReturn(c1.getCarModel(), c2.getCarModel());
         when(rs.getInt("user_id")).thenReturn(c1.getUserNo(), c2.getUserNo());
+        when(rs.getString("alias")).thenReturn(c1.getAlias(), c2.getAlias());
 
         int numUsersInTable = 2;
         CarDAO carDao = new CarDAO(sql);
@@ -178,9 +179,9 @@ public class CarDAOTest {
      */
     @Test
     public void testSelectAllCars() throws SQLException {
-        Car c1 = new Car(1, "01 ca 00001","testColour1", "testMake1", "testModel1", 1);
-        Car c2 = new Car(2, "02 ca 00002","testColour2", "testMake2", "testModel2", 1);
-        Car c3 = new Car(3, "03 ca 00003","testColour3", "testMake3", "testModel3", 1);
+        Car c1 = new Car(1, "home1", "01 ca 00001", "testColour1", "testMake1", "testModel1", 1);
+        Car c2 = new Car(2, "home2", "02 ca 00002", "testColour2", "testMake2", "testModel2", 1);
+        Car c3 = new Car(3, "home3", "03 ca 00003", "testColour3", "testMake3", "testModel3", 1);
 
         ArrayList<Object> expectedResults = new ArrayList();
 
@@ -210,6 +211,7 @@ public class CarDAOTest {
         when(rs.getString("car_make")).thenReturn(c1.getCarMake(), c2.getCarMake(), c3.getCarMake());
         when(rs.getString("car_model")).thenReturn(c1.getCarModel(), c2.getCarModel(), c3.getCarModel());
         when(rs.getInt("user_id")).thenReturn(c1.getUserNo(), c2.getUserNo(), c3.getUserNo());
+        when(rs.getString("alias")).thenReturn(c1.getAlias(), c2.getAlias(), c3.getAlias());
 
         int numUsersInTable = 3;
         CarDAO carDao = new CarDAO(sql);
@@ -225,5 +227,5 @@ public class CarDAOTest {
         // then the method worked as expected
         assertEquals(expectedResults, result);
     }
-    
+
 }

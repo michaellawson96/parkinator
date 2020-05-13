@@ -13,36 +13,37 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+
 /**
  *
  * @author USER
  */
 public class CarDAO implements CarDAOInterface {
 
-    
     private SqlConnection sql = new SqlConnection();
     private HttpStatusBase hsb = new HttpStatusBase();
-    
-    public CarDAO(SqlConnection sql){
+
+    public CarDAO(SqlConnection sql) {
         this.sql = sql;
     }
-    public CarDAO(){
+
+    public CarDAO() {
     }
-    
+
     @Override
     public boolean insertCar(Car car) {
         try {
-                sql.setPs(sql.getConn().prepareStatement("INSERT INTO cars(car_reg, car_colour, car_make, car_model, user_id,alias) VALUES (?,?,?,?,?,?)"));
+            sql.setPs(sql.getConn().prepareStatement("INSERT INTO cars(car_reg, car_colour, car_make, car_model, user_id,alias) VALUES (?,?,?,?,?,?)"));
 
-                sql.getPs().setString(1, car.getCarReg());
-                sql.getPs().setString(2, car.getCarColour());
-                sql.getPs().setString(3, car.getCarMake());
-                sql.getPs().setString(4, car.getCarModel());
-                sql.getPs().setInt(5, car.getUserNo());
-                 sql.getPs().setString(6, car.getAlias());
+            sql.getPs().setString(1, car.getCarReg());
+            sql.getPs().setString(2, car.getCarColour());
+            sql.getPs().setString(3, car.getCarMake());
+            sql.getPs().setString(4, car.getCarModel());
+            sql.getPs().setInt(5, car.getUserNo());
+            sql.getPs().setString(6, car.getAlias());
 
-                sql.getPs().executeUpdate();
-                return true;
+            sql.getPs().executeUpdate();
+            return true;
         } catch (SQLException se) {
             System.out.println("SQL Exception occurred: " + se.getMessage());
             se.printStackTrace();
@@ -57,17 +58,18 @@ public class CarDAO implements CarDAOInterface {
     @Override
     public boolean updateCar(Car car) {
         try {
-                sql.setPs(sql.getConn().prepareStatement("UPDATE cars SET car_reg =?, car_colour=?, car_make=?, car_model=?, user_id=? WHERE car_id=?"));
+            sql.setPs(sql.getConn().prepareStatement("UPDATE cars SET car_reg =?, car_colour=?, car_make=?, car_model=?, user_id=? , alias = ? WHERE car_id=?"));
 
-                sql.getPs().setString(1, car.getCarReg());
-                sql.getPs().setString(2, car.getCarColour());
-                sql.getPs().setString(3, car.getCarMake());
-                sql.getPs().setString(4, car.getCarModel());
-                sql.getPs().setInt(5, car.getUserNo());
-                sql.getPs().setInt(6, car.getCarNo());
+            sql.getPs().setString(1, car.getCarReg());
+            sql.getPs().setString(2, car.getCarColour());
+            sql.getPs().setString(3, car.getCarMake());
+            sql.getPs().setString(4, car.getCarModel());
+            sql.getPs().setInt(5, car.getUserNo());
+            sql.getPs().setInt(6, car.getCarNo());
+            sql.getPs().setString(7, car.getAlias());
 
-                sql.getPs().executeUpdate();
-                return true;
+            sql.getPs().executeUpdate();
+            return true;
         } catch (SQLException se) {
             System.out.println("SQL Exception occurred: " + se.getMessage());
             se.printStackTrace();
@@ -82,23 +84,21 @@ public class CarDAO implements CarDAOInterface {
     @Override
     public boolean deleteCar(Car car) {
         try {
-                sql.setPs(sql.getConn().prepareStatement("DELETE FROM cars WHERE car_id=?"));
+            sql.setPs(sql.getConn().prepareStatement("DELETE FROM cars WHERE car_id=?"));
 
-                sql.getPs().setInt(1, car.getCarNo());
+            sql.getPs().setInt(1, car.getCarNo());
 
-                sql.getPs().executeUpdate();
-                return true;
-        } 
-        catch (SQLException se) {
+            sql.getPs().executeUpdate();
+            return true;
+        } catch (SQLException se) {
             System.out.println("SQL Exception occurred: " + se.getMessage());
             se.printStackTrace();
             return false;
-        } 
-        catch (Exception e) {
+        } catch (Exception e) {
             System.out.println("Exception occurred: " + e.getMessage());
             e.printStackTrace();
             return false;
-        }    
+        }
     }
 
     @Override
@@ -111,7 +111,7 @@ public class CarDAO implements CarDAOInterface {
             // Execute the query
             rst = sql.getPs().executeQuery();
             while (rst.next()) {
-                objs.add(new Car(rst.getInt("car_id"),rst.getString("alias"),rst.getString("car_reg"),rst.getString("car_colour"),rst.getString("car_make"),rst.getString("car_model"),rst.getInt("user_id")));
+                objs.add(new Car(rst.getInt("car_id"), rst.getString("alias"), rst.getString("car_reg"), rst.getString("car_colour"), rst.getString("car_make"), rst.getString("car_model"), rst.getInt("user_id")));
             }
             System.out.println("Car has been added.");
 
@@ -128,8 +128,7 @@ public class CarDAO implements CarDAOInterface {
             return objs;
         }
     }
-    
-    
+
     @Override
     public ArrayList<Object> selectAllCars() {
         ArrayList<Object> objs = new ArrayList<>();
@@ -139,7 +138,7 @@ public class CarDAO implements CarDAOInterface {
             // Execute the query
             rst = sql.getPs().executeQuery();
             while (rst.next()) {
-                objs.add(new Car(rst.getInt("car_id"),rst.getString("alias"),rst.getString("car_reg"),rst.getString("car_colour"),rst.getString("car_make"),rst.getString("car_model"),rst.getInt("user_id")));
+                objs.add(new Car(rst.getInt("car_id"), rst.getString("alias"), rst.getString("car_reg"), rst.getString("car_colour"), rst.getString("car_make"), rst.getString("car_model"), rst.getInt("user_id")));
             }
             System.out.println("Car has been added.");
 
@@ -156,5 +155,5 @@ public class CarDAO implements CarDAOInterface {
             return objs;
         }
     }
-    
+
 }
