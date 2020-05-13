@@ -65,8 +65,9 @@ public class CarDAO implements CarDAOInterface {
             sql.getPs().setString(3, car.getCarMake());
             sql.getPs().setString(4, car.getCarModel());
             sql.getPs().setInt(5, car.getUserNo());
-            sql.getPs().setInt(6, car.getCarNo());
-            sql.getPs().setString(7, car.getAlias());
+             sql.getPs().setString(6, car.getAlias());
+            sql.getPs().setInt(7, car.getCarNo());
+           
 
             sql.getPs().executeUpdate();
             return true;
