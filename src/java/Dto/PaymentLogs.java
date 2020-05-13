@@ -13,21 +13,25 @@ import java.util.Objects;
  * @author SeppQ
  */
 public class PaymentLogs {
-    
-    private String create_time;
+
     private String id;
+    private String create_time;
     private String intent;
     private String status;
 
-    public PaymentLogs(String create_time, String id, String intent, String status) {
-        this.create_time = create_time;
+    public PaymentLogs(String id, String create_time, String intent, String status) {
         this.id = id;
+        this.create_time = create_time;
         this.intent = intent;
         this.status = status;
     }
+
+
+
     public PaymentLogs() {
 
     }
+
     public String getCreate_time() {
         return create_time;
     }
@@ -99,8 +103,9 @@ public class PaymentLogs {
 
     @Override
     public String toString() {
-        return "PaymentLogs{" + "create_time=" + create_time + ", id=" + id + ", intent=" + intent + ", status=" + status + '}';
+        return "PaymentLogs{" + "id=" + id + ", create_time=" + create_time + ", intent=" + intent + ", status=" + status + '}';
     }
-    
+
+
 
 }

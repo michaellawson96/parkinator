@@ -348,7 +348,7 @@ public class LotDAOTest {
         // Fill mock objects with appropriatel dummy data
         when(sql.getConn()).thenReturn(conn);
         when(conn.prepareStatement("INSERT INTO parking_lots(Parking_name,cc_id) VALUES (?,?)")).thenReturn(ps);
-        when(sql.getPs()).thenReturn(ps);
+        when(sql.getPs()).thenReturn(ps ,ps ,ps);
 
         LotDAO lotDao = new LotDAO(sql);
         Object result = lotDao.addLot(L3);
@@ -856,5 +856,92 @@ public class LotDAOTest {
 
         assertEquals(expectedResults, result);
     }
+    @Test
+    public void testselectLotsByCounty() throws SQLException {
+        Lot L1 = new Lot(1, "Test Lot1", 1, "Meath");
+        Lot L2 = new Lot(2, "Test Lot2", 2, "Louth");
+        Lot L3 = new Lot(3, "Test Lot3", 3, "Dublin");
 
+
+        ArrayList<Lot> expectedResults = new ArrayList();
+
+        expectedResults.add(L1);
+        expectedResults.add(L2);
+        expectedResults.add(L3);
+
+        // Create mock objects
+        SqlConnection sql = mock(SqlConnection.class);
+        Connection conn = mock(Connection.class);
+        PreparedStatement ps = mock(PreparedStatement.class);
+        ResultSet rs = mock(ResultSet.class);
+
+        LotDAO lotDao = new LotDAO(sql);
+
+        // Fill mock objects with appropriatel dummy data
+        when(sql.getConn()).thenReturn(conn);
+        when(conn.prepareStatement("SELECT * FROM parking_lots WHERE County = ?")).thenReturn(ps);
+        when(sql.getPs()).thenReturn(ps, ps);
+        when(ps.executeQuery()).thenReturn(rs);
+
+        // Want 3 results in the resultset, so need true to be returned 3 times
+        when(rs.next()).thenReturn(true, true, true, false);
+
+
+        // Fill in the resultset
+        when(rs.getInt("lot_id")).thenReturn(L1.getLot_id(), L2.getLot_id(), L3.getLot_id());
+        when(rs.getInt("cc_id")).thenReturn(L1.getCc_id(), L2.getCc_id(), L3.getCc_id());
+        when(rs.getString("parking_name")).thenReturn(L1.getParking_name(), L2.getParking_name(), L3.getParking_name());
+        when(rs.getString("County")).thenReturn(L1.getCounty(), L2.getCounty(), L3.getCounty());
+
+        Object result = lotDao.selectLotsByCounty(L1);
+
+        assertEquals(expectedResults, result);
+    }
+
+    @Test
+    public void testSelectZoneById() throws SQLException {
+        Zone z1 = new Zone(1, "TestingZone1", 99, true, 1, 1, 0.0, 0.0, 31);
+        Zone z2 = new Zone(2, "TestingZone2", 99, true, 1, 2, 0.0, 0.0, 12);
+        Zone z3 = new Zone(3, "TestingZone3", 99, false, 1, 3, 0.0, 0.0, 1);
+
+
+        Zone expectedResults =  z1;
+
+       
+
+        // Create mock objects
+        SqlConnection sql = mock(SqlConnection.class);
+        Connection conn = mock(Connection.class);
+        PreparedStatement ps = mock(PreparedStatement.class);
+        ResultSet rs = mock(ResultSet.class);
+
+        LotDAO lotDao = new LotDAO(sql);
+
+        // Fill mock objects with appropriatel dummy data
+        when(sql.getConn()).thenReturn(conn);
+        when(conn.prepareStatement("select * from parking_zones where zone_id = ?")).thenReturn(ps);
+        when(sql.getPs()).thenReturn(ps, ps);
+        when(ps.executeQuery()).thenReturn(rs);
+
+        // Want 3 results in the resultset, so need true to be returned 3 times
+        when(rs.next()).thenReturn(true, true, true, false);
+
+
+        // Fill in the resultset
+        when(rs.getInt("zone_id")).thenReturn(z1.getZone_id());
+        when(rs.getString("zone_name")).thenReturn(z1.getZone_name());
+        when(rs.getInt("max_spaces")).thenReturn(z1.getMax_spaces());
+        when(rs.getBoolean("is_vip")).thenReturn(z1.isIs_vip());
+        when(rs.getInt("lot_id")).thenReturn(z1.getLot_id());
+        when(rs.getInt("max_disabled_spaces")).thenReturn(z1.getMax_disabled_spaces());
+        when(rs.getDouble("altitude")).thenReturn(z1.getLat());
+        when(rs.getDouble("longitude")).thenReturn(z1.getLng());
+        when(rs.getDouble("price")).thenReturn(z1.getPrice());
+        
+        int zoneId = 1;
+        
+        Object result = lotDao.selectZoneById(zoneId);
+
+        assertEquals(expectedResults, result);
+    }    
 }

@@ -61,30 +61,30 @@ public class LotDAO implements LotDaoInterface {
         }
     }
 
-    @Override
-    public Object selectLotsByUserId(int userId) {
-        try {
-            sql.setPs(sql.getConn().prepareStatement("SELECT pl.lot_id, pl.cc_id, pl.parking_name FROM parking_lots as pl join parking_zones as pz on pl.lot_id = pz.lot_id join vips as v on pz.zone_id = v.zone_id where v.user_id = ?"));
-            sql.getPs().setInt(1, userId);
-            ResultSet rst;
-            // Execute the query
-            rst = sql.getPs().executeQuery();
-            ArrayList<Lot> lot = new ArrayList<>();
-            while (rst.next()) {
-                lot.add(new Lot(rst.getInt("lot_id"), rst.getString("parking_name"), rst.getInt("cc_id"), rst.getString("County")));
-            }
-
-            return lot;
-        } catch (SQLException se) {
-            System.out.println("SQL Exception occurred: " + se.getMessage());
-            se.printStackTrace();
-            return hsb.SQlError();
-        } catch (Exception e) {
-            System.out.println("Exception occurred: " + e.getMessage());
-            e.printStackTrace();
-            return hsb.exceptionError();
-        }
-    }
+//    @Override
+//    public Object selectLotsByUserId(int userId) {
+//        try {
+//            sql.setPs(sql.getConn().prepareStatement("SELECT pl.lot_id, pl.cc_id, pl.parking_name FROM parking_lots as pl join parking_zones as pz on pl.lot_id = pz.lot_id join vips as v on pz.zone_id = v.zone_id where v.user_id = ?"));
+//            sql.getPs().setInt(1, userId);
+//            ResultSet rst;
+//            // Execute the query
+//            rst = sql.getPs().executeQuery();
+//            ArrayList<Lot> lot = new ArrayList<>();
+//            while (rst.next()) {
+//                lot.add(new Lot(rst.getInt("lot_id"), rst.getString("parking_name"), rst.getInt("cc_id"), rst.getString("County")));
+//            }
+//
+//            return lot;
+//        } catch (SQLException se) {
+//            System.out.println("SQL Exception occurred: " + se.getMessage());
+//            se.printStackTrace();
+//            return hsb.SQlError();
+//        } catch (Exception e) {
+//            System.out.println("Exception occurred: " + e.getMessage());
+//            e.printStackTrace();
+//            return hsb.exceptionError();
+//        }
+//    }
 
     @Override
     public Object selectLotsByCounty(Lot l) {
@@ -211,7 +211,7 @@ public class LotDAO implements LotDaoInterface {
             return hsb.exceptionError();
         }
     }
-
+//need mocking
     @Override
     public Object selectZoneById(int zoneId) {
         try {
