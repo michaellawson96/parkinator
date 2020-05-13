@@ -13,6 +13,7 @@ import java.util.Objects;
  */
 public class Car {
     private int carNo;
+    private String alias;
     private String carReg;
     private String carColour;
     private String carMake;
@@ -21,19 +22,19 @@ public class Car {
 
     public Car() {
     }
-
-    public Car(int carNo, String carReg, String carColour, String carMake, String carModel, int userNo) {
+    public Car(int carNo,  String carReg) {
         this.carNo = carNo;
+        this.carReg = carReg;
+    }
+    public Car(int carNo, String alias, String carReg, String carColour, String carMake, String carModel, int userNo) {
+        this.carNo = carNo;
+        this.alias = alias;
         this.carReg = carReg;
         this.carColour = carColour;
         this.carMake = carMake;
         this.carModel = carModel;
         this.userNo = userNo;
     }
-    public Car(int carNo, String carReg) {
-        this.carNo = carNo;
-        this.carReg = carReg;
-    }    
 
     public int getCarNo() {
         return carNo;
@@ -41,6 +42,14 @@ public class Car {
 
     public void setCarNo(int carNo) {
         this.carNo = carNo;
+    }
+
+    public String getAlias() {
+        return alias;
+    }
+
+    public void setAlias(String alias) {
+        this.alias = alias;
     }
 
     public String getCarReg() {
@@ -85,13 +94,14 @@ public class Car {
 
     @Override
     public int hashCode() {
-        int hash = 5;
-        hash = 71 * hash + this.carNo;
-        hash = 71 * hash + Objects.hashCode(this.carReg);
-        hash = 71 * hash + Objects.hashCode(this.carColour);
-        hash = 71 * hash + Objects.hashCode(this.carMake);
-        hash = 71 * hash + Objects.hashCode(this.carModel);
-        hash = 71 * hash + this.userNo;
+        int hash = 7;
+        hash = 67 * hash + this.carNo;
+        hash = 67 * hash + Objects.hashCode(this.alias);
+        hash = 67 * hash + Objects.hashCode(this.carReg);
+        hash = 67 * hash + Objects.hashCode(this.carColour);
+        hash = 67 * hash + Objects.hashCode(this.carMake);
+        hash = 67 * hash + Objects.hashCode(this.carModel);
+        hash = 67 * hash + this.userNo;
         return hash;
     }
 
@@ -113,6 +123,9 @@ public class Car {
         if (this.userNo != other.userNo) {
             return false;
         }
+        if (!Objects.equals(this.alias, other.alias)) {
+            return false;
+        }
         if (!Objects.equals(this.carReg, other.carReg)) {
             return false;
         }
@@ -130,8 +143,10 @@ public class Car {
 
     @Override
     public String toString() {
-        return "Car{" + "carNo=" + carNo + ", carReg=" + carReg + ", carColour=" + carColour + ", carMake=" + carMake + ", carModel=" + carModel + ", userNo=" + userNo + '}';
+        return "Car{" + "carNo=" + carNo + ", alias=" + alias + ", carReg=" + carReg + ", carColour=" + carColour + ", carMake=" + carMake + ", carModel=" + carModel + ", userNo=" + userNo + '}';
     }
+
+   
 
     
     

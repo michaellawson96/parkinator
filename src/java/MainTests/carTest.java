@@ -5,14 +5,17 @@
  */
 package MainTests;
 import REST.*;
+import java.util.Scanner;
 /**
  *
  * @author USER
  */
 public class carTest {
-     public static CcResource cr = new CcResource();
+     public static CarResource cr = new CarResource();
     public static void main(String[] args) {
-        System.out.println(cr.ccUpdate("{\"cc_id\":6,\"cc_name\":\"Clamputen\"}"));
-        //{"user_id":11}
+        Scanner sc = new Scanner(System.in);
+        String s = sc.next();
+        System.out.println(cr.postText(s));
+        //{"car_reg":"asd","alias":"asd","car_id":0,"car_colour":"asd","car_make":"Austin","car_model":"Mini Cooper","user_id":18}
 }
 }
